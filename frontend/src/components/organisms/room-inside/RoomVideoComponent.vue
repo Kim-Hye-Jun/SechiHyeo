@@ -29,7 +29,7 @@ export default defineComponent({
   background: blue;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  /* gap: 20px; */
+  gap: 1.5em;
   grid-template-areas:
     "a1 c b1"
     "a2 c b2"
