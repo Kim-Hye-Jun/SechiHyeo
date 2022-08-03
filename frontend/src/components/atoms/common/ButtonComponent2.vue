@@ -1,0 +1,51 @@
+<template>
+  <button class="raise">Raise</button>
+</template>
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  components: {},
+  data() {
+    return {
+      example: "",
+    };
+  },
+  methods: {},
+});
+</script>
+
+<style>
+body {
+  background: black;
+}
+
+.raise:hover,
+.raise:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+}
+
+.raise {
+  --color: #5dd6f1;
+  --hover: #0dfbef;
+}
+
+button {
+  color: var(--color);
+  transition: 0.25s;
+}
+button:hover,
+button:focus {
+  border-color: var(--hover);
+  color: #fff;
+}
+
+button {
+  background: none;
+  border: 2px solid;
+  font: inherit;
+  line-height: 1;
+  margin: 0.5em;
+  padding: 1em 2em;
+}
+</style>
