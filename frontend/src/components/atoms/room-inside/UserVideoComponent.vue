@@ -18,5 +18,9 @@ export default defineComponent({
 <style>
 video {
   background: black;
+  border-radius: 10px;
+  padding: 5px;
+  box-sizing: border-box;
+  background-clip: content-box;
 }
 </style>

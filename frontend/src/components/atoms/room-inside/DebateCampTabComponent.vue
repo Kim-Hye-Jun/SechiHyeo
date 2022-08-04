@@ -14,9 +14,9 @@ export default defineComponent({
 });
 </script>
 <style>
-div {
+/* div {
   width: 50%;
   height: 3em;
   border-radius: 0.2em;
-}
+} */
 </style>

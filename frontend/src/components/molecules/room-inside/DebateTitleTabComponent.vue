@@ -1,18 +1,14 @@
 <template>
-  <div class="flex">
-    <debate-camp-tab-component-vue
-      class="redside"
-    ></debate-camp-tab-component-vue>
-    <debate-camp-tab-component-vue
-      class="blueside"
-    ></debate-camp-tab-component-vue>
+  <div class="flexB">
+    <div class="red side"></div>
+    <div class="blue side"></div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import DebateCampTabComponentVue from "@/components/atoms/room-inside/DebateCampTabComponent.vue";
+
 export default defineComponent({
-  components: { DebateCampTabComponentVue },
+  components: {},
   data() {
     return {
       example: "",
@@ -23,12 +19,17 @@ export default defineComponent({
 </script>
 
 <style>
-.flex {
+.flexB {
   display: flex;
   flex-direction: row;
   width: 80vw;
 }
-.redside {
+.side {
+  width: 50%;
+  height: 3em;
+  border-radius: 0.2em;
+}
+.red {
   background: rgb(59, 8, 25);
   background: linear-gradient(
     90deg,
@@ -37,7 +38,7 @@ export default defineComponent({
     rgba(30, 39, 57, 1) 100%
   );
 }
-.blueside {
+.blue {
   background: rgb(8, 48, 59);
   background: linear-gradient(
     90deg,
