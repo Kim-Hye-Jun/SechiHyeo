@@ -41,6 +41,18 @@ public class RegisterController {
         }
     }
 
+    //아이디 중복 체크
+    @GetMapping("/user-id/{login_id}")
+    public ResponseEntity<String> idDuplicateCheck(@PathVariable String login_id) throws Exception{
+        //DB에서 아이디로 검색했을 때 값이 나오면 중복된 아이디
+        if(memberService.idDuplicateCheck(login_id)==1) {
+            //throw new DuplicateMemberException("중복된 아이디 입니다.");
+            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
+        }
+        //아무것도 찾을 수 없다면 중복 검사 통과
+        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+    }
+
     //회원가입
     @PostMapping("/signup")
     public ResponseEntity<String> join(Member member) throws Exception {

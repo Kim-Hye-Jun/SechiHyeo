@@ -16,9 +16,9 @@ public class MemberServiceImpl implements MemberService {
     //아이디 중복 체크
     //1이면 중복으로 아이디 사용 불가, 아니라면 사용 가능
     @Override
-    public int idDuplicateCheck(String loginId) {
+    public Long idDuplicateCheck(String loginId) {
         // 추후 구현
-        return 0;
+        return memberRepository.getCountOfLoginID(loginId);
     }
 
     //이메일 중복 체크
