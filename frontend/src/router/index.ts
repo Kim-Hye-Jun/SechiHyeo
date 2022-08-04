@@ -21,16 +21,17 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 // import ModalInputComponent from "@components/atoms/common/ModalInputComponent.vue";
 // import ModalInputBoxComponent from "@components/molecules/room-entrance/ModalInputBoxComponent.vue";
 // import ModalRadioButtonComponent from "@components/atoms/common/ModalRadioButtonComponent.vue";
-import RoomMakeModalComponent from "@components/organisms/room-entrance/RoomMakeModalComponent.vue";
+// import RoomMakeModalComponent from "@components/organisms/room-entrance/RoomMakeModalComponent.vue";
 // import ModalAccessModifierComponent from "@components/molecules/room-entrance/ModalAccessModifierComponent.vue";
 // import ButtonComponent from "@components/atoms/common/ButtonComponent.vue";
 // import ButtonComponent2 from "@components/atoms/common/ButtonComponent2.vue";
+import RoomInsidePageComponent from "@components/templates/room-inside/RoomInsidePageComponent.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/dev",
     name: "dev",
-    component: RoomMakeModalComponent,
+    component: RoomInsidePageComponent,
   },
 ];
 

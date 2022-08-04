@@ -7,6 +7,7 @@ module.exports = defineConfig({
       "@components",
       path.resolve(__dirname, "src/components/")
     );
+    config.resolve.alias.set("@type", path.resolve(__dirname, "type/"));
   },
   transpileDependencies: true,
 });
