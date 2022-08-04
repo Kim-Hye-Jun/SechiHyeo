@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <room-entrance-search-input-component></room-entrance-search-input-component>
+  <div class="flex">
+    <room-entrance-search-input-component
+      @getSearchValue="updateRooms"
+    ></room-entrance-search-input-component>
     <room-entrance-board-component></room-entrance-board-component>
   </div>
 </template>
@@ -21,6 +23,17 @@ export default defineComponent({
   },
   //   created() {},
   //   mounted() {},
-  methods: {},
+  methods: {
+    updateRooms(searchValue: string) {
+      //(#구현해야할것) searchValue로 방검색 axios 요청 보낸 후 room-entrance-board-component 갱신
+    },
+  },
 });
 </script>
+
+<style>
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+</style>

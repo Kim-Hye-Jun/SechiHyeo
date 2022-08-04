@@ -27,9 +27,14 @@ export default defineComponent({
     RoomEntranceNameComponent,
     RoomEntranceInfoComponent,
   },
-  data() {
-    return {};
+  props: ["roomInfo"],
+  setup(props) {
+    if (props.roomInfo) {
+      console.log(props.roomInfo[0]);
+      console.log(props.roomInfo[1]);
+    }
   },
+  methods: {},
 });
 </script>
 

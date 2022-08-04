@@ -8,7 +8,7 @@
       ref="debateSubjectInput"
       labelName="DebateSubject"
     ></modal-input-box-component>
-    <ul>
+    <div class="flex__ul">
       <modal-radio-button-component
         labelId="private"
         labelValue="private"
@@ -21,7 +21,27 @@
         selector="accessModifier"
         @method="setRadioValue"
       ></modal-radio-button-component>
-    </ul>
+    </div>
+    <div class="flex__ul">
+      <modal-radio-button-component
+        labelId="2"
+        labelValue="2"
+        selector="numOfPeople"
+        @method="setRadioValue"
+      ></modal-radio-button-component>
+      <modal-radio-button-component
+        labelId="4"
+        labelValue="4"
+        selector="numOfPeople"
+        @method="setRadioValue"
+      ></modal-radio-button-component>
+      <modal-radio-button-component
+        labelId="6"
+        labelValue="6"
+        selector="numOfPeople"
+        @method="setRadioValue"
+      ></modal-radio-button-component>
+    </div>
     <button-component-vue @click="myFunc()"></button-component-vue>
   </div>
 
@@ -59,6 +79,7 @@ export default defineComponent({
           typeof ModalInputBoxComponent
         >
       ).inputValue;
+      // (#구현할것) 모달 input에서 데이터를 받아와서 방 생성 post 요청을 보냄
     },
     setRadioValue(radioValue: string): void {
       this.radioValue = radioValue;
@@ -86,5 +107,9 @@ body {
   flex-direction: column;
   text-align: center;
   align-items: center;
+}
+.flex__ul {
+  display: flex;
+  flex-direction: row;
 }
 </style>

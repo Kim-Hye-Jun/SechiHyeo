@@ -5,7 +5,13 @@
         <div class="finder__outer">
           <div class="finder__inner">
             <div class="finder__icon" ref="icon"></div>
-            <input class="finder__input" type="text" name="q" />
+            <input
+              class="finder__input"
+              type="text"
+              name="q"
+              v-model="searchInputValue"
+              @keyup.enter="searchRooms"
+            />
           </div>
         </div>
       </div>
@@ -19,10 +25,14 @@ export default defineComponent({
   components: {},
   data() {
     return {
-      example: "",
+      searchInputValue: "",
     };
   },
   methods: {
+    searchRooms(): void {
+      this.$emit("getSearchValue", this.searchInputValue);
+      this.searchInputValue = "";
+    },
     addEventListener(): void {
       const input: HTMLInputElement | null =
         document.querySelector(".finder__input");
