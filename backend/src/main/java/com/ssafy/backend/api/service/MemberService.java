@@ -6,9 +6,12 @@ public interface MemberService {
 	//아이디 중복 체크
 	Long idDuplicateCheck(String loginId);
 	//이메일 중복 체크
-	int emailDuplicateCheck(String email);
+	Long emailDuplicateCheck(String email);
+	//휴대폰번호 중복 체크
+	Long PhoneDuplicateCheck(String phoneNumber);
 	//회원가입
 	void join(Member member) throws Exception;
+
 	//로그인
 	int login(String loginId, String loginPassword) throws Exception;
 	//회원정보 수정

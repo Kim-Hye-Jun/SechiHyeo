@@ -18,17 +18,20 @@ public class MemberServiceImpl implements MemberService {
     //1이면 중복으로 아이디 사용 불가, 아니라면 사용 가능
     @Override
     public Long idDuplicateCheck(String loginId) {
-        // 추후 구현
         return memberRepository.getCountOfLoginID(loginId);
     }
 
     //이메일 중복 체크
     //1이면 중복으로 이메일 사용 불가, 아니라면 사용 가능
     @Override
-    public int emailDuplicateCheck(String email) {
-        // 추후 구현
+    public Long emailDuplicateCheck(String email) {
+        return memberRepository.getCountOfEmail(email);
+    }
 
-        return 0;
+    //휴대폰번호 중복 체크
+    @Override
+    public Long PhoneDuplicateCheck(String phoneNumber) {
+        return memberRepository.getCountOfPhoneNumber(phoneNumber);
     }
 
     //회원가입

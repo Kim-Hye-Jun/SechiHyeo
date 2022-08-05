@@ -40,6 +40,6 @@ public class WebConfig implements WebMvcConfigurer{
 				.excludePathPatterns("/webjars/**")
 				// 회원가입 및 로그인 관련 path 제외
 				.excludePathPatterns("/register/**")
-				.excludePathPatterns("/register/login");
+				.excludePathPatterns("/member/login");
 	}
 }
