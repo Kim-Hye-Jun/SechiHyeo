@@ -2,8 +2,8 @@ package com.ssafy.backend.api.controller;
 
 import com.ssafy.backend.api.request.debateBoard.DebateBoardRegiPostReq;
 import com.ssafy.backend.api.response.debateBoard.BoardRes;
-import com.ssafy.backend.api.response.service.DebateBoardService;
-import com.ssafy.backend.api.response.service.ReplyService;
+import com.ssafy.backend.api.service.DebateBoardService;
+import com.ssafy.backend.api.service.ReplyService;
 import com.ssafy.backend.common.model.response.BaseResponseBody;
 import com.ssafy.backend.db.entity.DebateBoard;
 import io.swagger.annotations.Api;
