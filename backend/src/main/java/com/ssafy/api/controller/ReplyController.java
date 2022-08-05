@@ -1,5 +1,7 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.request.reply.ReplyChangeReq;
+import com.ssafy.api.request.reply.ReplyRegiPostReq;
 import com.ssafy.api.service.ReplyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.db.entity.BaseEntity;
-
+import ssafy.common.model.response.BaseResponseBody;
 @Api(value = "댓글 API",tags = {"Reply"})
 @RestController
 @RequestMapping("/debate-reply")
@@ -28,9 +30,11 @@ public class ReplyController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseEntity> addReply(){
+    public ResponseEntity<? extends BaseResponseBody> regiReply(@PathVariable long board_no, @RequestBody ReplyRegiPostReq regiReq){
 
-        return ResponseEntity.status(200).body(null);
+
+        if(replyService.regiReply(board_no,regiReq)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
+        else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
     }
     
     //댓글 수정
@@ -40,9 +44,10 @@ public class ReplyController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseEntity> putReply() {
+    public ResponseEntity<? extends BaseResponseBody> putReply(@RequestBody ReplyChangeReq changeReq) {
 
-        return ResponseEntity.status(200).body(null);
+        if(replyService.chageReply(changeReq)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
+        else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
 
     }
     //댓글 삭제
@@ -52,9 +57,10 @@ public class ReplyController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseEntity> deleteReply(){
+    public ResponseEntity<? extends BaseResponseBody> deleteReply(@PathVariable long reply_no){
 
-        return ResponseEntity.status(200).body(null);
+        if(replyService.deleteReply(reply_no)){return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
+        else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
     }
     
 }

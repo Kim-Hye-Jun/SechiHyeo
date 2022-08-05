@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @ApiModel("boardResponse")
-public class boardRes {
+public class BoardRes {
     DebateBoard board;
     List<Reply> replies;
 

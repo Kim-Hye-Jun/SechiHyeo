@@ -25,5 +25,5 @@ public interface DebateBoardRepository extends JpaRepository<DebateBoard,Long> {
     //delete()
 
     //모집게시글 조회
-    Optional<DebateBoard> findById(Long board_no);
+    DebateBoard findByBoardNo(Long boardNo);
 }

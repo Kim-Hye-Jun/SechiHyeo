@@ -4,6 +4,7 @@ package com.ssafy.db.repository;
 import com.ssafy.db.entity.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
@@ -11,8 +12,10 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     Optional<Reply> findById(Long reply_no);
 
     //특정 게시글에 대한 댓글 조회
-    Optional<Reply> findByBoardNo(Long boardNo);
+    List<Reply> findByBoardNo(Long boardNo);
 
+    //특정 게시글에 대한 댓글 조회
+    Reply findByReplyNo(Long replyNo);
     //댓글 등록
     //save()
     //댓글 수정

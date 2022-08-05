@@ -26,6 +26,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	implementation 'mysql:mysql-connector-java'
+
 	//추가 dependency
 	//swagger
 	implementation("io.springfox:springfox-swagger2:3.0.0")
