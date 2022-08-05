@@ -19,7 +19,7 @@ public class ApplicantState {
     Long applicantNo = null;
 
     int side;
-    int order;
+    int turn;
 
     //연관
     //게시판

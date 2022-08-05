@@ -12,7 +12,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     Optional<Reply> findById(Long reply_no);
 
     //특정 게시글에 대한 댓글 조회
-    List<Reply> findByBoardNo(Long boardNo);
+    List<Reply> findByDebateBoardBoardNo(Long boardNo);
 
     //특정 게시글에 대한 댓글 조회
     Reply findByReplyNo(Long replyNo);

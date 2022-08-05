@@ -1,4 +1,4 @@
-package com.ssafy.backend.api.response.service;
+package com.ssafy.backend.api.service;
 
 import com.ssafy.backend.api.request.reply.ReplyChangeReq;
 import com.ssafy.backend.api.request.reply.ReplyRegiPostReq;
