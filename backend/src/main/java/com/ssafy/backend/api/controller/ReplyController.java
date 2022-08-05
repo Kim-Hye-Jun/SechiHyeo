@@ -2,7 +2,7 @@ package com.ssafy.backend.api.controller;
 
 import com.ssafy.backend.api.request.reply.ReplyChangeReq;
 import com.ssafy.backend.api.request.reply.ReplyRegiPostReq;
-import com.ssafy.backend.api.service.ReplyService;
+import com.ssafy.backend.api.response.service.ReplyService;
 import com.ssafy.backend.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

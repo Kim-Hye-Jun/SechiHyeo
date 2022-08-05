@@ -1,4 +1,4 @@
-package com.ssafy.backend.api.service;
+package com.ssafy.backend.api.response.service;
 
 
 import com.ssafy.backend.api.request.debateBoard.DebateBoardRegiPostReq;

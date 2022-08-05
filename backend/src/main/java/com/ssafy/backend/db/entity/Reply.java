@@ -1,12 +1,16 @@
 package com.ssafy.backend.db.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Reply  {
@@ -30,5 +34,7 @@ public class Reply  {
     private DebateBoard debateBoard;
     
     //회원은 추후
-
+    @ManyToOne
+    @JoinColumn(name = "member_no")
+    private Member member;
 }

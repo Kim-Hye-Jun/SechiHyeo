@@ -1,4 +1,4 @@
-package com.ssafy.backend.api.service;
+package com.ssafy.backend.api.response.service;
 
 import com.ssafy.backend.common.util.SHA256;
 import com.ssafy.backend.db.entity.Member;
@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
+
 
     @Autowired
     private MemberRepository memberRepository;
@@ -26,6 +27,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int emailDuplicateCheck(String email) {
         // 추후 구현
+
         return 0;
     }
 

@@ -1,12 +1,16 @@
 package com.ssafy.backend.db.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class DebateBoard {
@@ -39,5 +43,9 @@ public class DebateBoard {
 
     //이 밑엔 연관관계 회원, 방 지정되어야한다
     //방은 onetoone
+
     //회원은 manytoone
+    @ManyToOne
+    @JoinColumn(name = "member_no")
+    private Member member;
 }
