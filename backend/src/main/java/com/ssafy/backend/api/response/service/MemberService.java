@@ -4,7 +4,7 @@ import com.ssafy.backend.db.entity.Member;
 
 public interface MemberService {
 	//아이디 중복 체크
-	int idDuplicateCheck(String loginId);
+	Long idDuplicateCheck(String loginId);
 	//이메일 중복 체크
 	int emailDuplicateCheck(String email);
 	//회원가입
