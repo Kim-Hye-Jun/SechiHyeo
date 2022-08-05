@@ -15,13 +15,11 @@ public interface MemberService {
 	//로그인
 	int login(String loginId, String loginPassword) throws Exception;
 	//회원정보 수정
-	void changeMemberInfo(Member newMember, String loginId);
-	//아이디 찾기
-	String findLoginId(String email) throws Exception;
+	void changeMemberInfo(Member editedMember, String loginId);
 	//비밀번호 재설정
 	void changeLoginPassword(String loginId, String newLoginPassword) throws Exception;
 	//회원 탈퇴
-	int signOut(String userId) throws Exception;
+	int signOut(String loginId) throws Exception;
 	//아이디로 회원 불러오기
-	Member getInfoByLoginId(String userId) throws Exception;
+	Member getInfoByLoginId(String loginId) throws Exception;
 }

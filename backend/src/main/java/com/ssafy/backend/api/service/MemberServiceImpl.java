@@ -60,15 +60,8 @@ public class MemberServiceImpl implements MemberService {
     //회원 정보 수정
     @Transactional
     @Override
-    public void changeMemberInfo(Member newMember, String loginId) {
+    public void changeMemberInfo(Member editedMember, String loginId) {
         //추후 구현
-    }
-
-    //아이디 찾기
-    @Override
-    public String findLoginId(String email) throws Exception {
-        //추후 구현
-        return null;
     }
 
     //비밀번호 재설정
@@ -81,15 +74,17 @@ public class MemberServiceImpl implements MemberService {
     //회원탈퇴
     @Transactional
     @Override
-    public int signOut(String userId) throws Exception {
-        //추후 구현
-        return 0;
+    public int signOut(String loginId) throws Exception {
+        int memberNo = getInfoByLoginId(loginId).getMemberNo();
+        memberRepository.deleteById(memberNo);
+        //추후 게시글, 댓글 등 전부 삭제
+
+        return 1;
     }
 
     //아이디로 회원 불러오기
     @Override
-    public Member getInfoByLoginId(String userId) throws Exception {
-        //추후 구현
-        return null;
+    public Member getInfoByLoginId(String loginId) throws Exception {
+        return memberRepository.findByLoginId(loginId);
     }
 }
