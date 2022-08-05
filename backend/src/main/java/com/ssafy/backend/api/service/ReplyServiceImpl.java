@@ -1,4 +1,4 @@
-package com.ssafy.backend.api.response.service;
+package com.ssafy.backend.api.service;
 
 import com.ssafy.backend.api.request.reply.ReplyChangeReq;
 import com.ssafy.backend.api.request.reply.ReplyRegiPostReq;
@@ -21,7 +21,7 @@ public class ReplyServiceImpl implements  ReplyService{
 
     @Override
     public List<Reply> GetReplies(long boardNo) {
-        return replyRepository.findByBoardNo(boardNo);
+        return replyRepository.findByDebateBoardBoardNo(boardNo);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ReplyServiceImpl implements  ReplyService{
         reply.setHidden(false);
         reply.setParentNo(regiReq.getParent_no());
         reply.setDebateBoard(debateBoard);
-        
+
         //회원 처리
 
         if(replyRepository.save(reply)==null)return false;

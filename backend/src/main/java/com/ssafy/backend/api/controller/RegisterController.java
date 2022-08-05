@@ -1,6 +1,6 @@
 package com.ssafy.backend.api.controller;
 
-import com.ssafy.backend.api.response.service.MemberService;
+import com.ssafy.backend.api.service.MemberService;
 import com.ssafy.backend.common.util.JWTUtil;
 import com.ssafy.backend.db.entity.Member;
 import lombok.AllArgsConstructor;

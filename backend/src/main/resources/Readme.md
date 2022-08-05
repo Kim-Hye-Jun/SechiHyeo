@@ -1,11 +1,12 @@
 # 프로젝트 세팅 내용
 
 ## application.properties
-- 서버 포트번호 9999로 설정해둠 (frontend와 포트번호가 8080으로 겹쳐서, 테스트시 충돌 날 수 있어서...)
+- 서버 포트번호 8080
+- context path: /api/
 - db 설정
-  - 스키마 이름: common_test
+  - 스키마 이름: ssafy_web_db
   - ID: root
-  - PW: ssafy
+  - PW: seoulA508!
   - **본인 로컬 설정에 맞게 바꾸기**
 
 
@@ -28,4 +29,4 @@
 - **코드가 많지 않아서 WebConfig 안에 한번에 넣어놓음. 마음에 안들면 나눠도 상관없어요...**
 
 
-### swagger-ui: "http://localhost:9999/swagger-ui/index.html" 에서 테스트
+### swagger-ui: "http://localhost:8080/api/swagger-ui/index.html" 에서 테스트
