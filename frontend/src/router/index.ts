@@ -1,11 +1,27 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import TestAtom from "../components/atoms/TestAtom.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/test",
-    name: "test",
-    component: TestAtom,
+    path: "/",
+    redirect: "/login",
+  },
+  {
+    path: "/login",
+    name: "memberLogIn",
+    component: () => import("@/views/LoginPage.vue"),
+  },
+  {
+    path: "/signup",
+    name: "memberSignUp",
+    component: () => import("@/views/SignupPage.vue"),
+  },
+  {
+    path: "/main",
+    component: () => import("@/views/MainPage.vue"),
+  },
+  {
+    path: "/*",
+    component: () => import("@/views/NotFoundPage.vue"),
   },
 ];
 
