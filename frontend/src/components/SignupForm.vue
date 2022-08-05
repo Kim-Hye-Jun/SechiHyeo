@@ -26,7 +26,12 @@
         </div>
         <div>
           <label for="phoneNumber">전화번호: </label>
-          <input id="phoneNumber" type="text" v-model="member.phoneNumber" />
+          <input
+            id="phoneNumber"
+            type="text"
+            v-model="member.phoneNumber"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+          />
         </div>
         <button
           type="button"
