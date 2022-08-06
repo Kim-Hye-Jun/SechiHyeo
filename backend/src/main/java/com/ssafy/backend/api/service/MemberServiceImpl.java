@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
 
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -61,14 +60,27 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void changeMemberInfo(Member editedMember, String loginId) {
-        //추후 구현
+        Member member = memberRepository.findByLoginId(loginId);
+
+        member.setNickname(editedMember.getNickname());
+        member.setEmail(editedMember.getEmail());
+        member.setPhoneNumber(editedMember.getPhoneNumber());
+        member.setIntroduce(editedMember.getIntroduce());
+
+        memberRepository.save(member);
     }
 
     //비밀번호 재설정
     @Transactional
     @Override
     public void changeLoginPassword(String loginId, String newLoginPassword) throws Exception {
-        //추후 구현
+        Member member = memberRepository.findByLoginId(loginId);
+
+        System.out.println(member);
+        System.out.println(newLoginPassword);
+        //새 비밀번호 저장
+        member.setLoginPassword(new SHA256().getHash(newLoginPassword));
+        memberRepository.save(member);
     }
 
     //회원탈퇴

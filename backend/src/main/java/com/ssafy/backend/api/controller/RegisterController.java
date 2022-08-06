@@ -1,7 +1,6 @@
 package com.ssafy.backend.api.controller;
 
 import com.ssafy.backend.api.service.MemberService;
-import com.ssafy.backend.common.exception.handler.DuplicateMemberException;
 import com.ssafy.backend.db.entity.Member;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +40,6 @@ public class RegisterController {
             result.put(REDUPLICATION, true);
             result.put("message", "이미 사용되고 있는 아이디 입니다.");
             status = HttpStatus.CONFLICT;
-            throw new DuplicateMemberException("중복된 아이디 입니다.");
         }
         //아무것도 찾을 수 없다면 중복 검사 통과
         else {
@@ -69,7 +66,6 @@ public class RegisterController {
             result.put(REDUPLICATION, true);
             result.put("message", "이미 사용되고 있는 이메일 입니다.");
             status = HttpStatus.CONFLICT;
-            throw new DuplicateMemberException("중복된 이메일 입니다.");
         }
         //아무것도 찾을 수 없다면 중복 검사 통과
         else {
@@ -96,7 +92,6 @@ public class RegisterController {
             result.put(REDUPLICATION, true);
             result.put("message", "이미 사용되고 있는 휴대폰번호 입니다.");
             status = HttpStatus.CONFLICT;
-            throw new DuplicateMemberException("중복된 휴대폰번호 입니다.");
         }
         //아무것도 찾을 수 없다면 중복 검사 통과
         else {

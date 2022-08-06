@@ -35,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer{
 				.addPathPatterns("/**")
 				// swagger 관련 path 제외
 				.excludePathPatterns("/swagger-ui/**")
-				.excludePathPatterns("/v3/api-docs")
+				.excludePathPatterns("/v2/api-docs")
 				.excludePathPatterns("/swagger-resources/**")
 				.excludePathPatterns("/webjars/**")
 				// 회원가입 및 로그인 관련 path 제외
