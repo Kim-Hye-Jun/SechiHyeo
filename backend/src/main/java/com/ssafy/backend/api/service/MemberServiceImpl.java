@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
 
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -18,17 +17,20 @@ public class MemberServiceImpl implements MemberService {
     //1이면 중복으로 아이디 사용 불가, 아니라면 사용 가능
     @Override
     public Long idDuplicateCheck(String loginId) {
-        // 추후 구현
         return memberRepository.getCountOfLoginID(loginId);
     }
 
     //이메일 중복 체크
     //1이면 중복으로 이메일 사용 불가, 아니라면 사용 가능
     @Override
-    public int emailDuplicateCheck(String email) {
-        // 추후 구현
+    public Long emailDuplicateCheck(String email) {
+        return memberRepository.getCountOfEmail(email);
+    }
 
-        return 0;
+    //휴대폰번호 중복 체크
+    @Override
+    public Long PhoneDuplicateCheck(String phoneNumber) {
+        return memberRepository.getCountOfPhoneNumber(phoneNumber);
     }
 
     //회원가입
@@ -57,36 +59,44 @@ public class MemberServiceImpl implements MemberService {
     //회원 정보 수정
     @Transactional
     @Override
-    public void changeMemberInfo(Member newMember, String loginId) {
-        //추후 구현
-    }
+    public void changeMemberInfo(Member editedMember, String loginId) {
+        Member member = memberRepository.findByLoginId(loginId);
 
-    //아이디 찾기
-    @Override
-    public String findLoginId(String email) throws Exception {
-        //추후 구현
-        return null;
+        member.setNickname(editedMember.getNickname());
+        member.setEmail(editedMember.getEmail());
+        member.setPhoneNumber(editedMember.getPhoneNumber());
+        member.setIntroduce(editedMember.getIntroduce());
+
+        memberRepository.save(member);
     }
 
     //비밀번호 재설정
     @Transactional
     @Override
     public void changeLoginPassword(String loginId, String newLoginPassword) throws Exception {
-        //추후 구현
+        Member member = memberRepository.findByLoginId(loginId);
+
+        System.out.println(member);
+        System.out.println(newLoginPassword);
+        //새 비밀번호 저장
+        member.setLoginPassword(new SHA256().getHash(newLoginPassword));
+        memberRepository.save(member);
     }
 
     //회원탈퇴
     @Transactional
     @Override
-    public int signOut(String userId) throws Exception {
-        //추후 구현
-        return 0;
+    public int signOut(String loginId) throws Exception {
+        int memberNo = getInfoByLoginId(loginId).getMemberNo();
+        memberRepository.deleteById(memberNo);
+        //추후 게시글, 댓글 등 전부 삭제
+
+        return 1;
     }
 
     //아이디로 회원 불러오기
     @Override
-    public Member getInfoByLoginId(String userId) throws Exception {
-        //추후 구현
-        return null;
+    public Member getInfoByLoginId(String loginId) throws Exception {
+        return memberRepository.findByLoginId(loginId);
     }
 }
