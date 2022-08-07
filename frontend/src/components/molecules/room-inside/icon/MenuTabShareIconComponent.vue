@@ -1,13 +1,14 @@
 <template>
   <svg>
     <menu-tab-svg-path-component
-      d="M8.35 39q-1.15 0-2-.85-.85-.85-.85-2.05V11.9q0-1.2.85-2.05.85-.85 2-.85H32.6q1.15 0 2.025.85t.875 2.05v10.4l7-7.05V32.7l-7-7.05V36.1q0 1.2-.875 2.05-.875.85-2.025.85Zm0-2.25H32.6q.25 0 .425-.175t.175-.475V11.9q0-.3-.175-.475t-.425-.175H8.35q-.25 0-.425.175t-.175.475v24.2q0 .3.175.475t.425.175Zm-.6 0v-25.5 25.5Z"
+      d="M11 46q-1.2 0-2.1-.9Q8 44.2 8 43V17.55q0-1.2.9-2.1.9-.9 2.1-.9h8.45v3H11V43h26V17.55h-8.55v-3H37q1.2 0 2.1.9.9.9.9 2.1V43q0 1.2-.9 2.1-.9.9-2.1.9Zm11.45-15.35V7.8l-4.4 4.4-2.15-2.15L23.95 2 32 10.05l-2.15 2.15-4.4-4.4v22.85Z"
     ></menu-tab-svg-path-component>
   </svg>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 import MenuTabSvgPathComponent from "@components/atoms/room-inside/MenuTabSvgPathComponent.vue";
+
 export default defineComponent({
   components: { MenuTabSvgPathComponent },
   data() {
