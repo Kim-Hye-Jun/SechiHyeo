@@ -25,13 +25,16 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 // import ModalAccessModifierComponent from "@components/molecules/room-entrance/ModalAccessModifierComponent.vue";
 // import ButtonComponent from "@components/atoms/common/ButtonComponent.vue";
 // import ButtonComponent2 from "@components/atoms/common/ButtonComponent2.vue";
-import RoomInsidePageComponent from "@components/templates/room-inside/RoomInsidePageComponent.vue";
+// import ButtonComponent3 from "@components/atoms/common/ButtonComponent3.vue";
+// import RoomInsidePageComponent from "@components/templates/room-inside/RoomInsidePageComponent.vue";
+import DebateMemoComponent from "@components/atoms/room-inside/DebateMemoComponent.vue";
+// import DebateMemoModalComponent from "@components/molecules/room-inside/DebateMemoModalComponent.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/dev",
     name: "dev",
-    component: RoomInsidePageComponent,
+    component: DebateMemoComponent,
   },
 ];
 

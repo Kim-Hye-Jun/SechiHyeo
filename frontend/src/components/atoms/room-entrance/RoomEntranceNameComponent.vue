@@ -8,7 +8,7 @@ export default defineComponent({
   components: {},
   data() {
     return {
-      roomName: "test^^",
+      roomName: "test",
     };
   },
   methods: {},
