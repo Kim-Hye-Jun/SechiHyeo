@@ -1,5 +1,6 @@
 <template>
   <div class="flexA">
+    <debate-topic-component></debate-topic-component>
     <debate-title-tab-component
       class="room__inside__class1"
     ></debate-title-tab-component>
@@ -13,9 +14,15 @@ import { defineComponent } from "vue";
 import DebateTitleTabComponent from "@components/molecules/room-inside/DebateTitleTabComponent.vue";
 import RoomVideoComponent from "@components/organisms/room-inside/RoomVideoComponent.vue";
 import MenuTabComponent from "@components/organisms/room-inside/MenuTabComponent.vue";
+import DebateTopicComponent from "@components/atoms/room-inside/DebateTopicComponent.vue";
 
 export default defineComponent({
-  components: { RoomVideoComponent, MenuTabComponent, DebateTitleTabComponent },
+  components: {
+    RoomVideoComponent,
+    MenuTabComponent,
+    DebateTitleTabComponent,
+    DebateTopicComponent,
+  },
   data() {
     return {
       example: "",
@@ -28,6 +35,7 @@ export default defineComponent({
 <style>
 body {
   margin: 0;
+  background: #0e0e23;
 }
 .flexA {
   box-sizing: border-box;
@@ -49,6 +57,6 @@ body {
 .room__inside__class3 {
   width: 100%;
   height: 50px;
-  opacity: 0.8;
+  background: #0e0e23;
 }
 </style>
