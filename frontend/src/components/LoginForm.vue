@@ -1,7 +1,7 @@
 <template>
   <div class="contents">
     <div class="form-wrapper form-wrapper-sm">
-      <form @submit.stop.prevent class="form">
+      <form @submit.prevent="login" class="form">
         <div>
           <label for="userID">아이디:</label>
           <input
@@ -20,7 +20,7 @@
             placeholder="비밀번호를 입력하세요."
           />
         </div>
-        <button type="button" class="btn" @click="login">로그인</button>
+        <button type="submit" class="btn">로그인</button>
       </form>
       <div class="container text-center">
         <!-- <router-link :to="{ name: 'userid' }" class="find"
@@ -34,6 +34,7 @@
         <h6 class="text-center find mt-5">아직 회원이 아니신가요?</h6>
         <button
           class="w-100 btn btn-lg btn-outline-secondary signup-btn"
+          type="button"
           @click="moveToSignin"
         >
           회원가입
@@ -45,15 +46,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useStore } from "vuex";
+import { mapActions } from "vuex";
 
 export default defineComponent({
-  setup() {
-    const store = useStore();
-    // console.log(store);
-
-    return { store };
-  },
   data() {
     return {
       member: {
@@ -64,7 +59,8 @@ export default defineComponent({
   },
   computed: {},
   methods: {
-    login() {
+    ...mapActions(["LOGIN"]),
+    async login() {
       if (this.member.loginId.length == 0) {
         const myDom = document.querySelector("#userID") as HTMLParagraphElement;
         alert("아이디를 입력해주세요.");
@@ -74,15 +70,27 @@ export default defineComponent({
         const myDom = document.querySelector("#userPW") as HTMLParagraphElement;
         myDom.focus();
       } else {
-        this.store.dispatch("memberLogin", this.member);
-        this.member.loginId = "";
-        this.member.loginPassword = "";
-        const myDom = document.querySelector("#userID") as HTMLParagraphElement;
-        myDom.focus();
+        try {
+          await this.LOGIN(this.member);
+          this.$router.push("/main");
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.initForm();
+        }
+        await this.LOGIN(this.member);
+
+        // const myDom = document.querySelector("#userID") as HTMLParagraphElement;
+        // myDom.focus();
       }
     },
     moveToSignin() {
+      this.initForm();
       this.$router.push("signup");
+    },
+    initForm() {
+      this.member.loginId = "";
+      this.member.loginPassword = "";
     },
   },
 });

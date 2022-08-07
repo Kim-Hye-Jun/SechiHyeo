@@ -1,21 +1,15 @@
 <template>
   <header>
     <div>
-      <router-link v-if="isUserLogin()" to="/main" class="logo">
+      <router-link :to="headerLink" class="logo">
         세치혀
-        <span>by {{ this.store.state.memberinfo.nickname }}</span>
-      </router-link>
-      <router-link v-else to="/" class="logo">
-        세치혀
-        <span v-if="isUserLogin()"
-          >by {{ this.store.state.memberinfo.nickname }}</span
-        >
+        <span v-if="isLogin">by {{ $store.state.username }}</span>
       </router-link>
     </div>
     <div class="navigations">
       <!-- 1 -->
-      <template v-if="isUserLogin()">
-        <a href="javascript:;" @click="logoutMember" class="logout-button">
+      <template v-if="isLogin">
+        <a href="javascript:;" @click="logoutUser" class="logout-button">
           Logout
         </a>
       </template>
@@ -30,19 +24,22 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useStore } from "vuex";
+import { deleteCookie } from "@/utils/cookies";
+import { mapGetters, mapMutations } from "vuex";
 export default defineComponent({
-  setup() {
-    const store = useStore();
-
-    return { store };
+  computed: {
+    ...mapGetters(["isLogin"]),
+    headerLink(): string {
+      return this.isLogin ? "/main" : "/login";
+    },
   },
   methods: {
-    isUserLogin() {
-      return this.store.state.isLogin;
-    },
-    logoutMember() {
-      this.store.commit("MEMBER_LOGOUT");
+    ...mapMutations(["CLEAR_USER_ID", "CLEAR_TOKEN"]),
+    logoutUser() {
+      this.CLEAR_USER_ID();
+      this.CLEAR_TOKEN();
+      deleteCookie("sch_auth");
+      deleteCookie("sch_user");
       this.$router.push("/login");
     },
   },

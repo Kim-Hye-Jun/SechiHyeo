@@ -1,7 +1,7 @@
 <template>
   <div class="contents">
     <div class="form-wrapper form-wrapper-sm">
-      <form @submit.stop.prevent class="form">
+      <form @submit.prevent="signUp" class="form">
         <h2><b>회원 가입</b></h2>
         <div>
           <label for="userId">아이디: </label>
@@ -33,12 +33,7 @@
             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
           />
         </div>
-        <button
-          type="button"
-          class="btn"
-          @click="signup"
-          :disabled="isDisabled"
-        >
+        <button type="submit" class="btn" :disabled="isDisabled">
           회원 가입
         </button>
       </form>
@@ -48,15 +43,10 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { registerUser } from "@/api/auth";
 import { useStore, mapState } from "vuex";
 
 export default defineComponent({
-  setup() {
-    const store = useStore();
-    // console.log(store);
-
-    return { store };
-  },
   data() {
     return {
       // form values
@@ -111,20 +101,19 @@ export default defineComponent({
     },
   },
   methods: {
-    // idDuplicateCheck() { // 아이디 중복확인용
-    //   this.$store.dispatch("DuplicateId", this.user.userid);
-    // },
-    // emailDuplicateCheck() { // 이메일 중복 확인용
-    //   this.$store.dispatch("DuplicateEmail", this.user.email);
-    // },
-    signup() {
-      // if (!this.checkedId || this.member.userid != this.compare_id) {
-      //   alert("아이디 중복체크를 해주세요");
-      // } else if (!this.checkedEmail || this.member.email != this.compare_email) {
-      //   alert("이메일 중복체크를 해주세요");
-      // } else {
-      this.store.dispatch("memberSignup", this.member);
-      // }
+    async signUp() {
+      const response = await registerUser(this.member);
+      console.log(response);
+      this.initForm();
+      alert(response.data);
+    },
+    initForm() {
+      this.member.loginId = "";
+      this.member.nickname = "";
+      this.member.loginPassword = "";
+      this.member.email = "";
+      this.member.phoneNumber = "";
+      this.loginPassword2 = "";
     },
   },
 });
