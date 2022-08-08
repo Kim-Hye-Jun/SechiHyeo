@@ -1,106 +1,62 @@
 import { createStore } from "vuex";
-import router from "@/router";
-import axios from "axios";
 
-const REST_API = `http://localhost:9999`;
+import {
+  getAuthFromCookie,
+  getUserFromCookie,
+  saveAuthToCookie,
+  saveUserToCookie,
+} from "@/utils/cookies";
+import { loginUser } from "@/api/auth";
+import { getMemberInfo } from "@/api/member";
 
 export default createStore({
   state: {
-    username: "",
+    userid: getUserFromCookie() || "",
+    token: getAuthFromCookie() || "",
     // 로그인 관련
-    isLogin: false, // 로그인 상태
     memberinfo: {}, // 로그인된 user의 정보
-    // 회원가입 관련
-    checkedId: false, // id 중복체크완료 여부
-    checkedEmail: false, // eamil 중복체크완료 여부
-    compare_id: "", // 중복확인 완료 id값 임시저장
-    compare_email: "", // 중복확인 완료 email값 임시저장
-    // 비밀번호 재설정 관련
-    isAuthPw: false, // 비밀번호 재설정 권한
-    tmp_userid: "", // 임시 저장 아이디
-    // 프로필 재설정 관련
-    isAuthProfile: false, // 프로필 재설정 권한
   },
   getters: {
     isLogin(state) {
-      return state.username !== "";
+      return state.userid !== "";
+    },
+    isMemberInfo(state) {
+      return state.memberinfo;
     },
   },
   mutations: {
-    MEMBER_LOGIN(state, member) {
-      state.isLogin = true;
+    SET_USER_ID(state, userid) {
+      state.userid = userid;
+    },
+    CLEAR_USER_ID(state) {
+      state.userid = "";
+    },
+    SET_TOKEN(state, token) {
+      state.token = token;
+    },
+    CLEAR_TOKEN(state) {
+      state.token = "";
+    },
+    SET_MEMBER_INFO(state, member) {
       state.memberinfo = member;
     },
-    DUPL_RESET(state) {
-      state.checkedId = false;
-      state.compare_id = "";
-      state.checkedEmail = false;
-      state.compare_email = "";
-    },
-    MEMBER_LOGOUT(state) {
-      localStorage.removeItem("access-token");
-      state.isLogin = false;
+    CLEAR_MEMBER_INFO(state) {
       state.memberinfo = {};
     },
   },
   actions: {
-    memberLogin({ dispatch }, member) {
-      console.log("로그인 시작");
-      const API_URL = `${REST_API}/register/login`;
-      axios({
-        url: API_URL,
-        method: "POST",
-        params: member,
-      })
-        .then((res) => {
-          if (res.data.message == "success") {
-            console.log(res);
-            localStorage.setItem("access-token", res.data["access-token"]);
-            dispatch("getMemberInfo");
-            // console.log(123456);
-          } else {
-            alert("아이디 또는 비밀번호가 올바르지 않습니다.");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    getMemberInfo({ commit }) {
-      const API_URL = `${REST_API}/register/getMember`;
-      const ACESS_TOKEN = localStorage.getItem("access-token");
-      if (ACESS_TOKEN) {
-        axios({
-          url: API_URL,
-          method: "GET",
-          headers: {
-            "access-token": ACESS_TOKEN,
-          },
-        })
-          .then((res) => {
-            commit("MEMBER_LOGIN", res.data);
-            router.push("main");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    },
-    memberSignup({ commit }, member) {
-      const API_URL = `${REST_API}/register/signup`;
-      axios({
-        url: API_URL,
-        method: "POST",
-        params: member,
-      })
-        .then(() => {
-          alert(`${member.nickname}님, 회원가입을 축하드립니다!`);
-          commit("DUPL_RESET");
-          router.push({ name: "memberLogIn" });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    async loginMember({ commit }, member) {
+      const memberId = member.loginId;
+      const response = await loginUser(member);
+      // console.log(response);
+      commit("SET_TOKEN", response.data["access-token"]);
+      commit("SET_USER_ID", memberId);
+      const memberInfo = await getMemberInfo();
+      // console.log(memberInfo);
+      commit("SET_MEMBER_INFO", memberInfo.data);
+      saveAuthToCookie(response.data["access-token"]);
+      saveUserToCookie(memberId);
+      return response;
     },
   },
 });
