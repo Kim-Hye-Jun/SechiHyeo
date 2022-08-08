@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping(value = "/register", produces="application/json;charset=UTF-8")
 @AllArgsConstructor
 @CrossOrigin("*")
 public class RegisterController {
