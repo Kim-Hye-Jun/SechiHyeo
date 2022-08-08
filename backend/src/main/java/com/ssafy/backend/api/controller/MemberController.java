@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping(value = "/member", produces="application/json;charset=UTF-8")
 @AllArgsConstructor
 @CrossOrigin("*")
 public class MemberController {
