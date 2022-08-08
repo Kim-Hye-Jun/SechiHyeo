@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "댓글 API",tags = {"Reply"})
 @RestController
 @RequestMapping("/debate-reply")
-public class ReplyController {
+public class  ReplyController {
     
     //서비스
     @Autowired
