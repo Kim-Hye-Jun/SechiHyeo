@@ -7,6 +7,7 @@ import {
   saveUserToCookie,
 } from "@/utils/cookies";
 import { loginUser } from "@/api/auth";
+import { getMemberInfo } from "@/api/member";
 
 export default createStore({
   state: {
@@ -18,6 +19,9 @@ export default createStore({
   getters: {
     isLogin(state) {
       return state.userid !== "";
+    },
+    isMemberInfo(state) {
+      return state.memberinfo;
     },
   },
   mutations: {
@@ -33,15 +37,23 @@ export default createStore({
     CLEAR_TOKEN(state) {
       state.token = "";
     },
+    SET_MEMBER_INFO(state, member) {
+      state.memberinfo = member;
+    },
+    CLEAR_MEMBER_INFO(state) {
+      state.memberinfo = {};
+    },
   },
   actions: {
-    async LOGIN({ commit }, member) {
+    async loginMember({ commit }, member) {
       const memberId = member.loginId;
       const response = await loginUser(member);
-      console.log(member);
       // console.log(response);
       commit("SET_TOKEN", response.data["access-token"]);
       commit("SET_USER_ID", memberId);
+      const memberInfo = await getMemberInfo();
+      // console.log(memberInfo);
+      commit("SET_MEMBER_INFO", memberInfo.data);
       saveAuthToCookie(response.data["access-token"]);
       saveUserToCookie(memberId);
       return response;

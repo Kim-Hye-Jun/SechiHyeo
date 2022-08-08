@@ -1,7 +1,7 @@
 <template>
   <div class="contents">
     <div class="form-wrapper form-wrapper-sm">
-      <form @submit.prevent="login" class="form">
+      <form @submit.prevent class="form">
         <div>
           <label for="userID">아이디:</label>
           <input
@@ -20,7 +20,7 @@
             placeholder="비밀번호를 입력하세요."
           />
         </div>
-        <button type="submit" class="btn">로그인</button>
+        <button type="button" class="btn" @click="login">로그인</button>
       </form>
       <div class="container text-center">
         <!-- <router-link :to="{ name: 'userid' }" class="find"
@@ -59,7 +59,7 @@ export default defineComponent({
   },
   computed: {},
   methods: {
-    ...mapActions(["LOGIN"]),
+    ...mapActions(["loginMember"]),
     async login() {
       if (this.member.loginId.length == 0) {
         const myDom = document.querySelector("#userID") as HTMLParagraphElement;
@@ -71,17 +71,13 @@ export default defineComponent({
         myDom.focus();
       } else {
         try {
-          await this.LOGIN(this.member);
+          await this.loginMember(this.member);
           this.$router.push("/main");
         } catch (error) {
           console.log(error);
         } finally {
           this.initForm();
         }
-        await this.LOGIN(this.member);
-
-        // const myDom = document.querySelector("#userID") as HTMLParagraphElement;
-        // myDom.focus();
       }
     },
     moveToSignin() {

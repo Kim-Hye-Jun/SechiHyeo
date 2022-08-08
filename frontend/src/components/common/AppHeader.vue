@@ -3,7 +3,7 @@
     <div>
       <router-link :to="headerLink" class="logo">
         세치혀
-        <span v-if="isLogin">by {{ $store.state.username }}</span>
+        <span v-if="isLogin">by {{ isMemberInfo.nickname }}</span>
       </router-link>
     </div>
     <div class="navigations">
@@ -28,16 +28,17 @@ import { deleteCookie } from "@/utils/cookies";
 import { mapGetters, mapMutations } from "vuex";
 export default defineComponent({
   computed: {
-    ...mapGetters(["isLogin"]),
+    ...mapGetters(["isLogin", "isMemberInfo"]),
     headerLink(): string {
       return this.isLogin ? "/main" : "/login";
     },
   },
   methods: {
-    ...mapMutations(["CLEAR_USER_ID", "CLEAR_TOKEN"]),
+    ...mapMutations(["CLEAR_USER_ID", "CLEAR_TOKEN", "CLEAR_MEMBER_INFO"]),
     logoutUser() {
       this.CLEAR_USER_ID();
       this.CLEAR_TOKEN();
+      this.CLEAR_MEMBER_INFO();
       deleteCookie("sch_auth");
       deleteCookie("sch_user");
       this.$router.push("/login");

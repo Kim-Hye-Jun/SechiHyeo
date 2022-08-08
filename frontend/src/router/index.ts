@@ -4,7 +4,8 @@ import store from "@/store/index";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/login",
+    redirect: "/main",
+    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수, 로그인해야하는 path면 추가해주세요
   },
   {
     path: "/login",
@@ -35,7 +36,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.auth && !store.getters.isLogin) {
     // 로그인 안된 유저라면
-    alert("인증이 필요합니다");
+    // alert("인증이 필요합니다");
     next("/login");
     return;
   }

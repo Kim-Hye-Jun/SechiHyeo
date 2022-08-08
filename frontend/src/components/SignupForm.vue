@@ -44,7 +44,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { registerUser } from "@/api/auth";
-import { useStore, mapState } from "vuex";
 
 export default defineComponent({
   data() {
@@ -58,10 +57,15 @@ export default defineComponent({
         phoneNumber: "",
       },
       loginPassword2: "",
+      IdMessage: "",
+      passMessage: "",
+      passCheckMessage: "",
+      nickNameMessage: "",
+      emailMesssage: "",
+      phoneMessage: "",
     };
   },
   computed: {
-    // ...mapState(["checkedId", "checkedEmail", "compare_id", "compare_email"]),
     validId(): boolean {
       return this.member.loginId.length > 4 && this.member.loginId.length < 13;
     },
@@ -76,9 +80,8 @@ export default defineComponent({
     },
     validPw_Re(): boolean {
       return (
-        // this.member.loginPassword == this.loginPassword2 &&
-        // this.member.loginPassword.length > 0
-        true
+        this.member.loginPassword == this.loginPassword2 &&
+        this.member.loginPassword.length > 0
       );
     },
     validEmail(): boolean {

@@ -1,36 +1,60 @@
 <template>
-  <div class="spinner-container">
-    <div class="spinner" />
+  <div class="lds-loading" v-if="loading">
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({});
+<script>
+export default {
+  props: {
+    loading: {
+      type: Boolean,
+      required: true,
+    },
+  },
+};
 </script>
-<style scoped>
-.spinner-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 240px;
+
+<style>
+.lds-loading {
+  display: inline-block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  top: 47%;
+  left: 47%;
 }
-.spinner {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 5px solid #e0e0e0;
-  border-bottom: 5px solid #fe9616;
-  animation: spin 1s linear infinite;
-  position: relative;
+.lds-loading div {
+  display: inline-block;
+  position: absolute;
+  left: 6px;
+  width: 13px;
+  background: #4c42b8;
+  animation: lds-loading 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+.lds-loading div:nth-child(1) {
+  left: 6px;
+  animation-delay: -0.24s;
+}
+.lds-loading div:nth-child(2) {
+  left: 26px;
+  animation-delay: -0.12s;
+}
+.lds-loading div:nth-child(3) {
+  left: 45px;
+  animation-delay: 0;
+}
+@keyframes lds-loading {
+  0% {
+    top: 6px;
+    height: 51px;
   }
-  to {
-    transform: rotate(360deg);
+  50%,
+  100% {
+    top: 19px;
+    height: 26px;
   }
 }
 </style>
