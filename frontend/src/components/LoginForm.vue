@@ -1,5 +1,6 @@
 <template>
   <div class="contents">
+    <background></background>
     <div class="form-wrapper form-wrapper-sm">
       <form @submit.prevent class="form">
         <div>
@@ -47,8 +48,10 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapActions } from "vuex";
+import Background from "./common/Background.vue";
 
 export default defineComponent({
+  components: { Background },
   data() {
     return {
       member: {

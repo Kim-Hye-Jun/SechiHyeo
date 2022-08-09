@@ -26,6 +26,16 @@ const routes: Array<RouteRecordRaw> = [
     path: "/:catchAll(.*)", // vue3부터는 정규식으로 표현
     component: () => import("@/views/NotFoundPage.vue"),
   },
+  {
+    path: "/boards",
+    name: "debateBoards",
+    component: () => import("@/views/BoardsPage.vue"),
+  },
+  {
+    path: "/userpage",
+    name: "userPage",
+    component: () => import("@/views/MyPage.vue"),
+  },
 ];
 
 const router = createRouter({
