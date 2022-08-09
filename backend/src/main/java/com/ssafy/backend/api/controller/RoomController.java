@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @RestController
-@RequestMapping("/api/sessions")
+@RequestMapping("/sessions")
 public class RoomController {
 
     @Autowired
