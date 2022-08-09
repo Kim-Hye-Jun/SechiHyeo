@@ -12,4 +12,13 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     @Query(value = "SELECT COUNT(*) FROM member WHERE login_id = :loginId",
             nativeQuery = true)
     Long getCountOfLoginID(String loginId);
+
+    @Query(value = "SELECT COUNT(*) FROM member WHERE phone_number = :phoneNumber",
+            nativeQuery = true)
+    Long getCountOfPhoneNumber(String phoneNumber);
+
+    @Query(value = "SELECT COUNT(*) FROM member WHERE email = :email",
+            nativeQuery = true)
+    Long getCountOfEmail(String email);
+
 }

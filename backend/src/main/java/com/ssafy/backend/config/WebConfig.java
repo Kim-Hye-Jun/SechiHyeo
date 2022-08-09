@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer{
 	//[CORS 허용 관련]
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("*")
+		registry.addMapping("/api/**").allowedOrigins("*")
 		.allowedMethods("GET","POST","PUT","DELETE")
 		.maxAge(6000);
 	}
@@ -32,14 +32,14 @@ public class WebConfig implements WebMvcConfigurer{
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor)
 				// 모든 path 검증
-				.addPathPatterns("/**")
+				.addPathPatterns("/api/**")
 				// swagger 관련 path 제외
-				.excludePathPatterns("/swagger-ui/**")
-				.excludePathPatterns("/v3/api-docs")
-				.excludePathPatterns("/swagger-resources/**")
-				.excludePathPatterns("/webjars/**")
+				.excludePathPatterns("/api/swagger-ui/**")
+				.excludePathPatterns("/api/v2/api-docs")
+				.excludePathPatterns("/api/swagger-resources/**")
+				.excludePathPatterns("/api/webjars/**")
 				// 회원가입 및 로그인 관련 path 제외
-				.excludePathPatterns("/register/**")
-				.excludePathPatterns("/register/login");
+				.excludePathPatterns("/api/register/**")
+				.excludePathPatterns("/api/member/login");
 	}
 }

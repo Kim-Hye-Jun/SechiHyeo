@@ -29,7 +29,10 @@ public class JWTUtil {
 	public String createToken(String claimId) throws Exception {
 		Date now = new Date();
 		Member member = memberRepository.findByLoginId(claimId);
+		//멤버 번호와 비밀번호 제외
+		member.setMemberNo(-1);
 		member.setLoginPassword("");
+		//토큰에 정보 싣기
 		return Jwts.builder()
 				.setHeaderParam("alg", "HS256")
 				.setHeaderParam("typ", "JWT")
@@ -60,7 +63,7 @@ public class JWTUtil {
 		return member;
 	}
 	
-	// interceptor에서 토큰 유효성을 검증하기 위한 메서드
+	// Interceptor에서 토큰 유효성을 검증하기 위한 메서드
 	public void checkValid(String token) {
 		Jwts.parser().setSigningKey(SALT.getBytes()).parseClaimsJws(token);
 	}
