@@ -24,4 +24,7 @@ public class RoomCreateReq {
     //진영
     private String sideA;
     private String sideB;
+
+    //방장
+    private String host;
 }

@@ -1,6 +1,7 @@
 package com.ssafy.backend.api.service;
 
 
+import com.ssafy.backend.db.entity.Member;
 import com.ssafy.backend.dto.Room;
 import com.ssafy.backend.dto.SessionRoom;
 import com.ssafy.backend.dto.request.RoomCreateReq;
@@ -127,11 +128,15 @@ public class RoomServiceImpl implements RoomService {
             //토큰
             String token = session.createConnection(connectionProperties).getToken();
 
+            //RoomCreateReq에 host 변수에 접속자 id를 넣어줘야 함
+
             //세션 아이디와 토큰, 사용자 닉네임을 반환할 것
+            //방 생성한 경우 방장이므로 방장 권한 반환
             return RoomCreateRes.builder()
                     .OpenviduId(session.getSessionId())
                     .token(token)
                     .nickname("nickname")
+                    .isHost(true)
                     .build();
 
         } catch (OpenViduJavaClientException e) {
@@ -171,10 +176,12 @@ public class RoomServiceImpl implements RoomService {
             String token = session.createConnection(connectionProperties).getToken();
 
             //세션 아이디와 토큰, 사용자 닉네임을 반환할 것
+            //방에 접속하는 사람일 경우 방장이 아니므로 방장 권한 부여x
             return RoomJoinRes.builder()
                     .OpenviduId(session.getSessionId())
                     .token(token)
                     .nickname("nickname")
+                    .isHost(false)
                     .build();
 
         } catch (OpenViduJavaClientException e) {
@@ -184,6 +191,7 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
+    //마지막 사용자가 나가며 자동 삭제될 때랑, 사용자가 있는데 방을 종료하는 경우 둘 다 코드 작성
     @Override
     public void deleteRoom(String OpenviduId) {
         List<Session> sessionList = openVidu.getActiveSessions();
@@ -199,5 +207,11 @@ public class RoomServiceImpl implements RoomService {
                 }
             }
         }
+    }
+
+    //방장 권한 이동
+    @Override
+    public void changeHost(Member prevMember, Member nextMember) {
+
     }
 }

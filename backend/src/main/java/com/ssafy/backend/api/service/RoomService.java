@@ -1,6 +1,7 @@
 package com.ssafy.backend.api.service;
 
 //import com.ssafy.backend.db.entity.Room;
+import com.ssafy.backend.db.entity.Member;
 import com.ssafy.backend.dto.Room;
 import com.ssafy.backend.dto.request.RoomCreateReq;
 import com.ssafy.backend.dto.request.RoomJoinReq;
@@ -28,5 +29,8 @@ public interface RoomService {
 
     //방 삭제
     void deleteRoom(String OpenviduId);
+
+    //방장 권한 이동
+    void changeHost(Member prevMember, Member nextMember);
 
 }

@@ -66,6 +66,11 @@ public class RoomController {
         return ResponseEntity.ok(roomJoinRes);
     }
 
+    //방 설정 수정 요청
+
+    //방 설정 수정
+
+    //
 
 
 }

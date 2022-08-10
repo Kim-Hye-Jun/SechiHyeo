@@ -8,8 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class RoomJoinRes {
-    //세션아이디, 토큰, 닉네임(사용자정보)
+    //세션아이디, 토큰, 닉네임(사용자정보), 방장 권한
     private String OpenviduId;
     private String token;
     private String nickname;
+    private boolean isHost;
 }
