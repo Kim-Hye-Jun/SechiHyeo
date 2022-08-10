@@ -14,7 +14,7 @@
         </div>
         <div>
           <label for="password">비밀번호 확인: </label>
-          <input id="password" type="text" v-model="member.loginPassword2" />
+          <input id="password" type="text" v-model="loginPassword2" />
         </div>
         <div>
           <label for="nickname">닉네임: </label>
@@ -79,10 +79,7 @@ export default defineComponent({
       );
     },
     validPw_Re(): boolean {
-      return (
-        this.member.loginPassword == this.loginPassword2 &&
-        this.member.loginPassword.length > 0
-      );
+      return this.member.loginPassword === this.loginPassword2;
     },
     validEmail(): boolean {
       const exptext = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/;
