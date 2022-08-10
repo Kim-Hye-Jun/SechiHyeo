@@ -12,14 +12,14 @@ import javax.persistence.Column;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomCreateReq {
-    private String RoomTitle;
-    private String DebateTopic;
-    private int HeadCount;
-    private String RoomType;
-    private String DebateType;
+    private String roomTitle;
+    private String debateTopic;
+    private int headCount;
+    private String roomType;
+    private String debateType;
 
     //private일 경우 비밀번호
-    private int password;
+    private String password;
 
     //진영
     private String sideA;
