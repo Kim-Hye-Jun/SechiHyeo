@@ -8,6 +8,7 @@ import com.ssafy.backend.dto.request.RoomCreateReq;
 import com.ssafy.backend.dto.request.RoomJoinReq;
 import com.ssafy.backend.dto.response.RoomCreateRes;
 import com.ssafy.backend.dto.response.RoomJoinRes;
+import com.ssafy.backend.dto.response.RoomSearchRes;
 import io.openvidu.java.client.*;
 import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class RoomController {
 
     // 1. 전체 방 조회
     @GetMapping("/{page_info}")
-    public ResponseEntity<List<Room>> getAllRoom(@PathVariable("page_info") int pageInfo){
-        List<Room> list = roomService.getRooms(pageInfo);
+    public ResponseEntity<List<RoomSearchRes>> getAllRoom(@PathVariable("page_info") int pageInfo){
+        List<RoomSearchRes> list = roomService.getRooms(pageInfo);
         return ResponseEntity.ok(list);
     }
 
@@ -42,7 +43,7 @@ public class RoomController {
     }
 
     // 3. 방 생성
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<RoomCreateRes> createRoom(RoomCreateReq roomCreateReq){
         RoomCreateRes roomCreateRes = roomService.createRoom(roomCreateReq);
         return ResponseEntity.ok(roomCreateRes);

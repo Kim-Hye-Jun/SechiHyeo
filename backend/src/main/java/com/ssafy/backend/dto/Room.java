@@ -1,5 +1,6 @@
 package com.ssafy.backend.dto;
 
+import com.ssafy.backend.dto.response.RoomSearchRes;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -20,8 +21,18 @@ public class Room {
     private String thumbnail;
 
     //private일 경우 비밀번호
-    private int password;
+    private String password;
 
     private String sideA;
     private String sideB;
+
+    public RoomSearchRes convertToRoomSearchRes(Room room) {
+        return RoomSearchRes.builder()
+                .roomTitle(room.getRoomTitle())
+                .roomType(room.getRoomType())
+                .openviduId(room.getOpenviduId())
+                .headCount(room.getHeadCount())
+                .thumbnail(room.getThumbnail())
+                .build();
+    }
 }

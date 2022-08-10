@@ -1,14 +1,12 @@
 package com.ssafy.backend.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RoomSearchRes {
     //세션 아이디, 방 제목, 방 인원수, 잠금여부, 방 썸네일
     private String openviduId;

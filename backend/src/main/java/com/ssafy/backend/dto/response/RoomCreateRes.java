@@ -10,6 +10,4 @@ import lombok.*;
 public class RoomCreateRes {
     //세션아이디, 토큰, 닉네임(사용자정보)
     private String OpenviduId;
-    private String token;
-    private String nickname;
 }
