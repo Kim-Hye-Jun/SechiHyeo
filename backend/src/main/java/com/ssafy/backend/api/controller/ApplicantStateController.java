@@ -2,9 +2,11 @@ package com.ssafy.backend.api.controller;
 
 import com.ssafy.backend.api.request.applicantState.ApplicantStateRegiPostReq;
 import com.ssafy.backend.api.request.debateBoard.DebateBoardRegiPostReq;
+import com.ssafy.backend.api.response.applicantState.ApplicantStateRes;
 import com.ssafy.backend.api.service.ApplicantService;
 import com.ssafy.backend.common.model.response.BaseResponseBody;
 import com.ssafy.backend.common.util.JWTUtil;
+import com.ssafy.backend.db.entity.ApplicantState;
 import com.ssafy.backend.db.entity.Member;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Api(value = "토론 신청 API",tags = {"Applicant State"})
 @RestController
@@ -76,10 +80,75 @@ public class ApplicantStateController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseResponseBody> deleteApplicantState(HttpServletRequest request,@RequestParam long apply_no){
+    public ResponseEntity<? extends BaseResponseBody> deleteApplicantState(@RequestParam long apply_no){
         if(applicantService.deleteApplicant(apply_no)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
         else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
     }
 
+    @GetMapping("/recruiting")
+    @ApiOperation(value = "토론 모집 조회", notes = "내가 모집한 applicant_state 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 접근"),
+    })
+    public ResponseEntity<List<ApplicantStateRes>> getRecruitingApplicantState(HttpServletRequest request){
+        try {
+            String token = request.getHeader(HEADER_AUTH);
+            Member member = jwtUtil.getInfo(token);
 
+            List<ApplicantState> list=applicantService.getRecruitingApplicant(member.getMemberNo());
+            if(list==null){
+                return ResponseEntity.status(400).body(null);
+            }
+            ArrayList<ApplicantStateRes> arrayList=new ArrayList<>();
+
+            for (ApplicantState as: list
+                 ) {
+                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant(applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                        .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
+                        .board_finished(as.getDebateBoard().isBoardFinished()).build());
+            }
+
+            return ResponseEntity.status(200).body(arrayList);
+        } catch(Exception e) {
+            //토큰이 유효하지 않은 경우
+            String message = "권한이 없습니다.";
+
+            return ResponseEntity.status(400).body(null);
+        }
+    }
+
+    @GetMapping("/applying")
+    @ApiOperation(value = "토론 모집 조회", notes = "내가 신청한 applicant_state 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 접근"),
+    })
+    public ResponseEntity<List<ApplicantStateRes>> getApplyingApplicantState(HttpServletRequest request){
+        try {
+            String token = request.getHeader(HEADER_AUTH);
+            Member member = jwtUtil.getInfo(token);
+
+            List<ApplicantState> list=applicantService.getApplyingApplicant(member.getMemberNo());
+            if(list==null){
+                return ResponseEntity.status(400).body(null);
+            }
+            ArrayList<ApplicantStateRes> arrayList=new ArrayList<>();
+
+            for (ApplicantState as: list
+            ) {
+                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant(applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                        .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
+                        .board_finished(as.getDebateBoard().isBoardFinished()).build());
+            }
+
+            return ResponseEntity.status(200).body(arrayList);
+
+        } catch(Exception e) {
+            //토큰이 유효하지 않은 경우
+            String message = "권한이 없습니다.";
+
+            return ResponseEntity.status(400).body(null);
+        }
+    }
 }
