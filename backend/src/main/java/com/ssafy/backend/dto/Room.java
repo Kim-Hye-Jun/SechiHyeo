@@ -23,8 +23,16 @@ public class Room {
     //private일 경우 비밀번호
     private String password;
 
+    //진영
     private String sideA;
     private String sideB;
+
+    //진영에 속한 사람들?
+    //발언 순서
+
+    //규칙
+    String debateFormat;
+
 
     public RoomSearchRes convertToRoomSearchRes(Room room) {
         return RoomSearchRes.builder()
