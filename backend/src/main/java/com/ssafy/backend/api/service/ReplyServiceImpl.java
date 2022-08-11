@@ -3,6 +3,7 @@ package com.ssafy.backend.api.service;
 import com.ssafy.backend.api.request.reply.ReplyChangeReq;
 import com.ssafy.backend.api.request.reply.ReplyRegiPostReq;
 import com.ssafy.backend.db.entity.DebateBoard;
+import com.ssafy.backend.db.entity.Member;
 import com.ssafy.backend.db.entity.Reply;
 import com.ssafy.backend.db.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ReplyServiceImpl implements  ReplyService{
     }
 
     @Override
-    public boolean regiReply(long board_no, ReplyRegiPostReq regiReq) {
+    public boolean regiReply(long board_no, ReplyRegiPostReq regiReq, Member member) {
         DebateBoard debateBoard=debateBoardService.getBoard(board_no);
         if(debateBoard==null) return false;
 

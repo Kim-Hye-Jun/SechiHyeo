@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "REPLY")
 public class Reply  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class Reply  {
     boolean hidden;
 
     @Column(name="parent_no")
-    int parentNo;
+    long parentNo;
     
     //연관
     //게시판

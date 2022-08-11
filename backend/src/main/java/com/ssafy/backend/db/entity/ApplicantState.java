@@ -12,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "APPLICANT_STATE")
 public class ApplicantState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,8 @@ public class ApplicantState {
 
     int side;
     int turn;
+    // 0:거절 , 1:승인 , 2:대기
+    int accept;
 
     //연관
     //게시판

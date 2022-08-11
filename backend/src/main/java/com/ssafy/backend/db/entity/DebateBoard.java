@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "DEBATE_BOARD")
 public class DebateBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
