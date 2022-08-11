@@ -7,23 +7,32 @@
     <div class="userpage-content-set-form-pw">PW</div>
     <div class="userpage-content-set-form-email">E-mail</div>
     <div class="userpage-content-set-form-phone">Phone</div>
-    <input class="userpage-content-set-form-input-id" v-model="user.id" />
+    <input
+      class="userpage-content-set-form-input-id"
+      v-model="member.nickname"
+    />
     <input
       class="userpage-content-set-form-input-pw"
       type="password"
-      v-model="user.pw"
+      v-model="member.login_password"
     />
-    <input class="userpage-content-set-form-input-email" v-model="user.email" />
-    <input class="userpage-content-set-form-input-phone" v-model="user.phone" />
+    <input
+      class="userpage-content-set-form-input-email"
+      v-model="member.email"
+    />
+    <input
+      class="userpage-content-set-form-input-phone"
+      v-model="member.phone_number"
+    />
   </div>
   <input
     class="userpage-content-set-form-intro"
     type="text"
     placeholder="한줄 소개"
-    v-model="user.intro"
+    v-model="member.introduce"
   />
   <div class="userpage-content-set-form-intro-word">글자 수</div>
-  <button class="userpage-content-set-form-button" @click="update">
+  <button class="userpage-content-set-form-button" @click="profileUpdate">
     수정 완료
   </button>
 </template>
@@ -33,24 +42,25 @@ import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
-      user: {
-        id: "",
-        pw: "",
+      member: {
+        profile_url: "",
+        nickname: "",
+        login_password: "",
+        introduce: "",
+        phone_number: "",
         email: "",
-        phone: "",
-        intro: "",
       },
     };
   },
   computed: {
-    ...mapState("userStore", ["user"]),
+    ...mapState(["memberinfo"]),
   },
-  // methods: {
-  //   ...mapActions("userStore", ["UPDATE"]),
-  //   update() {
-  //     this.UPDATE(this.user);
-  //   },
-  // },
+  methods: {
+    ...mapActions(["PROFILEUPDATE"]),
+    profileUpdate() {
+      this.PROFILEUPDATE(this.memberinfo);
+    },
+  },
 };
 </script>
 

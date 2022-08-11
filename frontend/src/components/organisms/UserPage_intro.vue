@@ -1,21 +1,27 @@
 <template>
   <div class="userpage-content-intro-text">
-    토론이 삶이다! {{ user.introduce }}
+    토론이 삶이다! {{ member.introduce }}
   </div>
 </template>
 
 <script lang="ts">
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      user: {
+      member: {
         introduce: "",
       },
     };
   },
-  computed: {
-    ...mapState("userStore", ["user"]),
+  created() {
+    this.memberProfile();
+  },
+  methods: {
+    ...mapActions(["MEMBERPROFILE"]),
+    memberProfile() {
+      this.MEMBERPROFILE();
+    },
   },
 };
 </script>

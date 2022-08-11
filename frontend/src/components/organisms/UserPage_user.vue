@@ -1,10 +1,11 @@
 <template>
   <div class="userpage-user">
-    <div class="userpage-user-image">{{ user.image }}</div>
-    <div class="userpage-user-badge">{{ user.badge }}</div>
-    <div class="userpage-user-nickname">토론킹 {{ user.nickname }}</div>
-    <div class="userpage-user-level">level.{{ user.level }}</div>
-    <div class="userpage-user-exp">exp {{ user.exp }}%</div>
+    <div class="userpage-user-image">{{ member.profile_url }}</div>
+    <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
+    <!-- badge는 db에 없다 -->
+    <div class="userpage-user-nickname">토론킹 {{ member.nickname }}</div>
+    <div class="userpage-user-level">level.{{ member.level }}</div>
+    <div class="userpage-user-exp">exp {{ member.exp }}%</div>
     <div class="userpage-user-bar">
       <div class="userpage-user-bar-exp"></div>
       <div class="userpage-user-bar-bar"></div>
@@ -13,21 +14,30 @@
 </template>
 
 <script lang="ts">
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      user: {
-        image: "",
-        badge: [],
-        nickname: "",
+      member: {
+        profile_url: "",
         level: "",
+        nickname: "",
         exp: "",
       },
     };
   },
-  computed: {
-    ...mapState("userStore", ["user"]),
+  created() {
+    this.memberProfile();
+    this.memberExp();
+  },
+  methods: {
+    ...mapActions(["MEMBERPROFILE", "MEMBEREXP"]),
+    memberProfile() {
+      this.MEMBERPROFILE();
+    },
+    memberExep() {
+      this.MEMBEREXP();
+    },
   },
 };
 </script>

@@ -1,32 +1,38 @@
 <template>
   <div class="userpage-content-record-time-box">
-    {{ debate_number }} Fight Record
+    {{ member.debate_number }} Fight Record
   </div>
   <div class="userpage-content-record-inform-box">
-    <div class="userpage-content-record-inform">{{ record_win }} 전적</div>
-    <div class="userpage-content-record-inform">{{ record_lose }}</div>
-    <div class="userpage-content-record-inform">{{ record_draw }}</div>
-    <div class="userpage-content-record-pagination">1 2 3 4 5 6</div>
+    <div class="userpage-content-record-inform">{{ member.record_win }}</div>
+    <div class="userpage-content-record-inform">{{ member.record_lose }}</div>
+    <div class="userpage-content-record-inform">{{ member.record_draw }}</div>
+    <!-- <div class="userpage-content-record-pagination">1 2 3 4 5 6</div> -->
   </div>
 </template>
 
 <script lang="ts">
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
       members: [],
       member: {
         debate_number: "",
-        debate_time: "",
+        // debate_time: "",
         record_win: "",
         record_lose: "",
         record_draw: "",
       },
     };
   },
-  computed: {
-    ...mapState("boardStore", ["board"]),
+  created() {
+    this.memberRecord();
+  },
+  methods: {
+    ...mapActions(["MEMBERRECORD"]),
+    memberRecord() {
+      this.MEMBERRECORD();
+    },
   },
 };
 </script>
@@ -155,12 +161,12 @@ export default {
     0 0 12px 11px rgba(67, 67, 67, 0.9) inset,
     0 8px 30px 18px rgba(0, 0, 0, 0.8), 0 8px 25px 12px rgba(0, 0, 0, 0.7) inset;
 }
-.userpage-content-record-pagination {
+/* .userpage-content-record-pagination {
   position: absolute;
   left: 50%;
   transform: translate(-50%);
   font-family: "Inter";
   font-size: 30px;
   color: black;
-}
+} */
 </style>

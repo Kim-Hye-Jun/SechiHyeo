@@ -3,14 +3,35 @@
     class="userpage-content-room"
     v-for="board in boards"
     :key="board"
-    :filter="user.id"
+    :filter="(applicant.login_id, applicant.board_no)"
     :filter-function="myApply"
   >
-    <div class="userpage-content-count">{{ board.maxApplicant }}/6</div>
-    <div class="userpage-content-topic">{{ board.title }}토론의 시대다</div>
+    <div class="userpage-content-count">
+      {{ board.current_applicant }}/{{ board.max_applicant }}
+    </div>
+    <div class="userpage-content-topic">
+      {{ board.debate_topic }}토론의 시대다
+    </div>
+    <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
     <div class="userpage-content-room-button">
-      <a href="#" class="userpage-content-room-button-start" @click="moveToRoom"
+      <a
+        href="#"
+        class="userpage-content-room-button-no"
+        v-if="applicant.accept === 0"
+        >거절</a
+      >
+      <a
+        href="#"
+        class="userpage-content-room-button-start"
+        @click="moveToRoom"
+        v-if="applicant.accept === 1"
         >입장</a
+      >
+      <a
+        href="#"
+        class="userpage-content-room-button-wait"
+        v-if="applicant.accept === 2"
+        >대기</a
       >
     </div>
   </div>
@@ -52,31 +73,50 @@
 </template>
 
 <script lang="ts">
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
+      member: {
+        member_no: "",
+        login_id: "",
+      },
       boards: [],
       board: {
-        num: "",
-        title: "",
-        count: "",
+        debate_topic: "",
+        max_applicant: "",
+        current_applicant: "",
+        board_finished: "",
+      },
+      applicant: {
+        login_id: "",
+        board_no: "",
+        accept: "",
       },
     };
   },
-  // created() {
-  //   this.boardAll();
-  // },
   computed: {
-    ...mapState("boardStore", ["board"]),
+    ...mapState(["board"]),
+  },
+  created() {
+    this.debateApply();
   },
   methods: {
-    // moveToRoom(board: { num: string }) {
-    //   this.$router.push("/room/" + board.num);
-    // },
-    myApply(user: { id: any }, filter: any) {
-      if (user.id === filter) {
-        return true;
+    ...mapActions(["DEBATEAPPLY"]),
+    debateApply() {
+      this.DEBATEAPPLY();
+    },
+    moveToRoom(board: { num: string }) {
+      this.$router.push("/room/" + board.num);
+    },
+    myApply(
+      member: { login_id: any },
+      board: { board_no: any },
+      filter: any[]
+    ) {
+      if (member.login_id === filter[0]) {
+        if (board.board_no === filter[1]) return true;
+        return false;
       }
       return false;
     },

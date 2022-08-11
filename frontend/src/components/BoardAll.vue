@@ -43,7 +43,7 @@
             {{ board.board_title }}
           </div>
           <div class="boards-content-write-count">
-            6/{{ board.max_applicant }}
+            {{ board.current_applicant }}/{{ board.max_applicant }}
           </div>
         </div>
         <div class="boards-content-write-box1" @click="modalIn">
@@ -67,7 +67,7 @@
           <div class="boards-content-write-no">{{ board.board_no }}</div>
           <div class="boards-content-write-title">{{ board.board_title }}</div>
           <div class="boards-content-write-count">
-            6/{{ board.max_applicant }}
+            {{ board.current_applicant }}/{{ board.max_applicant }}
           </div>
         </div>
         <div class="boards-content-write-box2" @click="modalIn">
@@ -83,9 +83,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Background from "@/components/common/Background.vue";
 import BoardDetail from "./BoardDetail.vue";
+import { mapActions, mapState } from "vuex";
+
 export default {
   components: { Background, BoardDetail },
   data() {
@@ -98,6 +100,7 @@ export default {
         board_no: "",
         board_title: "",
         max_applicant: "",
+        current_applicant: "",
         board_finished: "",
       },
       room: {
@@ -105,7 +108,17 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(["boards"]),
+  },
+  created() {
+    this.boardAll();
+  },
   methods: {
+    ...mapActions(["BOARDALL"]),
+    boardAll() {
+      this.BOARDALL();
+    },
     academyClick() {
       (this.academy = true), (this.free = false);
     },
@@ -118,6 +131,7 @@ export default {
     },
     modalOut() {
       this.modal = false;
+      console.log("ddddd");
     },
     typeAcademy(room, filter) {
       if (room.debateType === filter) {
@@ -182,6 +196,7 @@ export default {
   text-align: center;
   color: #ffffff;
   font-style: italic;
+  font-family: "Raleway", sans-serif;
 }
 .boards-title::after {
   content: "토론 모집 게시판";

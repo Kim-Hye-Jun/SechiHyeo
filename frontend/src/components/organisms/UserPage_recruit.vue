@@ -3,13 +3,16 @@
     class="userpage-content-room"
     v-for="board in boards"
     :key="board"
-    :filter="user.id"
+    :filter="board.member_no"
     :filter-function="myRecruit"
   >
-    <div class="userpage-content-count">{{ board.maxApplicant }}/6</div>
-    <div class="userpage-content-topic">
-      {{ board.title }}미래와 토론의 연관
+    <div class="userpage-content-count">
+      {{ board.current_applicant }}/{{ board.max_applicant }}
     </div>
+    <div class="userpage-content-topic">
+      {{ board.debate_topic }}미래와 토론의 연관
+    </div>
+    <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
     <div class="userpage-content-room-button">
       <a href="#" class="userpage-content-room-button-start" @click="moveToRoom"
         >시작</a
@@ -54,30 +57,38 @@
 </template>
 
 <script lang="ts">
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
+      member: {
+        member_no: "",
+      },
       boards: [],
       board: {
-        num: "",
-        title: "",
-        count: "",
+        debate_topic: "",
+        max_applicant: "",
+        current_applicant: "",
+        board_finished: "",
       },
     };
   },
-  // created() {
-  //   this.boardAll();
-  // },
   computed: {
-    ...mapState("boardStore", ["board"]),
+    ...mapState(["board"]),
+  },
+  created() {
+    this.debateRecruit();
   },
   methods: {
-    // moveToRoom(board: { num: string }) {
-    //   this.$router.push("/room/" + board.num);
-    // },
-    myRecruit(user: { id: any }, filter: any) {
-      if (user.id === filter) {
+    ...mapActions(["DEBATERECRUIT"]),
+    debateRecruit() {
+      this.DEBATERECRUIT();
+    },
+    moveToRoom(board: { num: string }) {
+      this.$router.push("/room/" + board.num);
+    },
+    myRecruit(member: { member_no: any }, filter: any) {
+      if (member.member_no === filter) {
         return true;
       }
       return false;

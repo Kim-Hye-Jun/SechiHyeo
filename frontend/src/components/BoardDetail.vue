@@ -19,14 +19,16 @@
       </div>
       <div class="board-reply-box">
         <h3 class="board-reply">댓글</h3>
-        <h5 class="board-reply-count">{{}} 99개</h5>
+        <h5 class="board-reply-count">{{ reply.depth }} 개</h5>
       </div>
-      <img class="board-reply-create-profile" :src="profile_url" />
+      <img class="board-reply-create-profile" :src="member.profile_url" />
       <textarea class="board-reply-create-input" placeholder="댓글"></textarea>
-      <button class="board-reply-create-sign">등록</button>
+      <button class="board-reply-create-sign" @click="replyInsert()">
+        등록
+      </button>
       <!-- 댓글 반복 -->
-      <div>
-        <img class="board-reply-ex-profile" :src="profile_url" />
+      <div v-for="reply in replies" :key="reply.reply_no">
+        <img class="board-reply-ex-profile" :src="reply.profile_url" />
         <p class="board-reply-ex-user">User {{ reply.nickname }}</p>
         <p class="board-reply-ex-user-content">댓글 {{ reply.context }}</p>
         <button
@@ -43,15 +45,23 @@
         </button>
         <!-- 대댓글 토글 버튼 -->
         <button class="board-reply-ex-reply">답글</button>
-        <img class="board-reply2-create-profile" :src="profile_url" />
+        <img class="board-reply2-create-profile" :src="member.profile_url" />
         <textarea
           class="board-reply2-create-input"
           placeholder="대댓글"
         ></textarea>
-        <button class="board-reply2-create-sign">등록</button>
+        <button class="board-reply2-create-sign" @click="replyInsert()">
+          등록
+        </button>
         <!-- 대댓글 반복 -->
-        <div class="board-reply2-ex">
-          <image class="board-reply2-ex-profile" :src="profile_url" />
+        <div
+          class="board-reply2-ex"
+          v-for="reply in replies"
+          :key="reply"
+          :filter="reply.board_no"
+          :filter-function="reReply"
+        >
+          <image class="board-reply2-ex-profile" :src="reply.profile_url" />
           <p class="board-reply2-ex-user">User {{ reply.nickname }}</p>
           <p>대댓글 {{ reply.context }}</p>
           <button
@@ -70,18 +80,29 @@
       </div>
     </div>
     <footer class="modal-container-footer">
-      <button class="button decline modalOut" @click="goBack">뒤로가기</button>
-      <button class="button accept">참가신청</button>
+      <button class="button decline modalOut" @click="modalOut">
+        뒤로가기
+      </button>
+      <!-- 참가신청 버튼 메소드 미작성 -->
+      <button class="button accept" @click="apply">참가신청</button>
     </footer>
   </div>
 </template>
 
-<script lang="ts">
+<script>
+import axios from "axios";
+import { mapActions, mapState } from "vuex";
+
 export default {
   data() {
     return {
+      modal: true,
+      member: {
+        profile_url: "",
+      },
       boards: [],
       board: {
+        board_no: "",
         board_title: "",
         debate_topic: "",
         board_content: "",
@@ -104,16 +125,58 @@ export default {
         profile_url: "",
         nickname: "",
       },
-      replyCount: "",
     };
   },
+  computed: {
+    ...mapState(["boards"]),
+  },
+  created() {
+    let no = this.$route.params.board_no;
+    this.boardOne(no);
+    this.replyAll();
+  },
   methods: {
-    // replyUpdate() {
-    //   this.$router.push("/board/update");
-    // },
-    // replyDelete(num) {
-    //   this.REPLYDELETE(num);
-    // },
+    ...mapActions(["BOARDONE"]),
+    boardOne(no) {
+      this.BOARDONE(no);
+    },
+    // 자식 대댓글만을 걸러내기 위한 부모 댓글 필터
+    reReply(reply, filter) {
+      if (reply.parent_no === filter) {
+        return true;
+      }
+      return false;
+    },
+    replyAll() {
+      axios.get("debate-reply/" + this.reply_no).then((res) => {
+        this.replies = res.data;
+      });
+    },
+    replyInsert() {
+      axios
+        .post("debate-reply/" + this.board_no, {
+          parent_no: this.parent_no,
+          context: this.context,
+          depth: this.depth,
+        })
+        .then(() => {
+          this.newContent = "";
+          this.replyAll();
+        });
+    },
+    replyUpdate(reply_no) {
+      axios.put(`debate-reply/`, reply_no).then((res) => {
+        console.log(res.data);
+      });
+    },
+    replyDelete(reply_no) {
+      let flag = confirm("정말로 삭제하시겠습니까??");
+      if (flag) {
+        axios.delete("debate-reply/" + reply_no).then(() => {
+          this.replyAll();
+        });
+      }
+    },
   },
 };
 </script>
@@ -541,7 +604,7 @@ a {
   display: inline-block;
   width: 50px;
   height: 30px;
-  left: 200px;
+  left: 0px;
   top: -20px;
   font-family: "Inter";
   font-style: normal;
