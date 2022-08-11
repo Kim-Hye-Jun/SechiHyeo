@@ -2,7 +2,7 @@
 
 ## application.properties
 - 서버 포트번호 8080
-- context path: /api/
+- context path: /api
 - db 설정
   - 스키마 이름: ssafy_web_db
   - ID: root
