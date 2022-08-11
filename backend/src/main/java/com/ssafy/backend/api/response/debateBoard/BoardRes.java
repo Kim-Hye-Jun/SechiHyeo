@@ -12,8 +12,8 @@ import java.util.List;
 @Setter
 @ApiModel("boardResponse")
 public class BoardRes {
-    DebateBoard board;
-    List<Reply> replies;
+    BoardResBoard board;
+    List<BoardResReply> replies;
 
 
 }

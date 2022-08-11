@@ -26,7 +26,7 @@ public class Reply  {
     boolean hidden;
 
     @Column(name="parent_no")
-    int parentNo;
+    long parentNo;
     
     //연관
     //게시판

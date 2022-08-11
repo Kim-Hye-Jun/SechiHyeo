@@ -1,13 +1,17 @@
 package com.ssafy.backend.api.controller;
 
 import com.ssafy.backend.api.request.debateBoard.DebateBoardRegiPostReq;
+import com.ssafy.backend.api.response.debateBoard.AllBoardRes;
 import com.ssafy.backend.api.response.debateBoard.BoardRes;
+import com.ssafy.backend.api.response.debateBoard.BoardResBoard;
+import com.ssafy.backend.api.response.debateBoard.BoardResReply;
 import com.ssafy.backend.api.service.DebateBoardService;
 import com.ssafy.backend.api.service.ReplyService;
 import com.ssafy.backend.common.model.response.BaseResponseBody;
 import com.ssafy.backend.common.util.JWTUtil;
 import com.ssafy.backend.db.entity.DebateBoard;
 import com.ssafy.backend.db.entity.Member;
+import com.ssafy.backend.db.entity.Reply;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -18,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,16 +49,24 @@ public class DebateBoardController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<List<DebateBoard>> getBoards(){
+    public ResponseEntity<List<AllBoardRes>> getBoards(){
 
         List<DebateBoard> debateBoards=debateBoardService.getBoards();
 
         //실패=리스트 비어있음
         if(debateBoards==null){
             return ResponseEntity.status(400).body(null);
-        }else{
-            return ResponseEntity.status(200).body(debateBoards);
         }
+
+        ArrayList<AllBoardRes> list=new ArrayList<>();
+
+        for (DebateBoard db: debateBoards
+             ) {
+            list.add(AllBoardRes.builder().board_finished(db.isBoardFinished()).board_no(db.getBoardNo()).board_title(db.getBoardTitle()).max_applicant(db.getMaxApplicant()).build());
+        }
+
+
+        return ResponseEntity.status(200).body(list);
     }
 
     @GetMapping("/{board_no}")
@@ -67,13 +80,44 @@ public class DebateBoardController {
         //boardservice에서 보드를 board_no에 맞춰서 가져온다
         //없다면 400리턴
         //있다면 댓글 목록 가져온후 리턴
-        boardRes.setBoard(debateBoardService.getBoard(board_no));
+        DebateBoard debateBoard=debateBoardService.getBoard(board_no);
+        boardRes.setBoard(BoardResBoard.builder()
+                .board_title(debateBoard.getBoardTitle())
+                .debate_topic(debateBoard.getDebateTopic())
+                        .board_content(debateBoard.getBoardContent())
+                        .board_time(debateBoard.getBoardTime())
+                        .debate_time(debateBoard.getDebateTime())
+                        .max_applicant(debateBoard.getMaxApplicant())
+                        .a_opinion(debateBoard.getAOpinion())
+                        .b_opinion(debateBoard.getBOpinion())
+                        .board_finished(debateBoard.isBoardFinished())
+                        .login_id(debateBoard.getMember().getLoginId())
+                        .nickname(debateBoard.getMember().getNickname())
+                .build());
+
         if(boardRes.getBoard()==null){
             return ResponseEntity.status(400).body(null);
         }
 
         //board_no에 따른 댓글 가져오기
-        boardRes.setReplies(replyService.GetReplies(board_no));
+        List<Reply> replies=replyService.GetReplies(board_no);
+        ArrayList<BoardResReply> list=new ArrayList<>();
+        for (Reply reply:replies
+             ) {
+            list.add(BoardResReply.builder()
+                            .reply_no(reply.getReplyNo())
+                            .context(reply.getContext())
+                            .date(reply.getDate())
+                            .depth(reply.getDepth())
+                            .hidden(reply.isHidden())
+                            .board_no(reply.getDebateBoard().getBoardNo())
+                            .parent_no(reply.getParentNo())
+                            .login_id(reply.getMember().getLoginId())
+                            .nickname(reply.getMember().getNickname())
+                    .build());
+        }
+
+        boardRes.setReplies(list);
         
         return ResponseEntity.status(200).body(null);
     }
