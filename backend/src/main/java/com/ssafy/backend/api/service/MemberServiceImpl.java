@@ -70,6 +70,18 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+    //프로필 이미지 업로드
+    @Transactional
+    @Override
+    public void changeProfileImage(String loginId, String profileName, String profileUrl) {
+        Member member = memberRepository.findByLoginId(loginId);
+
+        member.setProfileName(profileName);
+        member.setProfileUrl(profileUrl);
+
+        memberRepository.save(member);
+    }
+
     //비밀번호 재설정
     @Transactional
     @Override
