@@ -3,9 +3,11 @@
     <!-- <div class="flex-container"> -->
     <room-entrance-thumbnail-component
       class="flex-item"
+      :thumbnailSrc="roomInfo.thumbnail"
     ></room-entrance-thumbnail-component>
     <room-entrance-name-component
       class="flex-item"
+      :roomTitle="roomInfo.roomTitle"
     ></room-entrance-name-component>
     <room-entrance-info-component
       class="flex-item"
@@ -30,8 +32,7 @@ export default defineComponent({
   props: ["roomInfo"],
   setup(props) {
     if (props.roomInfo) {
-      console.log(props.roomInfo[0]);
-      console.log(props.roomInfo[1]);
+      console.log("PROPS :: ", props.roomInfo);
     }
   },
   methods: {},

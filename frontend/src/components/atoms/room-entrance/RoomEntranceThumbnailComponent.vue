@@ -1,7 +1,7 @@
 <template>
   <img
     class="thumbnail"
-    src="/img/icons/android-chrome-512x512.png"
+    :src="thumbnailSrc"
     alt="Grapefruit slice atop a pile of other slices"
   />
 </template>
@@ -10,6 +10,9 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  props: {
+    thumbnailSrc: String,
+  },
   data() {
     return {
       room_no: 0,

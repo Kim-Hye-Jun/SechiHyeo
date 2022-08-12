@@ -46,7 +46,7 @@ export default defineComponent({
   padding: 10px 0;
   font-size: 16px;
   color: #fff;
-  /* pointer-events: none; */
+  pointer-events: none;
   transition: 0.5s;
 }
 

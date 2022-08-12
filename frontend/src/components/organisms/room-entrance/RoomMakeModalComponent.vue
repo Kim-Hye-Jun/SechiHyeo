@@ -1,45 +1,51 @@
 <template>
   <div class="modal">
+    <h1 class="text">방 만들기</h1>
     <modal-input-box-component
       ref="roomTitleInput"
-      labelName="RoomTitle"
+      :labelName="roomTitleLabelName"
     ></modal-input-box-component>
     <modal-input-box-component
       ref="debateSubjectInput"
-      labelName="DebateSubject"
+      :labelName="debateTopicLabelName"
     ></modal-input-box-component>
+    <div class="flex__modal__side">
+      <modal-input-box-component
+        ref="sideAInput"
+        :labelName="sideALabelName"
+      ></modal-input-box-component>
+      <modal-input-box-component
+        ref="sideBInput"
+        :labelName="sideBLabelName"
+      ></modal-input-box-component>
+    </div>
     <div class="flex__ul">
       <modal-radio-button-component
         labelId="private"
         labelValue="private"
-        selector="accessModifier"
-        @method="setRadioValue"
+        :selector="accessModifierRadioSelecter"
       ></modal-radio-button-component>
       <modal-radio-button-component
         labelId="public"
         labelValue="public"
-        selector="accessModifier"
-        @method="setRadioValue"
+        :selector="accessModifierRadioSelecter"
       ></modal-radio-button-component>
     </div>
     <div class="flex__ul">
       <modal-radio-button-component
         labelId="2"
         labelValue="2"
-        selector="numOfPeople"
-        @method="setRadioValue"
+        :selector="numOfPeopleRadioSelecter"
       ></modal-radio-button-component>
       <modal-radio-button-component
         labelId="4"
         labelValue="4"
-        selector="numOfPeople"
-        @method="setRadioValue"
+        :selector="numOfPeopleRadioSelecter"
       ></modal-radio-button-component>
       <modal-radio-button-component
         labelId="6"
         labelValue="6"
-        selector="numOfPeople"
-        @method="setRadioValue"
+        :selector="numOfPeopleRadioSelecter"
       ></modal-radio-button-component>
     </div>
     <button-component-vue @click="myFunc()"></button-component-vue>
@@ -56,6 +62,8 @@ import { defineComponent } from "vue";
 import ModalInputBoxComponent from "@/components/molecules/room-entrance/ModalInputBoxComponent.vue";
 import ButtonComponentVue from "@/components/atoms/common/ButtonComponent.vue";
 import ModalRadioButtonComponent from "@/components/atoms/common/ModalRadioButtonComponent.vue";
+import { RoomCreateRequestInfo, RoomCreateResponseInfo } from "@type/types";
+import http from "@/http";
 
 export default defineComponent({
   components: {
@@ -65,38 +73,90 @@ export default defineComponent({
   },
   data() {
     return {
-      roomTitle: "" as string,
-      radioValue: "" as string,
+      roomTitleLabelName: "RoomTitle" as string,
+      debateTopicLabelName: "DebateTopic" as string,
+      sideALabelName: "Side 1" as string,
+      sideBLabelName: "Side 2" as string,
+      accessModifierRadioSelecter: "accessModifier" as string,
+      numOfPeopleRadioSelecter: "numOfPeople" as string,
     };
   },
   methods: {
     myFunc(): void {
-      let roomTitleInput: string = (
-        this.$refs.roomTitleInput as InstanceType<typeof ModalInputBoxComponent>
-      ).inputValue;
-      let debateSubjectInput: string = (
-        this.$refs.debateSubjectInput as InstanceType<
-          typeof ModalInputBoxComponent
-        >
-      ).inputValue;
+      if (
+        document.querySelector(
+          `input[name=${this.accessModifierRadioSelecter}]:checked`
+        ) === null ||
+        document.querySelector(
+          `input[name=${this.accessModifierRadioSelecter}]:checked`
+        ) === null
+      ) {
+        console.log("NULL ...!");
+
+        return;
+      }
+
+      const roomCreateRequestValue: RoomCreateRequestInfo = {
+        roomTitle: (
+          this.$refs.roomTitleInput as InstanceType<
+            typeof ModalInputBoxComponent
+          >
+        ).inputValue,
+        debateTopic: (
+          this.$refs.debateSubjectInput as InstanceType<
+            typeof ModalInputBoxComponent
+          >
+        ).inputValue,
+        headCount: parseInt(
+          (
+            document.querySelector(
+              `input[name=${this.numOfPeopleRadioSelecter}]:checked`
+            ) as HTMLInputElement
+          ).getAttribute("value") as string
+        ),
+        roomType: (
+          document.querySelector(
+            `input[name=${this.accessModifierRadioSelecter}]:checked`
+          ) as HTMLInputElement
+        ).getAttribute("value") as string,
+        debateType: "토론유형",
+        sideA: (
+          this.$refs.sideAInput as InstanceType<typeof ModalInputBoxComponent>
+        ).inputValue,
+        sideB: (
+          this.$refs.sideBInput as InstanceType<typeof ModalInputBoxComponent>
+        ).inputValue,
+      };
+
       // (#구현할것) 모달 input에서 데이터를 받아와서 방 생성 post 요청을 보냄
+      console.log("ROOM CREATE REQUEST VALUE", roomCreateRequestValue);
+      http
+        .post("/sessions", roomCreateRequestValue)
+        .then((res) => {
+          if (res.status === 200) {
+            const roomId = res.data.roomId;
+            this.goRoomInsidePage(roomId);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    setRadioValue(radioValue: string): void {
-      this.radioValue = radioValue;
+    goRoomInsidePage(roomId: string): void {
+      this.$router.push({
+        name: "RoomInsidePage",
+        params: {
+          roomId: roomId,
+        },
+      });
     },
   },
 });
 </script>
 
 <style>
-body {
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(#141e30, #243b55);
-}
 .modal {
   width: 60vw;
-  height: 60vh;
   left: 10vw;
   background: rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
@@ -111,5 +171,13 @@ body {
 .flex__ul {
   display: flex;
   flex-direction: row;
+}
+.flex__modal__side {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+}
+.text {
+  color: white;
 }
 </style>
