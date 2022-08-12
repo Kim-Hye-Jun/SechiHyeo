@@ -154,7 +154,7 @@ public class MemberController {
 
                 //프로필 이미지 정보 db 저장
                 String loginID = member.getLoginId();
-                memberService.changeProfileImage(loginID, saveName, file.getCanonicalPath());
+                memberService.changeProfileImage(loginID, saveName, "/home/ubuntu/profile/" + saveName);
 
                 //토큰 재발급
                 result.put("access-token", jwtUtil.createToken(member.getLoginId()));
