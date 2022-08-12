@@ -1,3 +1,5 @@
 const API_BASE_URL = "https://i7a508.p.ssafy.io/api/";
-
-export { API_BASE_URL };
+// const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
+const OPENVIDU_SERVER_URL = "https://" + "i7a508.p.ssafy.io" + ":8443";
+const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+export { API_BASE_URL, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET };

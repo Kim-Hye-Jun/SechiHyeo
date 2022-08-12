@@ -16,7 +16,34 @@ export default createStore({
     // 로그인 관련
     userid: getUserFromCookie() || "",
     token: getAuthFromCookie() || "",
+
+    //memberinfo 저장되는 정보
+    // memberNo:-1
+    // loginId:""
+    // loginPassword:""
+    // phoneNumber:""
+    // nickname:""
+    // email:""
+    // introduce:null
+    // profileName:null
+    // profileUrl:null
+    // exp:0
+    // debateNumber:0
+    // recordWin:0
+    // recordDraw:0
+    // recordLose:0
+    // debateTime:0
     memberinfo: {}, // 로그인된 user의 정보 // 마이페이지??
+
+    // openvidu
+    OV: undefined,
+    ovToken: "",
+    session: undefined,
+    mainStreamManager: undefined,
+    publisher: undefined,
+    subscribers: [],
+    myNickName: "",
+
     // 게시판 관련
     boards: [],
     board: {},
