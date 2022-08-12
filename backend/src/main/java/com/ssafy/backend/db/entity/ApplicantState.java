@@ -12,14 +12,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "APPLICANT_STATE")
 public class ApplicantState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="applicant_no")
+    @Column(name="applicant_no", columnDefinition = "int unsigned")
     Long applicantNo = null;
 
+    @Column(name = "side", nullable = false, columnDefinition = "int unsigned default 0")
     int side;
+    @Column(name = "turn", nullable = false, columnDefinition = "int unsigned default 0")
     int turn;
+
+    // 0:거절 , 1:승인 , 2:대기
+    @Column(name = "accept", nullable = false, columnDefinition = "int unsigned default 2")
+    int accept;
 
     //연관
     //게시판

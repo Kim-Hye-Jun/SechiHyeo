@@ -3,10 +3,12 @@ package com.ssafy.backend.api.service;
 import com.ssafy.backend.api.request.reply.ReplyChangeReq;
 import com.ssafy.backend.api.request.reply.ReplyRegiPostReq;
 import com.ssafy.backend.db.entity.DebateBoard;
+import com.ssafy.backend.db.entity.Member;
 import com.ssafy.backend.db.entity.Reply;
 import com.ssafy.backend.db.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -24,8 +26,9 @@ public class ReplyServiceImpl implements  ReplyService{
         return replyRepository.findByDebateBoardBoardNo(boardNo);
     }
 
+    @Transactional
     @Override
-    public boolean regiReply(long board_no, ReplyRegiPostReq regiReq) {
+    public boolean regiReply(long board_no, ReplyRegiPostReq regiReq, Member member) {
         DebateBoard debateBoard=debateBoardService.getBoard(board_no);
         if(debateBoard==null) return false;
 
@@ -43,6 +46,7 @@ public class ReplyServiceImpl implements  ReplyService{
         return true;
     }
 
+    @Transactional
     @Override
     public boolean chageReply(ReplyChangeReq changeReq) {
         Reply reply=replyRepository.findByReplyNo(changeReq.getReply_no());
@@ -54,6 +58,7 @@ public class ReplyServiceImpl implements  ReplyService{
         else  return true;
     }
 
+    @Transactional
     @Override
     public boolean deleteReply(long reply_no) {
         Reply reply= replyRepository.findByReplyNo(reply_no);

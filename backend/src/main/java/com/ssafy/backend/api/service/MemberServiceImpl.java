@@ -29,8 +29,14 @@ public class MemberServiceImpl implements MemberService {
 
     //휴대폰번호 중복 체크
     @Override
-    public Long PhoneDuplicateCheck(String phoneNumber) {
+    public Long phoneDuplicateCheck(String phoneNumber) {
         return memberRepository.getCountOfPhoneNumber(phoneNumber);
+    }
+
+    //닉네임 중복체크
+    @Override
+    public Long nicknameDuplicateCheck(String nickname) {
+        return memberRepository.getCountOfNickname(nickname);
     }
 
     //회원가입
@@ -66,6 +72,18 @@ public class MemberServiceImpl implements MemberService {
         member.setEmail(editedMember.getEmail());
         member.setPhoneNumber(editedMember.getPhoneNumber());
         member.setIntroduce(editedMember.getIntroduce());
+
+        memberRepository.save(member);
+    }
+
+    //프로필 이미지 업로드
+    @Transactional
+    @Override
+    public void changeProfileImage(String loginId, String profileName, String profileUrl) {
+        Member member = memberRepository.findByLoginId(loginId);
+
+        member.setProfileName(profileName);
+        member.setProfileUrl(profileUrl);
 
         memberRepository.save(member);
     }

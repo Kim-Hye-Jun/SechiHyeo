@@ -8,7 +8,9 @@ public interface MemberService {
 	//이메일 중복 체크
 	Long emailDuplicateCheck(String email);
 	//휴대폰번호 중복 체크
-	Long PhoneDuplicateCheck(String phoneNumber);
+	Long phoneDuplicateCheck(String phoneNumber);
+	//휴대폰번호 중복 체크
+	Long nicknameDuplicateCheck(String nickname);
 	//회원가입
 	void join(Member member) throws Exception;
 
@@ -16,6 +18,8 @@ public interface MemberService {
 	int login(String loginId, String loginPassword) throws Exception;
 	//회원정보 수정
 	void changeMemberInfo(Member editedMember, String loginId);
+	//프로필 업로드
+	void changeProfileImage(String loginId, String profileName, String profileUrl);
 	//비밀번호 재설정
 	void changeLoginPassword(String loginId, String newLoginPassword) throws Exception;
 	//회원 탈퇴

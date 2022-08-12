@@ -8,29 +8,42 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/member", produces="application/json;charset=UTF-8")
+@RequestMapping(value = "/member")
 @AllArgsConstructor
 @CrossOrigin("*")
+@Log4j2
 public class MemberController {
     private static final String HEADER_AUTH = "access-token";
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
+    @Value("${part4.upload.path}")
+    private static String uploadPath;
+
 
     @Autowired
     private JWTUtil jwtUtil;
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private ServletContext servletContext;
 
     //로그인
     @PostMapping("/login")
@@ -91,14 +104,75 @@ public class MemberController {
             @ApiResponse(code = 400, message = "잘못된 접근"),
             @ApiResponse(code = 500, message = "서버에러")
     })
-    public ResponseEntity<String> updateMember(HttpServletRequest request, Member member) throws Exception{
+    public ResponseEntity<Map<String, Object>> updateMember(HttpServletRequest request, Member member) throws Exception{
         String token = request.getHeader(HEADER_AUTH);
         String loginId = jwtUtil.getInfo(token).getLoginId();
 
-        System.out.println(member);
         memberService.changeMemberInfo(member, loginId);
 
-        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+        HttpStatus status = null;
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("access-token", jwtUtil.createToken(member.getLoginId()));
+        result.put("message", SUCCESS);
+        status = HttpStatus.OK;
+
+        return new ResponseEntity<Map<String, Object>>(result, status);
+    }
+
+    //프로필 이미지 업로드
+    @PutMapping("/profile-image")
+    @ApiOperation(value = "프로필 이미지 수정(업로드)", notes = "헤더에 보내진 jwt 토큰과 업로드된 파일 정보를 이용해, 프로필 이미지를 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 접근"),
+            @ApiResponse(code = 500, message = "서버에러")
+    })
+    public ResponseEntity<Map<String, Object>> uploadProfileImage(HttpServletRequest request, @RequestPart MultipartFile profileImage){
+        HttpStatus status = null;
+        HashMap<String, Object> result = new HashMap<>();
+        if(profileImage.getSize() != 0) {
+            try {
+                //파일 업로드 경로 및 파일명
+//                String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
+                String uploadPath = "/home/ubuntu/profile/";
+                String fileName = profileImage.getOriginalFilename();
+                String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
+
+                //파일객체 생성 및 업로드
+                File file = new File(uploadPath, saveName);
+                if(!new File(uploadPath).exists())
+                    new File(uploadPath).mkdirs();
+                profileImage.transferTo(file);
+
+                //기존 프로필 삭제 및 업로드 프로필 db 저장
+                String token = request.getHeader(HEADER_AUTH);
+                Member member = jwtUtil.getInfo(token);
+                if(member.getProfileName() != null) {
+                    File deleteFile = new File(uploadPath, member.getProfileName());
+                    System.out.println(member.getProfileName());
+                    if (deleteFile.exists()) deleteFile.delete();
+                }
+
+                //프로필 이미지 정보 db 저장
+                String loginID = member.getLoginId();
+                memberService.changeProfileImage(loginID, saveName, "/home/ubuntu/profile/" + saveName);
+
+                //토큰 재발급
+                result.put("access-token", jwtUtil.createToken(member.getLoginId()));
+                result.put("message", SUCCESS);
+                status = HttpStatus.OK;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            
+            return new ResponseEntity<Map<String, Object>>(result, status);
+        }
+        
+        //업로드된 파일이 없는 경우
+        result.put("message", FAIL);
+        status = HttpStatus.NO_CONTENT;
+        return new ResponseEntity<Map<String, Object>>(result, status);
     }
 
     //비밀번호 재설정 자격 검증(기존 비밀번호 일치여부 확인)

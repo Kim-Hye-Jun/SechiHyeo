@@ -54,3 +54,33 @@
 ## 프로젝트 상세 설명
 
 // 개발 환경, 기술 스택, 시스템 구성도, ERD, 기능 상세 설명 등
+
+## Git Convention
+### 1. Branch
+
+main
+develop
+feature/front/{기능명}/{이니셜}
+feature/back/{기능명}/{이니셜}
+
+### 2. Commit message
+
+**type** : {영어}
+**body** : 설명
+**footer** : 생략 가능
+
+<aside>
+💡 **Type 종류**
+**feat** : 새로운 기능 추가
+**fix** : 버그 수정
+**docs** : 문서 수정
+**style** : 코드 의미에 영향을 주지 않는 변경사항 (포맷팅, 세미콜론 누락, 공백 등)
+**refactor** : 성능 개선 or 리팩토링
+**test** : 테스트 추가, 테스트 코드 리팩토링, 개발 코드는 변경 X
+**chore** : 그 외 자잘한 작업, 빌드 업무, 패키지 매니저(ex config) 설정관리, 패키지 업데이트 등등
+***** 추후 합의에 따라 추가 가능!
+</aside>
+
+### 3. Merge Message
+
+Merge {하위 Branch 이름} -> {상위 Branch 이름}
