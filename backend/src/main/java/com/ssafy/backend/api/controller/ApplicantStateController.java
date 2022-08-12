@@ -104,7 +104,7 @@ public class ApplicantStateController {
 
             for (ApplicantState as: list
                  ) {
-                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant(applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
                         .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
                         .board_finished(as.getDebateBoard().isBoardFinished()).build());
             }
@@ -137,7 +137,7 @@ public class ApplicantStateController {
 
             for (ApplicantState as: list
             ) {
-                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant(applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
                         .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
                         .board_finished(as.getDebateBoard().isBoardFinished()).build());
             }

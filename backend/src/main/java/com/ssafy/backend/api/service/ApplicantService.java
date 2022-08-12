@@ -15,7 +15,7 @@ public interface ApplicantService {
 
     List<ApplicantState> getRecruitingApplicant(long memberNo);
 
-    int countCurrentApplicantByBoardNo(long boardNo);
+    long countCurrentApplicantByBoardNo(long boardNo);
 
     List<ApplicantState> getApplyingApplicant(long memberNo);
 }
