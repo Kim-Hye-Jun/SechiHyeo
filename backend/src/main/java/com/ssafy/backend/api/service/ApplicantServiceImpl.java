@@ -8,6 +8,7 @@ import com.ssafy.backend.db.repository.ApplicantStateRepository;
 import com.ssafy.backend.db.repository.DebateBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class ApplicantServiceImpl implements  ApplicantService{
 
     @Autowired
     DebateBoardRepository debateBoardRepository;
+
+    @Transactional
     @Override
     public boolean regiApplicant(ApplicantStateRegiPostReq regiReq, Member member) {
         ApplicantState as=new ApplicantState();
@@ -37,6 +40,7 @@ public class ApplicantServiceImpl implements  ApplicantService{
         else return true;
     }
 
+    @Transactional
     @Override
     public boolean changeApplicant(ApplicantStateRegiPostReq regiReq, Member member, long apply_no) {
         ApplicantState as=applicantStateRepository.getReferenceById(apply_no);
@@ -57,6 +61,7 @@ public class ApplicantServiceImpl implements  ApplicantService{
         else return true;
     }
 
+    @Transactional
     @Override
     public boolean deleteApplicant(long apply_no) {
         ApplicantState as=applicantStateRepository.getReferenceById(apply_no);
@@ -82,8 +87,8 @@ public class ApplicantServiceImpl implements  ApplicantService{
 
     //boardNo로 찾은 보드에 현재 승인된 인원수 count
     @Override
-    public int countCurrentApplicantByBoardNo(long boardNo) {
-        int cnt=applicantStateRepository.getCountOfCurrentApplicant(String.valueOf(boardNo));
+    public long countCurrentApplicantByBoardNo(long boardNo) {
+        long cnt=applicantStateRepository.getCountOfCurrentApplicant(String.valueOf(boardNo));
         return cnt;
     }
 

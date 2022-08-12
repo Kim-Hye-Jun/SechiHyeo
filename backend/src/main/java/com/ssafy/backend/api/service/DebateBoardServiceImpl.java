@@ -7,6 +7,7 @@ import com.ssafy.backend.db.entity.Member;
 import com.ssafy.backend.db.repository.DebateBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ public class DebateBoardServiceImpl implements DebateBoardService{
         return debateBoardRepository.findByBoardNo(board_no);
     }
 
+    @Transactional
     @Override
     public boolean regiBoard(DebateBoardRegiPostReq regiReq,Member member) {
         DebateBoard debateBoard=new DebateBoard();
@@ -47,6 +49,7 @@ public class DebateBoardServiceImpl implements DebateBoardService{
         else return true;
     }
 
+    @Transactional
     @Override
     public boolean deleteBoard(long board_no) {
         DebateBoard debateBoard=getBoard(board_no);
@@ -57,6 +60,7 @@ public class DebateBoardServiceImpl implements DebateBoardService{
         return true;
     }
 
+    @Transactional
     @Override
     public boolean changeBoard(long board_no, DebateBoardRegiPostReq regiReq) {
         DebateBoard debateBoard=getBoard(board_no);
