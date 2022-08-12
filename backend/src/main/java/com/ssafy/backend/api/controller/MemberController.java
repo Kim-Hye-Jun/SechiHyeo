@@ -148,9 +148,11 @@ public class MemberController {
                 //기존 프로필 삭제 및 업로드 프로필 db 저장
                 String token = request.getHeader(HEADER_AUTH);
                 Member member = jwtUtil.getInfo(token);
-                File deleteFile = new File(uploadPath, member.getProfileName());
-                System.out.println(member.getProfileName());
-                if(deleteFile.exists()) deleteFile.delete();
+                if(member.getProfileName() != null) {
+                    File deleteFile = new File(uploadPath, member.getProfileName());
+                    System.out.println(member.getProfileName());
+                    if (deleteFile.exists()) deleteFile.delete();
+                }
 
                 //프로필 이미지 정보 db 저장
                 String loginID = member.getLoginId();
