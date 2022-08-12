@@ -19,11 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -139,7 +134,7 @@ public class MemberController {
         if(profileImage.getSize() != 0) {
             try {
                 //파일 업로드 경로 및 파일명
-                String uploadPath = servletContext.getRealPath("/profile");
+                String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
                 String fileName = profileImage.getOriginalFilename();
                 String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
 
