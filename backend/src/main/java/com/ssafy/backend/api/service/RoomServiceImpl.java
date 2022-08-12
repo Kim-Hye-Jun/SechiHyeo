@@ -20,6 +20,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -418,6 +424,52 @@ public class RoomServiceImpl implements RoomService {
         return roomWithParticipant.get(OpenviduId);
     }
 
+    @Override
+    public void sendSignal(String OpenviduId) {
+        try {
+            URL url = new URL("https://i7a508.p.ssafy.io:8443/openvidu/api/signal");
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+
+            conn.setRequestMethod("POST"); // http 메서드
+            conn.setRequestProperty("Content-Type", "application/json"); // header Content-Type 정보
+            conn.setRequestProperty("Authorization", "MY_SECRET"); // header의 auth 정보
+            conn.setDoInput(true); // 서버에 전달할 값이 있다면 true
+            conn.setDoOutput(false); // 서버로부터 받는 값이 있다면 true
+
+            // 서버에 데이터 전달
+            String[][] participants = roomWithParticipant.get(OpenviduId);
+            JSONObject jsonObject = new JSONObject();
+
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < participants[0].length; j++) {
+                    if(i == 0)
+                        jsonObject.put("side", "A");
+                    else jsonObject.put("side", "B");
+                    jsonObject.put("order", j+1);
+                    jsonObject.put("user", participants[i][j]);
+                }
+            }
+
+            JSONObject obj = new JSONObject();
+            obj.put("session", OpenviduId);
+//            obj.put("to", str);
+            obj.put("type", "UPDATE_SIDE_ORDER");
+            obj.put("data", jsonObject.toJSONString());
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            bw.write(obj.toString()); // 버퍼에 담기
+            bw.flush(); // 버퍼에 담긴 데이터 전달
+            bw.close();
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == 200) {
+                System.out.println(obj);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

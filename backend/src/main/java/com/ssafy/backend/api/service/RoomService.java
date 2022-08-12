@@ -46,4 +46,6 @@ public interface RoomService {
     RoomSetRes setDebateFormat(RoomSetReq roomSetReq);
 
     String[][] validSideOrder(String OpenviduId);
+
+    void sendSignal(String OpenviduId);
 }

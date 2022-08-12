@@ -16,6 +16,7 @@ import com.ssafy.backend.dto.response.RoomSearchRes;
 import com.ssafy.backend.dto.response.RoomSetRes;
 import io.openvidu.java.client.*;
 import io.swagger.models.Response;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -99,6 +107,15 @@ public class RoomController {
         String[][] participants = roomService.validSideOrder(openvidu_id);
         return ResponseEntity.ok(participants);
     }
+
+    //8. signal 전달
+    @GetMapping("/{openvidu_id}/signal")
+    public ResponseEntity sendSignal(@PathVariable String openvidu_id) {
+        roomService.sendSignal(openvidu_id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 
 
 }
