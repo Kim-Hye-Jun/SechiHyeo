@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -32,9 +33,6 @@ public class MemberController {
     private static final String HEADER_AUTH = "access-token";
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    @Value("${part4.upload.path}")
-    private static String uploadPath;
-
 
     @Autowired
     private JWTUtil jwtUtil;
@@ -133,30 +131,13 @@ public class MemberController {
         HashMap<String, Object> result = new HashMap<>();
         if(profileImage.getSize() != 0) {
             try {
-                //파일 업로드 경로 및 파일명
-//                String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
-                String uploadPath = "/home/ubuntu/profile/";
-                String fileName = profileImage.getOriginalFilename();
-                String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
-
-                //파일객체 생성 및 업로드
-                File file = new File(uploadPath, saveName);
-                if(!new File(uploadPath).exists())
-                    new File(uploadPath).mkdirs();
-                profileImage.transferTo(file);
-
-                //기존 프로필 삭제 및 업로드 프로필 db 저장
+                //토큰에서 회원정보 꺼내기
                 String token = request.getHeader(HEADER_AUTH);
-                Member member = jwtUtil.getInfo(token);
-                if(member.getProfileName() != null) {
-                    File deleteFile = new File(uploadPath, member.getProfileName());
-                    System.out.println(member.getProfileName());
-                    if (deleteFile.exists()) deleteFile.delete();
-                }
+                String loginId = jwtUtil.getInfo(token).getLoginId();
+                Member member = memberService.getInfoByLoginId(loginId);
 
-                //프로필 이미지 정보 db 저장
-                String loginID = member.getLoginId();
-                memberService.changeProfileImage(loginID, saveName, "/home/ubuntu/profile/" + saveName);
+                //파일 업로드
+                memberService.changeProfileImage(member, profileImage);
 
                 //토큰 재발급
                 result.put("access-token", jwtUtil.createToken(member.getLoginId()));
@@ -165,7 +146,7 @@ public class MemberController {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            
+
             return new ResponseEntity<Map<String, Object>>(result, status);
         }
         

@@ -4,11 +4,20 @@ import com.ssafy.backend.common.util.SHA256;
 import com.ssafy.backend.db.entity.Member;
 import com.ssafy.backend.db.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
+
+    @Value("${profile.path}")
+    String profilePath;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -76,16 +85,36 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
-    //프로필 이미지 업로드
     @Transactional
     @Override
-    public void changeProfileImage(String loginId, String profileName, String profileUrl) {
-        Member member = memberRepository.findByLoginId(loginId);
+    public void changeProfileImage(Member member, MultipartFile profileImage) {
+        try {
+            //파일 업로드 경로 및 파일명
+//            String profilePath = System.getProperty("user.dir") + "/src/main/resources/static/profile"; //로컬테스트
+            String fileName = profileImage.getOriginalFilename(); // 원본 파일 이름
+            String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
 
-        member.setProfileName(profileName);
-        member.setProfileUrl(profileUrl);
+            //파일객체 생성 및 업로드
+            File file = new File(profilePath, saveName);
+            if(!new File(profilePath).exists())
+                new File(profilePath).mkdirs();
+            profileImage.transferTo(file);
 
-        memberRepository.save(member);
+            //기존 프로필 삭제(있으면)
+            if(member.getProfileName() != null) {
+                File deleteFile = new File(profilePath, member.getProfileName());
+                System.out.println(member.getProfileName());
+                if (deleteFile.exists()) deleteFile.delete();
+            }
+
+            //db에 프로필 이미지 정보 및 경로 저장
+            member.setProfileName(saveName);
+            member.setProfileUrl(profilePath + saveName);
+            memberRepository.save(member);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //비밀번호 재설정
