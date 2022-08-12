@@ -1,13 +1,24 @@
 <template>
-  <router-view />
+  <div class="app">
+    <app-header></app-header>
+    <div class="app-contents">
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { defineComponent } from "vue";
+import AppHeader from "@/components/common/AppHeader.vue";
+
+export default defineComponent({
+  components: {
+    AppHeader,
+  },
+});
+</script>
+
+<style>
+@import "./css/reset.css";
+@import "./css/common.css";
 </style>
