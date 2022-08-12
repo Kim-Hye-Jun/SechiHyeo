@@ -134,7 +134,8 @@ public class MemberController {
         if(profileImage.getSize() != 0) {
             try {
                 //파일 업로드 경로 및 파일명
-                String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
+//                String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
+                String uploadPath = "/home/ubuntu/profile/";
                 String fileName = profileImage.getOriginalFilename();
                 String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
 
