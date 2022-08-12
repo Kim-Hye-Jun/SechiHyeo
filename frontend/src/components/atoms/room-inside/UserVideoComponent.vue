@@ -5,7 +5,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  components: {},
+  props: {
+    streamManager: Object,
+  },
+  mounted() {
+    console.log(this.streamManager);
+    this.streamManager?.addVideoElement(this.$el);
+  },
   data() {
     return {
       example: "",
