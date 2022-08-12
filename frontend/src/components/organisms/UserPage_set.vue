@@ -1,5 +1,6 @@
 <template>
   <div class="userpage-content-set-form-topic">회원정보 수정</div>
+  <image-upload></image-upload>
   <div class="userpage-content-set-form-image"></div>
   <button class="userpage-content-set-form-fix">사진 편집</button>
   <div class="userpage-content-set-form-personal">
@@ -39,7 +40,9 @@
 
 <script lang="ts">
 import { mapActions, mapState } from "vuex";
+import ImageUpload from "../molecules/ImageUpload.vue";
 export default {
+  components: { ImageUpload },
   data() {
     return {
       member: {

@@ -35,7 +35,7 @@ export default {
     memberProfile() {
       this.MEMBERPROFILE();
     },
-    memberExep() {
+    memberExp() {
       this.MEMBEREXP();
     },
   },

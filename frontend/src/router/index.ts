@@ -39,6 +39,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/MyPage.vue"),
     //meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
   },
+  // 화면공유, 파일업로드 테스트용
+  {
+    path: "/sharetest",
+    name: "sharetest",
+    component: () => import("@/components/organisms/Room_ScreenShare.vue"),
+  },
 ];
 
 const router = createRouter({
