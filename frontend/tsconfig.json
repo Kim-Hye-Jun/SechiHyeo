@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "typeRoots": [
+      "./@type"
+    ],
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -19,7 +22,13 @@
     ],
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
+      ],
+      "@components/*":[
+        "./src/components/*"
+      ],
+      "@type/*":[
+        "./type/*"
       ]
     },
     "lib": [
