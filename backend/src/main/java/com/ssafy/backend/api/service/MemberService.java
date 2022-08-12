@@ -8,7 +8,9 @@ public interface MemberService {
 	//이메일 중복 체크
 	Long emailDuplicateCheck(String email);
 	//휴대폰번호 중복 체크
-	Long PhoneDuplicateCheck(String phoneNumber);
+	Long phoneDuplicateCheck(String phoneNumber);
+	//휴대폰번호 중복 체크
+	Long nicknameDuplicateCheck(String nickname);
 	//회원가입
 	void join(Member member) throws Exception;
 

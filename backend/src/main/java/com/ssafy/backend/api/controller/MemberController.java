@@ -19,11 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -139,7 +134,8 @@ public class MemberController {
         if(profileImage.getSize() != 0) {
             try {
                 //파일 업로드 경로 및 파일명
-                String uploadPath = servletContext.getRealPath("/profile");
+//                String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/profile";
+                String uploadPath = "/home/ubuntu/profile/";
                 String fileName = profileImage.getOriginalFilename();
                 String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
 
@@ -152,13 +148,15 @@ public class MemberController {
                 //기존 프로필 삭제 및 업로드 프로필 db 저장
                 String token = request.getHeader(HEADER_AUTH);
                 Member member = jwtUtil.getInfo(token);
-                File deleteFile = new File(uploadPath, member.getProfileName());
-                System.out.println(member.getProfileName());
-                if(deleteFile.exists()) deleteFile.delete();
+                if(member.getProfileName() != null) {
+                    File deleteFile = new File(uploadPath, member.getProfileName());
+                    System.out.println(member.getProfileName());
+                    if (deleteFile.exists()) deleteFile.delete();
+                }
 
                 //프로필 이미지 정보 db 저장
                 String loginID = member.getLoginId();
-                memberService.changeProfileImage(loginID, saveName, file.getCanonicalPath());
+                memberService.changeProfileImage(loginID, saveName, "/home/ubuntu/profile/" + saveName);
 
                 //토큰 재발급
                 result.put("access-token", jwtUtil.createToken(member.getLoginId()));

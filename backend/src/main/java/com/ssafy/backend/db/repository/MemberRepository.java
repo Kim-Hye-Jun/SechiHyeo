@@ -21,4 +21,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
             nativeQuery = true)
     Long getCountOfEmail(String email);
 
+    @Query(value = "SELECT COUNT(*) FROM member WHERE nickname = :nickname",
+            nativeQuery = true)
+    Long getCountOfNickname(String nickname);
+
 }
