@@ -10,6 +10,7 @@ import com.ssafy.backend.dto.response.RoomCreateRes;
 import com.ssafy.backend.dto.response.RoomJoinRes;
 import com.ssafy.backend.dto.response.RoomSearchRes;
 import com.ssafy.backend.dto.response.RoomSetRes;
+import org.json.simple.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -43,4 +44,6 @@ public interface RoomService {
 
     //토론 규칙 저장 및 반환
     RoomSetRes setDebateFormat(RoomSetReq roomSetReq);
+
+    String[][] validSideOrder(String OpenviduId);
 }

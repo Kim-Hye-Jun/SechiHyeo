@@ -51,12 +51,13 @@ public class RoomServiceImpl implements RoomService {
     // 오픈비두 서버 주소
     private String OPENVIDU_URL;
     // 오픈비두 서버와 공유
+
     private String OPENVIDU_SECRET;
 
     //방과 방에 따
 
     @Autowired
-    public RoomServiceImpl(@Value("MY_SECRET") String secret, @Value("https://localhost:4443/") String openviduUrl) {
+    public RoomServiceImpl(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
         this.OPENVIDU_SECRET = secret;
         //오픈비두 서버로 요청
         this.OPENVIDU_URL = openviduUrl;
@@ -124,15 +125,9 @@ public class RoomServiceImpl implements RoomService {
         return null;
     }
 
-//    @Override
-//    public Room getRoom(String OpenviduId) {
-//        return null;
-//    }
-
     @Override
     public RoomCreateRes createRoom(RoomCreateReq roomCreateReq) {
         Room room = Room.builder()
-//                .roomNo(1)
                 .roomTitle(roomCreateReq.getRoomTitle())
                 .roomType(roomCreateReq.getRoomType())
                 .openviduId(String.valueOf(UUID.randomUUID()))
@@ -148,17 +143,19 @@ public class RoomServiceImpl implements RoomService {
         try {
 //            SessionProperties properties = new SessionProperties.Builder().build();
             Session session = openVidu.createSession(new SessionProperties.Builder().build());
-            SessionRoom sessionRoom = new SessionRoom(session, room);
+
+            //아직 방에 입장하지 않았으므로 Host는 빈 칸
+            SessionRoom sessionRoom = new SessionRoom(session, room, "");
             roomWithSession.put(session.getSessionId(), sessionRoom);
 
-            //JWT 토큰에서 사용자 정보 받아오기 : 나중에 꼭 추가할 것
-            //json
+            //roomWithSession 생성 - 인원수 길이만큼 배열 생성
+            roomWithParticipant.put(room.getOpenviduId(), new String[2][(int) (room.getHeadCount()/2)]);
 
             //세션 아이디와 토큰, 사용자 닉네임을 반환할 것
             return RoomCreateRes.builder()
                     .OpenviduId(session.getSessionId())
 //                    .token(token)
-                    .nickname("nickname")
+//                    .nickname("nickname")
                     .build();
         } catch (OpenViduJavaClientException e) {
             System.out.println(e);
@@ -178,7 +175,7 @@ public class RoomServiceImpl implements RoomService {
             //세션 가져오기
             Session session = roomWithSession.get(roomJoinReq.getOpenviduId()).getSession();
 
-            //JWT 토큰에서 사용자 정보 받아오기 : 나중에 꼭 추가할 것
+            //JWT 토큰에서 사용자 정보 받아오기
             String memberToken = httpServletRequest.getHeader("access-token");
             String loginId = jwtUtil.getInfo(memberToken).getLoginId();
 
@@ -192,7 +189,6 @@ public class RoomServiceImpl implements RoomService {
 //            jsonObject.put("order", "order");
             jsonObject.put("profileName", member.getProfileName());
             jsonObject.put("profileUrl", member.getProfileUrl());
-            //서버에서 랜덤으로 진영 순서를 배정한 후에 그 값을 반환할 것
 
             //접속자용 커넥션 생성
             OpenViduRole role = OpenViduRole.PUBLISHER;
@@ -205,11 +201,48 @@ public class RoomServiceImpl implements RoomService {
             //토큰
             String token = session.createConnection(connectionProperties).getToken();
 
+            String[][] participants = roomWithParticipant.get(roomJoinReq.getOpenviduId());
+
+            //방에 접속하는 첫 번째 사람이라면 해당 사람의 아이디를 방장 변수에 저장
+            boolean check = false;
+            loop : for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < participants[0].length; j++) {
+                    if(participants[i][j] != null){
+                        check = true;
+                        break loop;
+                    }
+                }
+            }
+            if(!check)
+                roomWithSession.get(roomJoinReq.getOpenviduId()).setHost(loginId);
+
+            //서버에서 랜덤으로 진영 순서를 배정한 후에 그 값을 반환할 것
+            //roomWithParticipant 가져와서 빈자리 하나 배정
+            //A진영의 첫번째 순서라면 A1을 반환
+            String sideOrder = "";
+            loop : for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < participants[0].length; j++) {
+                    if(participants[i][j] == null){
+                        participants[i][j] = loginId;
+                        if (i == 0)
+                            sideOrder+="A";
+                        else
+                            sideOrder+="B";
+                        sideOrder+=(j+1);
+                        break loop;
+                    }
+                }
+            }
+
+            //갱신한 접속자목록 반영
+            roomWithParticipant.replace(roomJoinReq.getOpenviduId(), participants);
+
             //세션 아이디와 토큰, 사용자 닉네임을 반환할 것
             return RoomJoinRes.builder()
                     .OpenviduId(session.getSessionId())
                     .token(token)
-                    .nickname("nickname")
+                    .nickname(member.getNickname())
+                    .sideOrder(sideOrder)
                     .build();
 
         } catch (OpenViduJavaClientException e) {
@@ -260,6 +293,8 @@ public class RoomServiceImpl implements RoomService {
         if(!check) {
             roomWithParticipant.remove(OpenviduId);
             roomWithSession.remove(OpenviduId);
+            //세션 닫기
+            this.deleteRoom(OpenviduId);
         }
     }
 
@@ -373,6 +408,16 @@ public class RoomServiceImpl implements RoomService {
         jsonObject.put("debateOrder", jsonArray);
         return new RoomSetRes(roomSetReq.getOpenviduId(), jsonObject);
     }
+
+    //방 내부 비어있는 진영, 순서 반환
+    @Override
+    public String[][] validSideOrder(String OpenviduId) {
+
+        //오픈비두 세션 아이디로 RoomWithParticipant 찾기
+        //해당 배열 반환
+        return roomWithParticipant.get(OpenviduId);
+    }
+
 
 
 }

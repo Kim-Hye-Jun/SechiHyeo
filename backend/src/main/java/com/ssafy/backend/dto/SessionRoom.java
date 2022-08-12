@@ -14,4 +14,5 @@ import lombok.Setter;
 public class SessionRoom {
     private Session session;
     private Room room;
+    private String Host;
 }
