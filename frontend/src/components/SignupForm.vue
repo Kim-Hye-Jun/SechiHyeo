@@ -1,5 +1,6 @@
 <template>
   <div class="contents">
+    <background></background>
     <div class="form-wrapper form-wrapper-sm">
       <form @submit.prevent="signUp" class="form">
         <h2><b>회원 가입</b></h2>
@@ -51,8 +52,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { registerUser, checkUserId, checkEmail, checkPhone } from "@/api/auth";
-
+import Background from "./common/Background.vue";
 export default defineComponent({
+  components: { Background },
   data() {
     return {
       // form values
