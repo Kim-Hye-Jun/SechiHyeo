@@ -33,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.getCountOfPhoneNumber(phoneNumber);
     }
 
+    //닉네임 중복체크
     @Override
     public Long nicknameDuplicateCheck(String nickname) {
         return memberRepository.getCountOfNickname(nickname);
