@@ -29,8 +29,13 @@ public class MemberServiceImpl implements MemberService {
 
     //휴대폰번호 중복 체크
     @Override
-    public Long PhoneDuplicateCheck(String phoneNumber) {
+    public Long phoneDuplicateCheck(String phoneNumber) {
         return memberRepository.getCountOfPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public Long nicknameDuplicateCheck(String nickname) {
+        return memberRepository.getCountOfNickname(nickname);
     }
 
     //회원가입

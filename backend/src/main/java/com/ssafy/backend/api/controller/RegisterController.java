@@ -57,7 +57,7 @@ public class RegisterController {
             @ApiResponse(code = 200, message = "사용 가능한 이메일 입니다."),
             @ApiResponse(code = 409, message = "이미 사용되고 있는 이메일 입니다."),
     })
-    public ResponseEntity<Map<String, Object>> EmailDuplicateCheck(@PathVariable String email) throws Exception{
+    public ResponseEntity<Map<String, Object>> emailDuplicateCheck(@PathVariable String email) throws Exception{
         HttpStatus status = null;
 
         HashMap<String, Object> result = new HashMap<>();
@@ -83,12 +83,12 @@ public class RegisterController {
             @ApiResponse(code = 200, message = "사용 가능한 휴대폰번호 입니다."),
             @ApiResponse(code = 409, message = "이미 사용되고 있는 휴대폰번호 입니다."),
     })
-    public ResponseEntity<Map<String, Object>> PhoneDuplicateCheck(@PathVariable String phone_number) throws Exception{
+    public ResponseEntity<Map<String, Object>> phoneDuplicateCheck(@PathVariable String phone_number) throws Exception{
         HttpStatus status = null;
 
         HashMap<String, Object> result = new HashMap<>();
         //DB에서 휴대폰번호로 검색했을 때 값이 나오면 중복된 이메일
-        if(memberService.PhoneDuplicateCheck(phone_number)==1) {
+        if(memberService.phoneDuplicateCheck(phone_number)==1) {
             result.put(REDUPLICATION, true);
             result.put("message", "이미 사용되고 있는 휴대폰번호 입니다.");
             status = HttpStatus.CONFLICT;
@@ -97,6 +97,32 @@ public class RegisterController {
         else {
             result.put(REDUPLICATION, false);
             result.put("message", "사용 가능한 휴대폰번호 입니다.");
+            status = HttpStatus.OK;
+        }
+
+        return new ResponseEntity<Map<String,Object>>(result, status);
+    }
+
+    @GetMapping("/nickname/{nickname}")
+    @ApiOperation(value = "닉네임 중복체크", notes = "현재 회원가입하려고 하는 닉네임({nickname})를 다른 사용자가 이용중인지 확인합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "사용 가능한 닉네임 입니다."),
+            @ApiResponse(code = 409, message = "이미 사용되고 있는 닉네임 입니다."),
+    })
+    public ResponseEntity<Map<String, Object>> nicknameDuplicateCheck(@PathVariable String nickname) throws Exception{
+        HttpStatus status = null;
+
+        HashMap<String, Object> result = new HashMap<>();
+        //DB에서 휴대폰번호로 검색했을 때 값이 나오면 중복된 이메일
+        if(memberService.nicknameDuplicateCheck(nickname)==1) {
+            result.put(REDUPLICATION, true);
+            result.put("message", "이미 사용되고 있는 닉네임 입니다.");
+            status = HttpStatus.CONFLICT;
+        }
+        //아무것도 찾을 수 없다면 중복 검사 통과
+        else {
+            result.put(REDUPLICATION, false);
+            result.put("message", "사용 가능한 닉네임 입니다.");
             status = HttpStatus.OK;
         }
 
