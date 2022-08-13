@@ -1,4 +1,5 @@
 <template>
+  <Background></Background>
   <div class="grid">
     <!-- <user-video-component-vue
       :stream-manager="publisher"
@@ -42,7 +43,14 @@
         userSideOrderMap?.get(JSON.parse(sub.stream.connection.data)['userId'])
       "
     /> -->
-    <div class="c"></div>
+    <DebateImage1 :class="[data1 === true ? '' : 'hidden']"></DebateImage1>
+    <DebateImage2 :class="[data2 === true ? '' : 'hidden']"></DebateImage2>
+    <DebateImage3 :class="[data3 === true ? '' : 'hidden']"></DebateImage3>
+  </div>
+  <div style="margin-left: 26%">
+    <button @click="data1Click">1</button>
+    <button @click="data2Click">2</button>
+    <button @click="data3Click">3</button>
   </div>
 </template>
 
@@ -52,6 +60,10 @@ import http from "@/http";
 import * as openVidu from "openvidu-browser";
 import { RoomJoinResponseInfo } from "@type/types";
 import UserVideoComponentVue from "@/components/atoms/room-inside/UserVideoComponent.vue";
+import Background from "@/components/common/Background.vue";
+import DebateImage1 from "../../molecules/DebateImage1.vue";
+import DebateImage2 from "../../molecules/DebateImage2.vue";
+import DebateImage3 from "../../molecules/DebateImage3.vue";
 
 export default defineComponent({
   props: {
@@ -63,9 +75,18 @@ export default defineComponent({
   data() {
     return {
       startElement: null as EventTarget | null,
+      data1: true,
+      data2: false,
+      data3: false,
     };
   },
-  components: { UserVideoComponentVue },
+  components: {
+    UserVideoComponentVue,
+    DebateImage1,
+    DebateImage2,
+    DebateImage3,
+    Background,
+  },
   methods: {
     isRoomAdmin(): boolean {
       return true;
@@ -106,6 +127,30 @@ export default defineComponent({
       // console.log((e.target as HTMLDivElement).className);
       // console.log((this.startElement as HTMLDivElement).className);
     },
+    data1Click() {
+      this.data1 = true;
+      this.data2 = false;
+      this.data3 = false;
+      console.log(this.data1);
+      console.log(this.data2);
+      console.log(this.data3);
+    },
+    data2Click() {
+      this.data1 = false;
+      this.data2 = true;
+      this.data3 = false;
+      console.log(this.data1);
+      console.log(this.data2);
+      console.log(this.data3);
+    },
+    data3Click() {
+      this.data1 = false;
+      this.data2 = false;
+      this.data3 = true;
+      console.log(this.data1);
+      console.log(this.data2);
+      console.log(this.data3);
+    },
   },
   mounted() {
     const videos = document.querySelectorAll(".video");
@@ -123,7 +168,7 @@ export default defineComponent({
 
 <style>
 .grid {
-  background: radial-gradient(circle, #141834 0%, #13162f 100%);
+  /* background: radial-gradient(circle, #141834 0%, #13162f 100%); */
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   /* gap: 1.5em; */
@@ -163,7 +208,6 @@ export default defineComponent({
 .c {
   width: 100%;
   grid-area: c;
-  background: red;
   padding: 20px;
   box-sizing: border-box;
   background-clip: content-box;

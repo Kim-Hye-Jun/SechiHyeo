@@ -6,7 +6,7 @@
       <div
         class="boards-content-text"
         @click="academyClick"
-        :class="[academy === 'academy' ? 'academy' : 'no']"
+        :class="[academy === true ? 'academy' : 'no']"
       >
         <span class="span-board"></span>
         <span class="span-board"></span>
@@ -18,7 +18,7 @@
         class="boards-content-text"
         style="filter: hue-rotate(270deg)"
         @click="freeClick"
-        :class="[free === 'free' ? 'free' : 'no']"
+        :class="[free === true ? 'free' : 'no']"
       >
         자유
         <span class="span-board"></span>
@@ -28,15 +28,15 @@
       </div>
       <div
         class="boards-content-write"
-        :class="[academy === 'academy' ? '' : 'hidden']"
+        :class="[academy === true ? '' : 'hidden']"
       >
         <div
           class="boards-content-write-box2"
           @click="modalIn"
           v-for="board in boards"
           :key="board"
-          :filter="academy"
-          :filter-function="typeAcademy(room, academy)"
+          :filter="`academy`"
+          :filter-function="typeAcademy(room, '`academy`')"
         >
           <div class="boards-content-write-no">{{ board.board_no }}</div>
           <div class="boards-content-write-title">
@@ -54,15 +54,15 @@
       </div>
       <div
         class="boards-content-write"
-        :class="[free === 'free' ? '' : 'hidden']"
+        :class="[free === true ? '' : 'hidden']"
       >
         <div
           class="boards-content-write-box1"
           @click="modalIn"
           v-for="board in boards"
           :key="board"
-          :filter="free"
-          :filter-function="typeFree(room, free)"
+          :filter="`free`"
+          :filter-function="typeFree(room, '`free`')"
         >
           <div class="boards-content-write-no">{{ board.board_no }}</div>
           <div class="boards-content-write-title">{{ board.board_title }}</div>
@@ -93,8 +93,8 @@ export default defineComponent({
   components: { Background, BoardDetail },
   data() {
     return {
-      academy: "academy",
-      free: "free",
+      academy: true,
+      free: false,
       modal: false,
       boards: [],
       board: {
@@ -121,10 +121,10 @@ export default defineComponent({
       this.BOARDALL();
     },
     academyClick() {
-      (this.academy = "academy"), (this.free = "free");
+      (this.academy = true), (this.free = false);
     },
     freeClick() {
-      (this.academy = "academy"), (this.free = "free");
+      (this.academy = false), (this.free = true);
     },
     // 수정
     modalIn(num: any) {

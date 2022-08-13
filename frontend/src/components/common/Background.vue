@@ -6,7 +6,7 @@
       <div class="layer"></div>
       <div class="layer"></div>
     </div>
-    <div class="star" v-bind:style="{ boxShadow: result }"></div>
+    <div class="star"></div>
   </div>
 </template>
 
