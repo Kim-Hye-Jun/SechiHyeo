@@ -9,9 +9,10 @@ import lombok.*;
 @Builder
 public class RoomSearchRes {
     //세션 아이디, 방 제목, 방 인원수, 잠금여부, 방 썸네일
-    private String openviduId;
+    private String roomId;
     private String roomTitle;
-    private long headCount;
+    private int curNumOfPeople;
+    private int maxNumOfPeople;
     private String roomType;
     private String thumbnail;
 }
