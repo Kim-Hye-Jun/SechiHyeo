@@ -1,7 +1,7 @@
 <template>
   <div class="c">
     <div class="file-upload">
-      <form @submit.prevent="formSubmit" method="post">
+      <form>
         <div style="height: 565px">
           <img
             v-if="previewImgUrl"
@@ -26,9 +26,8 @@
   </div>
 </template>
 
-<script>
-import { ref, defineComponent } from "vue";
-import http from "@/http/index";
+<script lang="ts">
+import { defineComponent } from "vue";
 export default defineComponent({
   components: {},
   data() {
@@ -45,25 +44,28 @@ export default defineComponent({
   },
   methods: {
     previewFile() {
-      if (0 < this.$refs.selectFile.files.length) {
-        this.selectFile = this.$refs.selectFile.files[0];
-        let fileExt = this.selectFile?.name.substring(
-          this.selectFile?.name.lastIndexOf(".") + 1
+      if (
+        0 < ((this.$refs["selectFile"] as any)["files"]["length"] as number)
+      ) {
+        this.selectFile = (this.$refs["selectFile"] as any)["files"][0] as null;
+        let fileExt = ((this.selectFile as any)["name"] as string).substring(
+          ((this.selectFile as any)["name"] as string).lastIndexOf(".") + 1
         );
         fileExt = fileExt.toLowerCase();
         if (
           ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
-          this.selectFile.size <= 1048576
+          this.selectFile != null &&
+          this.selectFile["size"] <= 1048576
         ) {
           var reader = new FileReader();
-          reader.onload = (e) => {
+          reader.onload = (e: any) => {
             this.previewImgUrl = e.target.result;
           };
           reader.readAsDataURL(this.selectFile);
-        } else if (this.selectFile?.size <= 1048576) {
+        } else if (((this.selectFile as any)["size"] as number) <= 1048576) {
           this.previewImgUrl = null;
         } else {
-          alert("파일 용량 초과입니다! 다른 파일을 선택해 주세요~.");
+          alert("파일을 다시 선택해 주세요.");
           this.selectFile = null;
           this.previewImgUrl = null;
         }

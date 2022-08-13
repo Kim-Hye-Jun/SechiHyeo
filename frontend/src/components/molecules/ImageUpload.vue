@@ -19,8 +19,8 @@
   </div>
 </template>
 
-<script>
-import { ref, defineComponent } from "vue";
+<script lang="ts">
+import { defineComponent } from "vue";
 import http from "@/http/index";
 export default defineComponent({
   components: {},
@@ -35,23 +35,25 @@ export default defineComponent({
   },
   methods: {
     previewFile() {
-      if (0 < this.$refs.selectFile.files.length) {
-        this.selectFile = this.$refs.selectFile.files[0];
-        let fileExt = this.selectFile?.name.substring(
-          this.selectFile?.name.lastIndexOf(".") + 1
+      if (
+        0 < ((this.$refs["selectFile"] as any)["files"]["length"] as number)
+      ) {
+        this.selectFile = (this.$refs["selectFile"] as any)["files"][0] as null;
+        let fileExt = ((this.selectFile as any)["name"] as string).substring(
+          ((this.selectFile as any)["name"] as string).lastIndexOf(".") + 1
         );
         fileExt = fileExt.toLowerCase();
         if (
           ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
-          this.selectFile.size <= 1048576
+          this.selectFile != null &&
+          this.selectFile["size"] <= 1048576
         ) {
           var reader = new FileReader();
-          reader.onload = (e) => {
+          reader.onload = (e: any) => {
             this.previewImgUrl = e.target.result;
           };
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           reader.readAsDataURL(this.selectFile);
-        } else if (this.selectFile?.size <= 1048576) {
+        } else if (((this.selectFile as any)["size"] as number) <= 1048576) {
           this.previewImgUrl = null;
         } else {
           alert("파일을 다시 선택해 주세요.");
@@ -76,7 +78,7 @@ export default defineComponent({
               "Content-Type": "multipart/form-data",
             },
           })
-          .then((res) => {
+          .then((res: any) => {
             this.response = res;
             this.isUploading = false;
           })
