@@ -35,23 +35,10 @@ public class RoomServiceImpl implements RoomService {
     @Value("${thumbnail.path}")
     private String thumbnailPath;
 
-    static class userInfo {
-        String nickname;
-        String side;
-        String profileName;
-        String profileUrl;
-    }
-
-    private final String DEFAULT_URL = "https://us.123rf.com/450wm/isselee/isselee1312/isselee131200018/24155958-%EC%82%AC%EC%9E%90%EC%9D%98-%EC%84%9C-%ED%9D%B0%EC%83%89%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%90%9C-10-%EC%84%B8-%ED%91%9C%EB%B2%94-%EC%86%8D-%EB%A0%88%EC%98%A4-.jpg?ver=6";
-
-
     //오픈비두 객체
     private OpenVidu openVidu;
 
-    // 오픈비두 세션을 저장할 Map
-//    private Map<String, Session> mapSessions = new ConcurrentHashMap<>();
-
-    //오픈비두 세션과 방 정보를 저장하는 Map..?
+    //오픈비두 세션과 방 정보를 저장하는 Map
     private Map<String, SessionRoom> roomWithSession = new ConcurrentHashMap<>();
 
     //방과 방 내부 접속자를 저장할 Map
@@ -61,10 +48,7 @@ public class RoomServiceImpl implements RoomService {
     // 오픈비두 서버 주소
     private String OPENVIDU_URL;
     // 오픈비두 서버와 공유
-
     private String OPENVIDU_SECRET;
-
-    //방과 방에 따
 
     @Autowired
     public RoomServiceImpl(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
@@ -254,7 +238,7 @@ public class RoomServiceImpl implements RoomService {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userId", member.getLoginId());
             jsonObject.put("nickname", member.getNickname());
-            jsonObject.put("profileUrl", DEFAULT_URL);
+            jsonObject.put("profileUrl", member.getProfileUrl());
 //            jsonObject.put("profileName", member.getProfileName());
 //            jsonObject.put("profileUrl", member.getProfileUrl());
 
@@ -503,15 +487,14 @@ public class RoomServiceImpl implements RoomService {
 
     //방 내부 비어있는 진영, 순서 반환
     @Override
-    public String[][] validSideOrder(String OpenviduId) {
-
+    public String[][] validSideOrder(String roomId) {
         //오픈비두 세션 아이디로 RoomWithParticipant 찾기
         //해당 배열 반환
-        return roomWithParticipant.get(OpenviduId);
+        return roomWithParticipant.get(roomId);
     }
 
     @Override
-    public void sendSignal(String OpenviduId) {
+    public void sendSignal(String roomId) {
         try {
             URL url = new URL("https://i7a508.p.ssafy.io:8443/openvidu/api/signal");
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -523,7 +506,7 @@ public class RoomServiceImpl implements RoomService {
             conn.setDoOutput(true); // 서버로부터 받는 값이 있다면 true
 
             // 서버에 데이터 전달
-            String[][] participants = roomWithParticipant.get(OpenviduId);
+            String[][] participants = roomWithParticipant.get(roomId);
 //            String[][] participants = new String[2][3];
 
             System.out.println(participants[0].length);
@@ -547,7 +530,7 @@ public class RoomServiceImpl implements RoomService {
 //            ArrayList<String> al = new ArrayList<>();
 
             JSONObject obj = new JSONObject();
-            obj.put("session", OpenviduId);
+            obj.put("session", roomId);
 //            obj.put("to", al);
             obj.put("type", "UPDATE_SIDE_ORDER");
             obj.put("data", jsonArray.toJSONString());
