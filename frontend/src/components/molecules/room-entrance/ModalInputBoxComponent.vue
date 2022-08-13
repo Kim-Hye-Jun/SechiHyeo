@@ -26,7 +26,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .box__input {
   width: 100%;
   padding: 10px 0;

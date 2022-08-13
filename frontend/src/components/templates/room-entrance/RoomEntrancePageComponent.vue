@@ -49,7 +49,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 body {
   background: rgb(7, 8, 78);
 }

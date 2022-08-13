@@ -22,7 +22,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .thumbnail {
   /* border: 3px solid black; */
   /* border-radius: 1em; */

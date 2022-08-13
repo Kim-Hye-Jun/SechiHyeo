@@ -154,7 +154,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .modal {
   width: 60vw;
   left: 10vw;
