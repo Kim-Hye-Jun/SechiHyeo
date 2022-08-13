@@ -15,10 +15,8 @@ public class WebConfig implements WebMvcConfigurer{
 	//[CORS 허용 관련]
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**")
-				.allowedOrigins("*")
-				.allowedMethods("*")
-				.allowedHeaders("*")
+		registry.addMapping("/api/**").allowedOrigins("*")
+				.allowedMethods("GET","POST","PUT","DELETE")
 				.maxAge(6000);
 	}
 
