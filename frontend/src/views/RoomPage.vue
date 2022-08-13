@@ -3,12 +3,14 @@
     Leave session
   </button>
   <div>
+    <debate-timer></debate-timer>
     <user-video :stream-manager="this.store.state.publisher" />
     <user-video
       v-for="sub in this.store.state.subscribers"
       :key="sub.stream.connection.connectionId"
       :stream-manager="sub"
     />
+    <!-- <debate-chat></debate-chat> -->
   </div>
 </template>
 
@@ -20,7 +22,8 @@ import { useStore } from "vuex";
 // import { mapState } from "vuex";
 // import { OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET } from "@/config/index";
 import UserVideo from "@/components/Video/UserVideo.vue";
-
+import DebateTimer from "@/components/DebateTimer.vue";
+import DebateChat from "@/components/DebateChat.vue";
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -30,6 +33,8 @@ export default defineComponent({
   computed: {},
   components: {
     UserVideo,
+    DebateTimer,
+    // DebateChat,
   },
 
   methods: {

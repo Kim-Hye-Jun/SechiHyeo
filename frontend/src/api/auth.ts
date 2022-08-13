@@ -15,7 +15,7 @@ function checkUserId(memberId: string) {
   return instance.get(`register/user-id/${memberId}`);
 }
 
-// ID 중복체크
+// 닉네임 중복체크
 function checkNickName(nickName: string) {
   // console.log(memberId);
   return instance.get(`register/nickname/${nickName}`);

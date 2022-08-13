@@ -90,6 +90,10 @@ export default defineComponent({
         console.warn(exception);
       });
 
+      this.store.state.session.on("signal:countdown", (event: any) => {
+        console.log(event);
+      });
+
       // --- Connect to the session with a valid user token ---
 
       // 'getToken' method is simulating what your server-side should do.
