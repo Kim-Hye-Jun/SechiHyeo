@@ -11,11 +11,12 @@ import javax.persistence.Column;
 @NoArgsConstructor
 @Builder
 public class Room {
-//    private long roomNo;
-    private String openviduId;
+    //    private long roomNo;
+    private String roomId;
     private String roomTitle;
     private String debateTopic;
-    private long headCount;
+    private int curNumOfPeople;
+    private int maxNumOfPeople;
     private String roomType;
     private String debateType;
     private String thumbnail;
@@ -38,8 +39,9 @@ public class Room {
         return RoomSearchRes.builder()
                 .roomTitle(room.getRoomTitle())
                 .roomType(room.getRoomType())
-                .openviduId(room.getOpenviduId())
-                .headCount(room.getHeadCount())
+                .roomId(room.getRoomId())
+                .curNumOfPeople(room.getCurNumOfPeople())
+                .maxNumOfPeople(room.getMaxNumOfPeople())
                 .thumbnail(room.getThumbnail())
                 .build();
     }

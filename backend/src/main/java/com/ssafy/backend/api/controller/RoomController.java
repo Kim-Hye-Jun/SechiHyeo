@@ -56,15 +56,15 @@ public class RoomController {
 
     // 3. 방 생성
     @PostMapping("")
-    public ResponseEntity<RoomCreateRes> createRoom(RoomCreateReq roomCreateReq){
+    public ResponseEntity<RoomCreateRes> createRoom(@RequestBody RoomCreateReq roomCreateReq){
         RoomCreateRes roomCreateRes = roomService.createRoom(roomCreateReq);
         return ResponseEntity.ok(roomCreateRes);
     }
 
     // 4. 방 접속
-    @GetMapping("/{openvidu_id}/connection")
-    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String openvidu_id, HttpServletRequest httpServletRequest){
-        RoomJoinReq roomJoinReq = new RoomJoinReq(openvidu_id);
+    @GetMapping("/{roomId}/connection")
+    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String roomId, HttpServletRequest httpServletRequest){
+        RoomJoinReq roomJoinReq = new RoomJoinReq(roomId);
         RoomJoinRes roomJoinRes = roomService.joinRoom(httpServletRequest, roomJoinReq);
         return ResponseEntity.ok(roomJoinRes);
     }
