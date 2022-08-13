@@ -183,7 +183,7 @@ export default defineComponent({
     },
     async nickNameDuplicateCheck() {
       try {
-        const response = await checkNickName(this.member.loginId);
+        const response = await checkNickName(this.member.nickname);
         this.nickNameDuplicate = false;
       } catch {
         alert("이미 사용중인 닉네임 입니다!");
