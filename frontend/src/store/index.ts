@@ -63,11 +63,11 @@ export default createStore({
     async loginMember({ commit }, member) {
       const memberId = member.loginId;
       const response = await loginUser(member);
-      // console.log(response);
+      console.log(response);
       commit("SET_TOKEN", response.data["access-token"]);
       commit("SET_USER_ID", memberId);
       const memberInfo = await getMemberInfo();
-      // console.log(memberInfo);
+      console.log(memberInfo);
       commit("SET_MEMBER_INFO", memberInfo.data);
       saveAuthToCookie(response.data["access-token"]);
       saveUserToCookie(memberId);

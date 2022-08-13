@@ -12,7 +12,7 @@ function createInstance() {
 // JWT 인증이 따로 필요한 axios
 function createInstanceWithAuth(url: string) {
   const instance = axios.create({
-    baseURL: `${API_BASE_URL}${url}`,
+    baseURL: `${API_BASE_URL}`,
   });
   return setInterceptors(instance); // JWT를
 }
