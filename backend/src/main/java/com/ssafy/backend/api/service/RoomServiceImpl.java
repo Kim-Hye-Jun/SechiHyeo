@@ -18,13 +18,23 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class RoomServiceImpl implements RoomService {
+    @Value("${thumbnail.path}")
+    private String thumbnailPath;
+
     static class userInfo {
         String nickname;
         String side;
@@ -133,7 +143,8 @@ public class RoomServiceImpl implements RoomService {
                 .roomId(String.valueOf(UUID.randomUUID()))
                 .maxNumOfPeople(roomCreateReq.getHeadCount())
                 .curNumOfPeople(0)
-                .thumbnail(DEFAULT_URL)
+//                .thumbnail(thumbnailPath + saveName)
+                .thumbnail(null)
                 .debateTopic(roomCreateReq.getDebateTopic())
                 .debateType(roomCreateReq.getDebateType())
                 .password((roomCreateReq.getPassword()))
@@ -167,6 +178,49 @@ public class RoomServiceImpl implements RoomService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public void uploadThumbnail(String roomId, MultipartFile thumbnail) {
+        //썸네일 업로드
+        //파일 업로드 경로 및 파일명
+        String fileName = thumbnail.getOriginalFilename(); // 원본 파일 이름
+        String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
+
+//        썸네일 업로드 테스트용
+//        String thumbnailPath = System.getProperty("user.dir") + "/src/main/resources/static/thumbnail";
+        try {
+            //파일객체 생성 및 업로드
+            File file = new File(thumbnailPath, saveName);
+            if(!new File(thumbnailPath).exists())
+                new File(thumbnailPath).mkdirs();
+            thumbnail.transferTo(file);
+
+            //기존 프로필 삭제(있으면)
+//            if(member.getProfileName() != null) {
+//                File deleteFile = new File(profilePath, member.getProfileName());
+//                System.out.println(member.getProfileName());
+//                if (deleteFile.exists()) deleteFile.delete();
+//            }
+
+//            //db에 프로필 이미지 정보 및 경로 저장
+//            member.setProfileName(saveName);
+//            member.setProfileUrl(profilePath + saveName);
+//            memberRepository.save(member);
+
+            //만들어진 방 객체를 찾아 thumbnail을 수정
+            //roomWithSession, roomList
+            roomWithSession.get(roomId).getRoom().setThumbnail(thumbnailPath+saveName);
+            for (int i = 0; i < roomList.size(); i++) {
+                if(roomList.get(i).getRoomId().equals(roomId)){
+                    roomList.get(i).setThumbnail(thumbnailPath+saveName);
+                    break;
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -285,10 +339,12 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoom(String OpenviduId) {
+        //session 삭제
         List<Session> sessionList = openVidu.getActiveSessions();
         for (int i = 0; i < sessionList.size(); i++) {
             if (sessionList.get(i).getSessionId().equals(OpenviduId)) {
                 try {
+                    //openvidu session close
                     sessionList.get(i).close();
                     break;
                 } catch (OpenViduJavaClientException e) {
@@ -296,6 +352,13 @@ public class RoomServiceImpl implements RoomService {
                 } catch (OpenViduHttpException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+
+        //roomList 방 삭제
+        for (int i = 0; i < roomList.size(); i++) {
+            if(roomList.get(i).getRoomId().equals(OpenviduId)){
+                roomList.remove(i);
             }
         }
     }
@@ -445,6 +508,66 @@ public class RoomServiceImpl implements RoomService {
         //오픈비두 세션 아이디로 RoomWithParticipant 찾기
         //해당 배열 반환
         return roomWithParticipant.get(OpenviduId);
+    }
+
+    @Override
+    public void sendSignal(String OpenviduId) {
+        try {
+            URL url = new URL("https://i7a508.p.ssafy.io:8443/openvidu/api/signal");
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+
+            conn.setRequestMethod("POST"); // http 메서드
+            conn.setRequestProperty("Content-Type", "application/json"); // header Content-Type 정보
+            conn.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString("OPENVIDUAPP:MY_SECRET".getBytes())); // header의 auth 정보
+            conn.setDoInput(true); // 서버에 전달할 값이 있다면 true
+            conn.setDoOutput(true); // 서버로부터 받는 값이 있다면 true
+
+            // 서버에 데이터 전달
+            String[][] participants = roomWithParticipant.get(OpenviduId);
+//            String[][] participants = new String[2][3];
+
+            System.out.println(participants[0].length);
+
+            JSONArray jsonArray = new JSONArray();
+            int count = participants[0].length;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < count; j++) {
+                    JSONObject jsonObject = new JSONObject();
+
+                    if(i == 0)
+                        jsonObject.put("side", "A");
+                    else jsonObject.put("side", "B");
+                    jsonObject.put("order", j+1);
+                    jsonObject.put("user", participants[i][j]);
+
+                    jsonArray.add(jsonObject);
+                }
+            }
+
+//            ArrayList<String> al = new ArrayList<>();
+
+            JSONObject obj = new JSONObject();
+            obj.put("session", OpenviduId);
+//            obj.put("to", al);
+            obj.put("type", "UPDATE_SIDE_ORDER");
+            obj.put("data", jsonArray.toJSONString());
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            bw.write(obj.toJSONString()); // 버퍼에 담기
+            System.out.println("obj : " + obj.toJSONString());
+            bw.flush(); // 버퍼에 담긴 데이터 전달
+            bw.close();
+
+            int responseCode = conn.getResponseCode();
+            System.out.println(responseCode);
+
+            if (responseCode == 200) {
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

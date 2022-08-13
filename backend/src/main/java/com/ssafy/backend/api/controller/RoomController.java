@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -61,6 +62,13 @@ public class RoomController {
         return ResponseEntity.ok(roomCreateRes);
     }
 
+    @PostMapping("/{roomId}/thumbnail")
+    public  ResponseEntity createRoomThumbnail(@PathVariable String roomId, @RequestPart MultipartFile thumbnail) {
+        roomService.uploadThumbnail(roomId, thumbnail);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
     // 4. 방 접속
     @GetMapping("/{roomId}/connection")
     public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String roomId, HttpServletRequest httpServletRequest){
@@ -99,6 +107,7 @@ public class RoomController {
         String[][] participants = roomService.validSideOrder(openvidu_id);
         return ResponseEntity.ok(participants);
     }
+
 
 
 }
