@@ -12,7 +12,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 input {
   width: 100%;
   padding: 10px 0;

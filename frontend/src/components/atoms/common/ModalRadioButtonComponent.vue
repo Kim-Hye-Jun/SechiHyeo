@@ -36,7 +36,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .list {
   color: #aaaaaa;
   display: block;
