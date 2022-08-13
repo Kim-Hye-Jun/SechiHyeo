@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface DebateBoardService {
     List<DebateBoard> getBoards();
-    DebateBoard getBoard(long board_no);
+    DebateBoard getBoard(int board_no);
 
     boolean regiBoard(DebateBoardRegiPostReq regiReq, Member member);
 
-    boolean deleteBoard(long board_no);
+    boolean deleteBoard(int board_no);
 
-    boolean changeBoard(long board_no, DebateBoardRegiPostReq regiReq);
+    boolean changeBoard(int board_no, DebateBoardRegiPostReq regiReq);
 }

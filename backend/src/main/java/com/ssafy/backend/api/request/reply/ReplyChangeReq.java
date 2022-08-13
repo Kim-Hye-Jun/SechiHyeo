@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReplyChangeReq {
-    long reply_no;
+    int reply_no;
     String context;
 }

@@ -8,5 +8,5 @@ import lombok.Setter;
 public class ApplicantStateRegiPostReq {
     int side;
     int order;
-    long board_no;
+    int board_no;
 }

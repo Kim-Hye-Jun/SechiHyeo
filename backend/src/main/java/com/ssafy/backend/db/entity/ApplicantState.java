@@ -17,7 +17,7 @@ public class ApplicantState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="applicant_no", columnDefinition = "int unsigned")
-    Long applicantNo = null;
+    private int applicantNo;
 
     @Column(name = "side", nullable = false, columnDefinition = "int unsigned default 0")
     int side;

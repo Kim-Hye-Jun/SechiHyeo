@@ -18,7 +18,7 @@ public class DebateBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="board_no", columnDefinition = "int unsigned")
-    Long boardNo = null;
+    private int boardNo;
 
     @Column(name="board_title",nullable = false, columnDefinition = "varchar(100)")
     String boardTitle;
@@ -39,11 +39,11 @@ public class DebateBoard {
     String aOpinion;
     @Column(name="b_opinion",nullable = false, columnDefinition = "varchar(200)")
     String bOpinion;
-    @Column(name="board_finished", nullable = false, columnDefinition = "boolean unsigned default false" )
+    @Column(name="board_finished", nullable = false, columnDefinition = "boolean default false" )
     boolean boardFinished;
 
     //이 밑엔 연관관계 회원, 방 지정되어야한다
-    //방은 onetoone
+    //방은 db생성 안되서 없다
 
     //회원은 manytoone
     @ManyToOne

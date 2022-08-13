@@ -18,7 +18,7 @@ public class Reply  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="reply_no", columnDefinition = "int unsigned")
-    Long replyNo = null;
+    private int replyNo;
 
     @Column(name = "context",columnDefinition = "varchar(150)")
     String context;
@@ -31,7 +31,7 @@ public class Reply  {
     boolean hidden;
 
     @Column(name="parent_no",nullable = false, columnDefinition = "int unsigned default 0")
-    long parentNo;
+    int parentNo;
     
     //연관
     //게시판
