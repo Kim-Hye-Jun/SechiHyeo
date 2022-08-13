@@ -17,7 +17,7 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
 
     @Value("${profile.path}")
-    String profilePath;
+    private String profilePath;
 
     @Autowired
     private MemberRepository memberRepository;
