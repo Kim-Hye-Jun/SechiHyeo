@@ -9,7 +9,7 @@ export default defineComponent({
     streamManager: Object,
   },
   mounted() {
-    console.log(this.streamManager);
+    console.log("추가", this.streamManager);
     this.streamManager?.addVideoElement(this.$el);
   },
   data() {
@@ -21,7 +21,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 video {
   background: black;
   border-radius: 10px;

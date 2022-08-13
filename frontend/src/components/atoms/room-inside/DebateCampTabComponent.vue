@@ -13,7 +13,7 @@ export default defineComponent({
   methods: {},
 });
 </script>
-<style>
+<style scoped>
 /* div {
   width: 50%;
   height: 3em;

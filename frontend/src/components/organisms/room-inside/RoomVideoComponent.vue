@@ -1,10 +1,6 @@
 <template>
   <div class="grid">
     <!-- <user-video-component-vue
-      :stream-manager="publisher"
-      :class="roomAndUserData?.userSideOrder"
-    ></user-video-component-vue> -->
-    <user-video-component-vue
       class="a1 video"
       :draggable="isRoomAdmin()"
       value="1"
@@ -33,15 +29,29 @@
       class="b3 video"
       :draggable="isRoomAdmin()"
       value="6"
+    ></user-video-component-vue> -->
+    <user-video-component-vue
+      :stream-manager="publisher"
+      :class="roomAndUserData?.userSideOrder"
+      :draggable="isRoomAdmin()"
     ></user-video-component-vue>
-    <!-- <user-video
+    <user-video-component-vue
       v-for="sub in subscribers"
       v-bind:key="sub.stream.connection.connectionId"
       :stream-manager="sub"
       :class="
-        userSideOrderMap?.get(JSON.parse(sub.stream.connection.data)['userId'])
+        userSideOrderMap?.get(
+          JSON.parse(sub.stream.connection.data.split('%/%')[1])['userId']
+        )
       "
-    /> -->
+      :draggable="isRoomAdmin()"
+    ></user-video-component-vue>
+    <user-video-component-vue
+      v-for="empty in emptyVideoClasses"
+      v-bind:key="empty"
+      :class="empty"
+    >
+    </user-video-component-vue>
     <div class="c"></div>
   </div>
 </template>
@@ -59,6 +69,7 @@ export default defineComponent({
     subscribers: Array(Object),
     roomAndUserData: Object,
     userSideOrderMap: Map,
+    emptyVideoClasses: Array(Object),
   },
   data() {
     return {
@@ -67,8 +78,15 @@ export default defineComponent({
   },
   components: { UserVideoComponentVue },
   methods: {
+    test(arr: Array<string>, index: number, name: string): string {
+      console.log("name : ", name);
+      console.log("arr : ", arr);
+      console.log("index : ", index);
+      return arr[index];
+    },
     isRoomAdmin(): boolean {
-      return true;
+      console.log("HOST : ", this.roomAndUserData?.host);
+      return this.roomAndUserData?.isHost;
     },
     dragOver(e: Event): void {
       e.preventDefault();
@@ -121,7 +139,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .grid {
   background: radial-gradient(circle, #141834 0%, #13162f 100%);
   display: grid;
