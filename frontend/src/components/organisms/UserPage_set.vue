@@ -1,11 +1,13 @@
 <template>
   <div class="userpage-content-set-form-topic">회원정보 수정</div>
   <image-upload></image-upload>
-  <div class="userpage-content-set-form-image"></div>
-  <button class="userpage-content-set-form-fix">사진 편집</button>
+  <!-- <div class="userpage-content-set-form-image"></div> -->
+  <!-- <button class="userpage-content-set-form-fix">사진 편집</button> -->
   <div class="userpage-content-set-form-personal">
     <div class="userpage-content-set-form-id">ID</div>
     <div class="userpage-content-set-form-pw">PW</div>
+    <div class="userpage-content-set-form-pw2">PW2</div>
+    <div class="userpage-content-set-form-pw3">PW3</div>
     <div class="userpage-content-set-form-email">E-mail</div>
     <div class="userpage-content-set-form-phone">Phone</div>
     <input
@@ -15,7 +17,20 @@
     <input
       class="userpage-content-set-form-input-pw"
       type="password"
-      v-model="member.login_password"
+      placeholder="현재 비밀번호"
+      v-model="ps"
+    />
+    <input
+      class="userpage-content-set-form-input-pw2"
+      type="password"
+      placeholder="새 비밀번호"
+      v-model="newps1"
+    />
+    <input
+      class="userpage-content-set-form-input-pw3"
+      type="password"
+      placeholder="새 비밀번호 확인"
+      v-model="newps2"
     />
     <input
       class="userpage-content-set-form-input-email"
@@ -23,7 +38,7 @@
     />
     <input
       class="userpage-content-set-form-input-phone"
-      v-model="member.phone_number"
+      v-model="member.phoneNumber"
     />
   </div>
   <input
@@ -47,13 +62,16 @@ export default defineComponent({
   data() {
     return {
       member: {
-        profile_url: "",
+        profileUrl: "",
         nickname: "",
-        login_password: "",
+        loginPassword: "",
         introduce: "",
-        phone_number: "",
+        phoneNumber: "",
         email: "",
       },
+      ps: "",
+      newps1: "",
+      newps2: "",
     };
   },
   computed: {
@@ -62,7 +80,15 @@ export default defineComponent({
   methods: {
     ...mapActions(["PROFILEUPDATE"]),
     profileUpdate() {
-      this.PROFILEUPDATE(this.memberinfo);
+      if (this.memberinfo.loginPassword === this.ps) {
+        if (this.newps1 === this.newps2) {
+          this.PROFILEUPDATE(this.memberinfo);
+        } else {
+          alert("새 비밀번호가 일치하지 않습니다!!!");
+        }
+      } else {
+        alert("비밀번호가 틀렸습니다!!");
+      }
     },
   },
 });
@@ -120,11 +146,10 @@ export default defineComponent({
   color: #ffffff;
 }
 .userpage-content-set-form-fix {
-  position: absolute;
-  width: 100px;
+  width: 80px;
   height: 30px;
-  left: 157px;
-  top: 290px;
+  left: 100px;
+  top: 190px;
   background: #070707;
   border-radius: 10px;
   border: #ffffff solid 1px;
@@ -136,8 +161,8 @@ export default defineComponent({
 }
 .userpage-content-set-form-fix:hover {
   background: #ff0080;
-  box-shadow: 0 0 5px #ff0080, 0 0 25px #ff0080, 0 0 50px #ff0080,
-    0 0 100px #ff0080;
+  box-shadow: 0 0 2px #ff0080, 0 0 10px #ff0080, 0 0 20px #ff0080,
+    0 0 40px #ff0080;
 }
 .userpage-content-set-form-image {
   position: absolute;
@@ -203,7 +228,7 @@ export default defineComponent({
   width: 250px;
   height: 40px;
   left: 500px;
-  top: 200px;
+  top: 300px;
   background: #acacac;
   border: 1px solid #000000;
   border-radius: 15px;
@@ -225,7 +250,7 @@ export default defineComponent({
   width: 250px;
   height: 40px;
   left: 500px;
-  top: 150px;
+  top: 250px;
   background: #acacac;
   border: 1px solid #000000;
   border-radius: 15px;
@@ -263,6 +288,50 @@ export default defineComponent({
   background: #000000;
   border: white solid 1px;
 }
+.userpage-content-set-form-input-pw2 {
+  box-sizing: border-box;
+  position: absolute;
+  width: 250px;
+  height: 40px;
+  left: 500px;
+  top: 150px;
+  background: #acacac;
+  border: 1px solid #000000;
+  border-radius: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: 0.5s;
+  letter-spacing: 4px;
+  outline: 0;
+  font-weight: bold;
+}
+.userpage-content-set-form-input-pw2:focus {
+  color: white;
+  background: #000000;
+  border: white solid 1px;
+}
+.userpage-content-set-form-input-pw3 {
+  box-sizing: border-box;
+  position: absolute;
+  width: 250px;
+  height: 40px;
+  left: 500px;
+  top: 200px;
+  background: #acacac;
+  border: 1px solid #000000;
+  border-radius: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: 0.5s;
+  letter-spacing: 4px;
+  outline: 0;
+  font-weight: bold;
+}
+.userpage-content-set-form-input-pw3:focus {
+  color: white;
+  background: #000000;
+  border: white solid 1px;
+}
 .userpage-content-set-form-input-id {
   box-sizing: border-box;
   position: absolute;
@@ -290,7 +359,7 @@ export default defineComponent({
   width: 270px;
   height: 24px;
   left: 400px;
-  top: 203px;
+  top: 303px;
   font-family: "Inter";
   font-style: normal;
   font-size: 24px;
@@ -301,7 +370,7 @@ export default defineComponent({
   width: 270px;
   height: 24px;
   left: 400px;
-  top: 153px;
+  top: 253px;
   font-family: "Inter";
   font-style: normal;
   font-size: 24px;
@@ -313,6 +382,28 @@ export default defineComponent({
   height: 24px;
   left: 400px;
   top: 103px;
+  font-family: "Inter";
+  font-style: normal;
+  font-size: 24px;
+  color: #ffffff;
+}
+.userpage-content-set-form-pw2 {
+  position: absolute;
+  width: 300px;
+  height: 24px;
+  left: 400px;
+  top: 153px;
+  font-family: "Inter";
+  font-style: normal;
+  font-size: 24px;
+  color: #ffffff;
+}
+.userpage-content-set-form-pw3 {
+  position: absolute;
+  width: 300px;
+  height: 24px;
+  left: 400px;
+  top: 203px;
   font-family: "Inter";
   font-style: normal;
   font-size: 24px;
