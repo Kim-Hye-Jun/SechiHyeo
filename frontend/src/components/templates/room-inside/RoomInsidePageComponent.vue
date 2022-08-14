@@ -11,6 +11,7 @@
         :subscribers="subscribers"
         :roomAndUserData="testReturnData"
         :userSideOrderMap="mapUserClassName"
+        :emptyVideoClasses="emptyVideoArr"
       ></room-video-component>
     </suspense>
     <menu-tab-component class="room__inside__class3"></menu-tab-component>
@@ -18,11 +19,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, toRaw } from "vue";
 import DebateTitleTabComponent from "@components/molecules/room-inside/DebateTitleTabComponent.vue";
 import RoomVideoComponent from "@components/organisms/room-inside/RoomVideoComponent.vue";
 import MenuTabComponent from "@components/organisms/room-inside/MenuTabComponent.vue";
 import DebateTopicComponent from "@components/atoms/room-inside/DebateTopicComponent.vue";
+import { member2 } from "@/api/index";
 
 import http from "@/http";
 import * as openVidu from "openvidu-browser";
@@ -40,54 +42,106 @@ export default defineComponent({
     // 뭘 반응형으로 설정해야 할지...?
     let OV: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
     let session: openVidu.Session | undefined = OV.initSession();
-    let subscribers: openVidu.Subscriber[] = [];
+    const subscribers = ref([]);
+    // let subscribers: openVidu.Subscriber[] = [];
     let testReturnData: RoomJoinResponseInfo | undefined = undefined;
 
-    let mapUserClassName = new Map();
+    const mapUserClassName = ref(new Map());
 
     const apiCall = async () => {
       try {
-        console.log("here");
+        console.log("here", `${useRoute().params.roomId}`);
         testReturnData = (
-          await http.get(`/sessions/${useRoute().params.roomId}/connection`)
+          await member2.get(`/sessions/${useRoute().params.roomId}/connection`)
         ).data;
-        console.log(testReturnData?.token);
-        console.log(testReturnData);
+        console.log("testReturnData token : ", testReturnData?.token);
+        console.log("testReturnData : ", testReturnData);
       } catch (err) {
         console.log(err);
       }
     };
     await apiCall();
+    const emptyVideoArr = ref([]);
+    for (const data of (testReturnData as unknown as RoomJoinResponseInfo)[
+      "emptySideOrderList"
+    ]) {
+      (emptyVideoArr.value as string[]).push(data);
+    }
 
     let mainStreamManager: openVidu.Publisher | undefined = undefined;
     let publisher: openVidu.Publisher | undefined = undefined;
 
     session.on("streamCreated", ({ stream }) => {
+      // 1. 서버에 추가 요청 => x
+      // 완료
+
       if (session) {
         const subscriber = session.subscribe(
           stream,
           undefined as unknown as HTMLElement
         );
+
+        // (##구현) emptyArr에 sub의 class 제거
         console.log("subscript create @@ ", subscriber);
-        mapUserClassName.set(
-          JSON.parse(subscriber.stream.connection.data)["userId"],
+        console.log(
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])
+        );
+        console.log(
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])
+        );
+        // 2. map user class name 추가
+        mapUserClassName.value.set(
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
+            "userId"
+          ],
           testReturnData?.userSideOrder
         );
-        subscribers.push(subscriber);
+        (subscribers.value as openVidu.Subscriber[]).push(subscriber);
+
+        // 3. empty arr 삭제
+
+        const index = (emptyVideoArr.value as string[]).indexOf(
+          testReturnData?.userSideOrder as string
+        );
+        if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
+        console.log("MAP : ", mapUserClassName);
+        console.log("SUBSCRIBERS : ", subscribers);
+        console.log("EMPTY VIDEO ARR : ", emptyVideoArr);
       }
     });
 
     session.on("streamDestroyed", ({ stream }) => {
       // Remove the stream from 'subscribers' array
-      const index = subscribers.indexOf(
+
+      // 1. 서버에 삭제 요청 *****
+
+      // 2. map user-class name 삭제
+      const index = (subscribers.value as openVidu.Subscriber[]).indexOf(
         stream.streamManager as openVidu.Subscriber,
         0
       );
-      mapUserClassName.delete(
-        JSON.parse(subscribers[index].stream.connection.data)["userId"]
+
+      // 3. empty arr 에 추가
+
+      const currentUserSideOrder = mapUserClassName.value.get(
+        JSON.parse(
+          (subscribers.value as openVidu.Subscriber[])[
+            index
+          ].stream.connection.data.split("%/%")[1]
+        )["userId"]
+      );
+
+      (emptyVideoArr.value as string[]).push(currentUserSideOrder);
+
+      mapUserClassName.value.delete(
+        JSON.parse(
+          (subscribers.value as openVidu.Subscriber[])[
+            index
+          ].stream.connection.data.split("%/%")[1]
+        )["userId"]
       );
       if (index >= 0) {
-        subscribers.splice(index, 1);
+        subscribers.value.splice(index, 1);
       }
     });
 
@@ -95,10 +149,26 @@ export default defineComponent({
       console.warn(exception);
     });
 
+    session.on("signal:UPDATE_SIDE_ORDER", (event) => {
+      // user(login_id)가 진영이 어디로 바뀌었는지 시그널 받음
+      // 1. map user classname 변경
+      // 2. empty로 갔으면 empty 삭제 or 추가
+      // 기존 side, order 을 받아야 될듯
+      // ***** 변경필요
+
+      if (typeof event.data === "string") {
+        const data = JSON.parse(event.data);
+        const userId = data["login_id"];
+        const sideOrder = data["side"] + data["order"];
+        mapUserClassName.value.set(userId, sideOrder);
+      }
+    });
+
     // // 2번째 매개변수에 userInfo넣기
     console.log(testReturnData);
     if (testReturnData === undefined) return;
     console.log("no return");
+
     await session
       .connect(testReturnData["token"], testReturnData)
       .then(() => {
@@ -109,7 +179,7 @@ export default defineComponent({
             videoSource: undefined, // The source of video. If undefined default webcam
             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-            resolution: "640x480", // The resolution of your video
+            resolution: "300x150", // The resolution of your video
             frameRate: 30, // The frame rate of your video
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
             mirror: false, // Whether to mirror your local video or not
@@ -137,9 +207,9 @@ export default defineComponent({
       session = undefined;
       mainStreamManager = undefined;
       publisher = undefined;
-      subscribers = [];
+      subscribers.value = [];
       OV = undefined;
-      mapUserClassName = new Map();
+      mapUserClassName.value = new Map();
 
       window.removeEventListener("beforeunload", leaveSession);
       window.removeEventListener("beforeunload", removeUser);
@@ -154,17 +224,30 @@ export default defineComponent({
     console.log("...?");
     console.log("pub : ", publisher);
     console.log("sub : ", subscribers);
+
+    console.log("empty Video Arr : ", emptyVideoArr);
+    console.log("subscribers Value : ", toRaw(subscribers.value));
+    // for (let i = 0; i < toRaw(subscribers.value).length; i++) {
+    //   const sideOrder = JSON.parse(
+    //     (
+    //       toRaw(subscribers.value)[i] as openVidu.Subscriber
+    //     ).stream.connection.data.split("%/%")[0] as any
+    //   )["userSideOrder"];
+    //   const index = emptyVideoArr.value.indexOf((sideOrder as string));
+    // }
+
     return {
       publisher,
       testReturnData,
       subscribers,
       mapUserClassName,
+      emptyVideoArr,
     };
   },
 });
 </script>
 
-<style>
+<style scoped>
 body {
   margin: 0;
   background: #0e0e23;

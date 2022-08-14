@@ -39,7 +39,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .flex-container {
   width: 80%;
   display: flex;

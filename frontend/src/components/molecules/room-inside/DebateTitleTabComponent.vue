@@ -18,7 +18,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .flexB {
   display: flex;
   flex-direction: row;

@@ -13,7 +13,7 @@ export default defineComponent({
   methods: {},
 });
 </script>
-<style>
+<style scoped>
 .topic {
   width: 100%;
   background: linear-gradient(325deg, #1a1d3a 0%, #212752 100%);

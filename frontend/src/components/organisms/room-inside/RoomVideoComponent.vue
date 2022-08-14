@@ -1,10 +1,6 @@
 <template>
   <div class="grid">
     <!-- <user-video-component-vue
-      :stream-manager="publisher"
-      :class="roomAndUserData?.userSideOrder"
-    ></user-video-component-vue> -->
-    <user-video-component-vue
       class="a1 video"
       :draggable="isRoomAdmin()"
       value="1"
@@ -33,15 +29,29 @@
       class="b3 video"
       :draggable="isRoomAdmin()"
       value="6"
+    ></user-video-component-vue> -->
+    <user-video-component-vue
+      :stream-manager="publisher"
+      :class="roomAndUserData?.userSideOrder"
+      :draggable="isRoomAdmin()"
     ></user-video-component-vue>
-    <!-- <user-video
+    <user-video-component-vue
       v-for="sub in subscribers"
       v-bind:key="sub.stream.connection.connectionId"
       :stream-manager="sub"
       :class="
-        userSideOrderMap?.get(JSON.parse(sub.stream.connection.data)['userId'])
+        userSideOrderMap?.get(
+          JSON.parse(sub.stream.connection.data.split('%/%')[1])['userId']
+        )
       "
-    /> -->
+      :draggable="isRoomAdmin()"
+    ></user-video-component-vue>
+    <user-video-component-vue
+      v-for="empty in emptyVideoClasses"
+      v-bind:key="empty"
+      :class="empty"
+    >
+    </user-video-component-vue>
     <div class="c"></div>
   </div>
 </template>
@@ -59,6 +69,7 @@ export default defineComponent({
     subscribers: Array(Object),
     roomAndUserData: Object,
     userSideOrderMap: Map,
+    emptyVideoClasses: Array(Object),
   },
   data() {
     return {
@@ -67,25 +78,32 @@ export default defineComponent({
   },
   components: { UserVideoComponentVue },
   methods: {
+    test(arr: Array<string>, index: number, name: string): string {
+      // console.log("name : ", name);
+      // console.log("arr : ", arr);
+      // console.log("index : ", index);
+      return arr[index];
+    },
     isRoomAdmin(): boolean {
-      return true;
+      // console.log("HOST : ", this.roomAndUserData?.host);
+      return this.roomAndUserData?.host;
     },
     dragOver(e: Event): void {
       e.preventDefault();
-      console.log("OVER", e);
+      // console.log("OVER", e);
     },
     dragEnter(e: Event): void {
-      e.preventDefault();
-      console.log("ENTER", e);
+      // e.preventDefault();
+      // console.log("ENTER", e);
     },
     dragLeave(e: Event): void {
-      e.preventDefault();
-      console.log("LEAVE", e);
+      // e.preventDefault();
+      // console.log("LEAVE", e);
     },
     dragDrop(e: Event): void {
       e.preventDefault();
-      console.log("DROP", e.target);
-      console.log("START", this.startElement);
+      // console.log("DROP", e.target);
+      // console.log("START", this.startElement);
 
       const dropVideoClassName = (e.target as HTMLDivElement).className;
       const startVideoClassName = (this.startElement as HTMLDivElement)
@@ -93,22 +111,23 @@ export default defineComponent({
 
       (this.startElement as HTMLDivElement).className = dropVideoClassName;
       (e.target as HTMLDivElement).className = startVideoClassName;
+      // console.log("START //  DROP", startVideoClassName, dropVideoClassName);
+
+      // 클래스 이름 변경 하고 서버에 요청보내주기
     },
     dragStart(e: Event): void {
-      console.log("START", e.target);
       this.startElement = e.target;
     },
     dragEnd(e: Event): void {
-      e.preventDefault();
+      // e.preventDefault();
       // console.log("END", e.target);
       // console.log("START", this.startElement);
-
       // console.log((e.target as HTMLDivElement).className);
       // console.log((this.startElement as HTMLDivElement).className);
     },
   },
   mounted() {
-    const videos = document.querySelectorAll(".video");
+    const videos = document.querySelectorAll("video");
     for (const video of videos) {
       video.addEventListener("dragstart", this.dragStart);
       video.addEventListener("dragover", this.dragOver);
@@ -121,7 +140,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .grid {
   background: radial-gradient(circle, #141834 0%, #13162f 100%);
   display: grid;

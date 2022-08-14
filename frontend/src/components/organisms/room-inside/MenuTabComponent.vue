@@ -38,7 +38,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .table {
   width: 500px;
   background: #252954;

@@ -37,13 +37,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/dev",
     name: "dev",
-    component: RoomVideoComponentVue,
+    component: RoomEntrancePageComponentVue,
   },
-  // {
-  //   path: "/room",
-  //   name: "RoomInsidePage",
-  //   component: RoomInsideView,
-  // },
+  {
+    path: "/room",
+    name: "RoomInsidePage",
+    component: RoomInsideView,
+  },
   {
     path: "/",
     redirect: "/main",
