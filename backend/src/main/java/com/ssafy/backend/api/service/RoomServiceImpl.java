@@ -147,8 +147,15 @@ public class RoomServiceImpl implements RoomService {
             roomWithSession.put(room.getRoomId(), sessionRoom);
             roomList.add(room);
 
-            //roomWithSession 생성 - 인원수 길이만큼 배열 생성
-            roomWithParticipant.put(room.getRoomId(), new String[2][(int) (room.getMaxNumOfPeople() / 2)]);
+            //roomWithParticipant 생성 - 인원수 길이만큼 배열 생성
+            String[][] participants = new String[2][(int) (room.getMaxNumOfPeople() / 2)];
+            //문자열 배열을 모두 ""으로 초기화
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < participants[0].length; j++) {
+                    participants[i][j] = "";
+                }
+            }
+            roomWithParticipant.put(room.getRoomId(), participants);
 
             //세션 아이디와 토큰, 사용자 닉네임을 반환할 것
             return RoomCreateRes.builder()
@@ -264,7 +271,7 @@ public class RoomServiceImpl implements RoomService {
             loop:
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < participants[0].length; j++) {
-                    if (participants[i][j] != null) {
+                    if (!participants[i][j].equals("")) {
                         checkHost = false;
                         break loop;
                     }
@@ -280,7 +287,7 @@ public class RoomServiceImpl implements RoomService {
             loop:
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < participants[0].length; j++) {
-                    if (participants[i][j] == null) {
+                    if (participants[i][j].equals("")) {
                         participants[i][j] = loginId;
                         if (i == 0)
                             sideOrder += "a";
@@ -325,11 +332,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deleteRoom(String OpenviduId) {
+    public void deleteRoom(String roomId) {
         //session 삭제
         List<Session> sessionList = openVidu.getActiveSessions();
         for (int i = 0; i < sessionList.size(); i++) {
-            if (sessionList.get(i).getSessionId().equals(OpenviduId)) {
+            if (sessionList.get(i).getSessionId().equals(roomId)) {
                 try {
                     //openvidu session close
                     sessionList.get(i).close();
@@ -344,36 +351,41 @@ public class RoomServiceImpl implements RoomService {
 
         //roomList 방 삭제
         for (int i = 0; i < roomList.size(); i++) {
-            if(roomList.get(i).getRoomId().equals(OpenviduId)){
+            if(roomList.get(i).getRoomId().equals(roomId)){
                 roomList.remove(i);
             }
         }
+
+        //roomWithParticipant 삭제
+        roomWithParticipant.remove(roomId);
     }
 
     //접속자가 방을 퇴장했을 때 back에서 관리하는 방 관련 Map에서 접속자를 삭제하기 위함
     @Override
-    public void disconnectParticipant(String OpenviduId, String loginId) {
+    public void disconnectParticipant(String roomId, String loginId) {
         //roomWithParticipant에서 세션 찾기
-        String[][] participants = roomWithParticipant.get(OpenviduId);
+        String[][] participants = roomWithParticipant.get(roomId);
 
-        //for문을 돌면서 해당 id를 찾아 null로 바꾸기
+        //for문을 돌면서 해당 id를 찾아 ""으로 바꾸기
         boolean check = false;
-        for (int i = 0; i < 6; i++) {
-            if(participants[i].equals(loginId)){
-                participants[i] = null;
-                break;
-            }
-            if(participants[i] != null){
-                check = true;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < participants[0].length; j++) {
+                if(participants[i][j].equals(loginId)){
+                    participants[i][j] = "";
+                    break;
+                }
+                if(!participants[i][j].equals("")){
+                    check = true;
+                }
             }
         }
 
-        //if문으로 만약 배열의 모든 값들이 다 null이면 roomWithParticipant, roomWithSession에서 해당 세션 정보 삭제
+        //if문으로 만약 배열의 모든 값들이 다 ""이면 roomWithParticipant, roomWithSession에서 해당 세션 정보 삭제
         if(!check) {
-            roomWithParticipant.remove(OpenviduId);
-            roomWithSession.remove(OpenviduId);
+            roomWithParticipant.remove(roomId);
+            roomWithSession.remove(roomId);
             //세션 닫기
-            this.deleteRoom(OpenviduId);
+            this.deleteRoom(roomId);
         }
     }
 
@@ -512,8 +524,6 @@ public class RoomServiceImpl implements RoomService {
             String[][] participants = roomWithParticipant.get(roomId);
 //            String[][] participants = new String[2][3];
 
-            System.out.println(participants[0].length);
-
             JSONArray jsonArray = new JSONArray();
             int count = participants[0].length;
             for (int i = 0; i < 2; i++) {
@@ -540,15 +550,13 @@ public class RoomServiceImpl implements RoomService {
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             bw.write(obj.toJSONString()); // 버퍼에 담기
-            System.out.println("obj : " + obj.toJSONString());
+//            System.out.println("obj : " + obj.toJSONString());
             bw.flush(); // 버퍼에 담긴 데이터 전달
             bw.close();
 
             int responseCode = conn.getResponseCode();
-            System.out.println(responseCode);
-
             if (responseCode == 200) {
-
+                System.out.println("success send signal");
             }
 
         } catch (Exception e) {
@@ -560,7 +568,7 @@ public class RoomServiceImpl implements RoomService {
         List<String> returnList = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < participants[0].length; j++) {
-                if (participants[i][j] == null) {
+                if (participants[i][j].equals("")) {
                     returnList.add(String.format("%c%d", 'a' + i, j + 1)); // j=0,1,2 -> a123 b123
                 }
             }

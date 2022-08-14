@@ -63,17 +63,17 @@ public class RoomController {
         return ResponseEntity.ok(roomCreateRes);
     }
 
-    @PostMapping("/{roomId}/thumbnail")
-    public  ResponseEntity createRoomThumbnail(@PathVariable String roomId, @RequestPart MultipartFile thumbnail) {
-        roomService.uploadThumbnail(roomId, thumbnail);
+    @PostMapping("/{room_id}/thumbnail")
+    public  ResponseEntity createRoomThumbnail(@PathVariable String room_id, @RequestPart MultipartFile thumbnail) {
+        roomService.uploadThumbnail(room_id, thumbnail);
         return new ResponseEntity(HttpStatus.OK);
     }
 
 
     // 4. 방 접속
-    @GetMapping("/{roomId}/connection")
-    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String roomId, HttpServletRequest httpServletRequest){
-        RoomJoinReq roomJoinReq = new RoomJoinReq(roomId);
+    @GetMapping("/{room_id}/connection")
+    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String room_id, HttpServletRequest httpServletRequest){
+        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id);
         RoomJoinRes roomJoinRes = roomService.joinRoom(httpServletRequest, roomJoinReq);
         return ResponseEntity.ok(roomJoinRes);
     }
@@ -81,13 +81,15 @@ public class RoomController {
 
 
     //5. 방 퇴장
-    @GetMapping("/{openvidu_id}/disconnect")
-    public ResponseEntity disconnect(HttpServletRequest httpServletRequest, @PathVariable String openvidu_id) throws Exception {
+    @GetMapping("/{room_id}/disconnect")
+    public ResponseEntity disconnect(HttpServletRequest httpServletRequest, @PathVariable String room_id) throws Exception {
         //JWT 토큰에서 사용자 정보 받아오기
         String memberToken = httpServletRequest.getHeader("access-token");
         String loginId = jwtUtil.getInfo(memberToken).getLoginId();
 
-        Member member = memberService.getInfoByLoginId(loginId);
+//        Member member = memberService.getInfoByLoginId(loginId);
+
+        roomService.disconnectParticipant(room_id, loginId);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -103,9 +105,9 @@ public class RoomController {
 
 
     //7. 비어있는 진영, 순서 배열 반환
-    @GetMapping("/{openvidu_id}/empty")
-    public ResponseEntity<String[][]> emptySideOrder(@PathVariable String openvidu_id){
-        String[][] participants = roomService.validSideOrder(openvidu_id);
+    @GetMapping("/{room_id}/empty")
+    public ResponseEntity<String[][]> emptySideOrder(@PathVariable String room_id){
+        String[][] participants = roomService.validSideOrder(room_id);
         return ResponseEntity.ok(participants);
     }
 
