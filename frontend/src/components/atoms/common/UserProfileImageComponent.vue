@@ -24,7 +24,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .account-user {
   display: inline-flex;
   align-items: center;

@@ -27,7 +27,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .button-circle {
   background: black;
   border-radius: 50%;

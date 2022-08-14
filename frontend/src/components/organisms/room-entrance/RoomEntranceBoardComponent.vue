@@ -48,7 +48,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .grid {
   background: black;
   position: relative;

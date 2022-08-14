@@ -9,6 +9,8 @@
     <div class="navigations">
       <!-- 1 -->
       <template v-if="isLogin">
+        <router-link to="/boards">토론 모집 게시판</router-link>
+        <router-link to="/userPage">Mypage</router-link>
         <a href="javascript:;" @click="logoutUser" class="logout-button">
           Logout
         </a>

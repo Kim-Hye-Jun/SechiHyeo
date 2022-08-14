@@ -26,5 +26,7 @@ export interface RoomJoinResponseInfo {
   roomTitle: string;
   sideA: string;
   sideB: string;
+  maxNumOfPeople: number;
   userSideOrder: string;
+  emptySideOrderList: Array<string>;
 }

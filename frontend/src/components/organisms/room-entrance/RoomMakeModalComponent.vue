@@ -133,8 +133,10 @@ export default defineComponent({
       http
         .post("/sessions", roomCreateRequestValue)
         .then((res) => {
+          console.log("ROOM CREATE RES : ", res);
           if (res.status === 200) {
             const roomId = res.data.roomId;
+            console.log(roomId);
             this.goRoomInsidePage(roomId);
           }
         })
@@ -154,7 +156,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .modal {
   width: 60vw;
   left: 10vw;

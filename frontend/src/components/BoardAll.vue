@@ -78,7 +78,7 @@
       </div>
     </div>
     <div class="modal" :class="[modal === false ? 'hidden' : '']">
-      <board-detail></board-detail>
+      <board-detail @modalOut="modalOut"></board-detail>
     </div>
   </div>
 </template>
