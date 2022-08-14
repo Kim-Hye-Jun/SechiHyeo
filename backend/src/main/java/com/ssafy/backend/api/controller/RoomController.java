@@ -10,6 +10,7 @@ import com.ssafy.backend.dto.SessionRoom;
 import com.ssafy.backend.dto.request.RoomCreateReq;
 import com.ssafy.backend.dto.request.RoomJoinReq;
 import com.ssafy.backend.dto.request.RoomSetReq;
+import com.ssafy.backend.dto.request.RoomUpdateUserSideOrderReq;
 import com.ssafy.backend.dto.response.RoomCreateRes;
 import com.ssafy.backend.dto.response.RoomJoinRes;
 import com.ssafy.backend.dto.response.RoomSearchRes;
@@ -112,5 +113,10 @@ public class RoomController {
     }
 
 
+    @PutMapping("/sideOrder")
+    public ResponseEntity updateUserSideOrder(@RequestBody RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq) {
+        roomService.sendSignal(roomUpdateUserSideOrderReq);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 }
