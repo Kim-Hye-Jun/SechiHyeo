@@ -11,6 +11,9 @@ import { loginUser } from "@/api/auth";
 import { getMemberInfo } from "@/api/member";
 import axios from "axios";
 import router from "@/router";
+
+const API_BASE_URL = "https://i7a508.p.ssafy.io/api/";
+
 export default createStore({
   state: {
     // 로그인 관련
@@ -102,14 +105,14 @@ export default createStore({
     },
     // BOARD Action
     BOARDALL: (store) => {
-      axios.get("/debate-board").then((res) => {
+      axios.get(API_BASE_URL + "/debate-board").then((res) => {
         store.commit("BOARDALL", {
           boards: res.data,
         });
       });
     },
     BOARDONE: (store, num) => {
-      axios.get("/debate-board/" + num).then((res) => {
+      axios.get(API_BASE_URL + "/debate-board/" + num).then((res) => {
         store.commit("BOARDONE", {
           board: res.data,
         });
@@ -117,7 +120,7 @@ export default createStore({
     },
     BOARDWRITE: (store, board) => {
       axios
-        .post(`/debate-board/`, board)
+        .post(`${API_BASE_URL}/debate-board/`, board)
         .then((res) => {
           console.log(res.data);
         })
@@ -128,7 +131,7 @@ export default createStore({
     },
     BOARDUPDATE: (store, board) => {
       axios
-        .put(`/debate-board/`, board)
+        .put(`${API_BASE_URL}/debate-board/`, board)
         .then((res) => {
           console.log(res.data);
         })
@@ -141,7 +144,7 @@ export default createStore({
       let flag = confirm("정말로 삭제하시겠습니까??");
       if (flag) {
         axios
-          .delete(`/debate-board/${num}`)
+          .delete(`${API_BASE_URL}/debate-board/${num}`)
           .then((res) => {
             console.log(res.data);
           })
@@ -153,42 +156,48 @@ export default createStore({
     },
     //MyPage Action
     MEMBERPROFILE: (store) => {
-      axios.get("/member/profile").then((res) => {
+      // const memberInfo = await getMemberInfo();
+      getMemberInfo().then((res: any) => {
         store.commit("MEMBERPROFILE", {
           member: res.data,
         });
       });
+      // axios.get(API_BASE_URL + "/member/profile").then((res) => {
+      //   store.commit("MEMBERPROFILE", {
+      //     member: res.data,
+      //   });
+      // });
     },
     MEMBEREXP: (store) => {
-      axios.get("/member/exp").then((res) => {
+      axios.get(API_BASE_URL + "/member/exp").then((res) => {
         store.commit("MEMBEREXP", {
           member: res.data,
         });
       });
     },
     MEMBERRECORD: (store) => {
-      axios.get("/member/record").then((res) => {
+      axios.get(API_BASE_URL + "/member/record").then((res) => {
         store.commit("MEMBERRECORD", {
           member: res.data,
         });
       });
     },
     DEBATERECRUIT: (store) => {
-      axios.get("/debate-apply/recruiting").then((res) => {
+      axios.get(API_BASE_URL + "/debate-apply/recruiting").then((res) => {
         store.commit("DEBATERECRUIT", {
           debate_board: res.data,
         });
       });
     },
     DEBATEAPPLY: (store) => {
-      axios.get("/debate-apply/applying").then((res) => {
+      axios.get(API_BASE_URL + "/debate-apply/applying").then((res) => {
         store.commit("DEBATEAPPLY", {
           debate_board: res.data,
         });
       });
     },
     PROFILEUPDATE: (store, member) => {
-      axios.put("/member/introduce", member).then(() => {
+      axios.put(API_BASE_URL + "/member/introduce", member).then(() => {
         alert("수정이 완료되었습니다!!!");
       });
     },

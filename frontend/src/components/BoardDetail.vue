@@ -140,6 +140,7 @@ export default defineComponent({
     ...mapActions(["BOARDONE"]),
     modalOut() {
       this.modal = false;
+      this.$emit("modalOut");
     },
     boardOne(no: number) {
       this.BOARDONE(no);
