@@ -9,13 +9,13 @@ import java.util.List;
 public interface ApplicantService {
     boolean regiApplicant(ApplicantStateRegiPostReq regiReq, Member member);
 
-    boolean changeApplicant(ApplicantStateRegiPostReq regiReq, Member member, long apply_no);
+    boolean changeApplicant(ApplicantStateRegiPostReq regiReq, Member member, int apply_no);
 
-    boolean deleteApplicant(long apply_no);
+    boolean deleteApplicant(int apply_no);
 
-    List<ApplicantState> getRecruitingApplicant(long memberNo);
+    List<ApplicantState> getRecruitingApplicant(int memberNo);
 
-    long countCurrentApplicantByBoardNo(long boardNo);
+    long countCurrentApplicantByBoardNo(int boardNo);
 
-    List<ApplicantState> getApplyingApplicant(long memberNo);
+    List<ApplicantState> getApplyingApplicant(int memberNo);
 }

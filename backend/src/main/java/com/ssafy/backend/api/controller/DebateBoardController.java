@@ -6,6 +6,7 @@ import com.ssafy.backend.api.response.debateBoard.BoardRes;
 import com.ssafy.backend.api.response.debateBoard.BoardResBoard;
 import com.ssafy.backend.api.response.debateBoard.BoardResReply;
 import com.ssafy.backend.api.service.DebateBoardService;
+import com.ssafy.backend.api.service.MemberService;
 import com.ssafy.backend.api.service.ReplyService;
 import com.ssafy.backend.common.model.response.BaseResponseBody;
 import com.ssafy.backend.common.util.JWTUtil;
@@ -39,6 +40,8 @@ public class DebateBoardController {
     @Autowired
     DebateBoardService debateBoardService;
 
+    @Autowired
+    MemberService memberService;
     @Autowired
     ReplyService replyService;
     //매핑
@@ -75,7 +78,7 @@ public class DebateBoardController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<BoardRes> getBoard(@PathVariable long board_no){
+    public ResponseEntity<BoardRes> getBoard(@PathVariable int board_no){
         BoardRes boardRes=new BoardRes();
         //boardservice에서 보드를 board_no에 맞춰서 가져온다
         //없다면 400리턴
@@ -100,8 +103,9 @@ public class DebateBoardController {
         }
 
         //board_no에 따른 댓글 가져오기
-        List<Reply> replies=replyService.GetReplies(board_no);
+        ArrayList<Reply> replies=replyService.GetReplies(board_no);
         ArrayList<BoardResReply> list=new ArrayList<>();
+
         for (Reply reply:replies
              ) {
             list.add(BoardResReply.builder()
@@ -119,7 +123,7 @@ public class DebateBoardController {
 
         boardRes.setReplies(list);
         
-        return ResponseEntity.status(200).body(null);
+        return ResponseEntity.status(200).body(boardRes);
     }
     
     @PostMapping()
@@ -131,7 +135,8 @@ public class DebateBoardController {
     public ResponseEntity<? extends BaseResponseBody> registerBoard(HttpServletRequest request,@RequestBody DebateBoardRegiPostReq regiReq){
         try {
             String token = request.getHeader(HEADER_AUTH);
-            Member member = jwtUtil.getInfo(token);
+            String loginID=jwtUtil.getInfo(token).getLoginId();
+            Member member = memberService.getInfoByLoginId(loginID);
             if(debateBoardService.regiBoard(regiReq,member)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
             else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
         } catch(Exception e) {
@@ -145,13 +150,13 @@ public class DebateBoardController {
 
     }
 
-    @PutMapping ()
+    @PutMapping ("/{board_no}")
     @ApiOperation(value = "모집 게시글 수정", notes = "<strong>모집 게시글</strong>을 수정한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseResponseBody> changeBoard(@PathVariable long board_no,@RequestBody DebateBoardRegiPostReq regiReq){
+    public ResponseEntity<? extends BaseResponseBody> changeBoard(@PathVariable int board_no,@RequestBody DebateBoardRegiPostReq regiReq){
 
 
         if(debateBoardService.changeBoard(board_no,regiReq)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
@@ -160,12 +165,12 @@ public class DebateBoardController {
     }
     
     @DeleteMapping("/{board_no}")
-    @ApiOperation(value = "모집 게시글 삭젠", notes = "<strong>모집 게시글</strong>을 삭제해준다.")
+    @ApiOperation(value = "모집 게시글 삭제", notes = "<strong>모집 게시글</strong>을 삭제해준다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    ResponseEntity<? extends BaseResponseBody> deleteBoard(@PathVariable long board_no){
+    ResponseEntity<? extends BaseResponseBody> deleteBoard(@PathVariable int board_no){
 
         if(debateBoardService.deleteBoard(board_no)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
         else { return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}

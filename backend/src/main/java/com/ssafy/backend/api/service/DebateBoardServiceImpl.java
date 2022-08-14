@@ -23,7 +23,7 @@ public class DebateBoardServiceImpl implements DebateBoardService{
     }
 
     @Override
-    public DebateBoard getBoard(long board_no) {
+    public DebateBoard getBoard(int board_no) {
 
         return debateBoardRepository.findByBoardNo(board_no);
     }
@@ -34,6 +34,7 @@ public class DebateBoardServiceImpl implements DebateBoardService{
         DebateBoard debateBoard=new DebateBoard();
         debateBoard.setDebateTopic(regiReq.getDebate_topic());
         debateBoard.setBoardContent(regiReq.getBoard_content());
+        debateBoard.setBoardTitle(regiReq.getBoard_title());
         debateBoard.setBoardTime(new Date());
         debateBoard.setDebateTime(regiReq.getDebate_time());
         debateBoard.setMaxApplicant(regiReq.getMax_applicant());
@@ -51,7 +52,7 @@ public class DebateBoardServiceImpl implements DebateBoardService{
 
     @Transactional
     @Override
-    public boolean deleteBoard(long board_no) {
+    public boolean deleteBoard(int board_no) {
         DebateBoard debateBoard=getBoard(board_no);
 
         if(debateBoard==null) return false;
@@ -62,10 +63,11 @@ public class DebateBoardServiceImpl implements DebateBoardService{
 
     @Transactional
     @Override
-    public boolean changeBoard(long board_no, DebateBoardRegiPostReq regiReq) {
+    public boolean changeBoard(int board_no, DebateBoardRegiPostReq regiReq) {
         DebateBoard debateBoard=getBoard(board_no);
         debateBoard.setDebateTopic(regiReq.getDebate_topic());
         debateBoard.setBoardContent(regiReq.getBoard_content());
+        debateBoard.setBoardTitle(regiReq.getBoard_title());
         debateBoard.setBoardTime(new Date());
         debateBoard.setDebateTime(regiReq.getDebate_time());
         debateBoard.setMaxApplicant(regiReq.getMax_applicant());

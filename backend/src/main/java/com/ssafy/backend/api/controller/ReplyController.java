@@ -2,9 +2,12 @@ package com.ssafy.backend.api.controller;
 
 import com.ssafy.backend.api.request.reply.ReplyChangeReq;
 import com.ssafy.backend.api.request.reply.ReplyRegiPostReq;
+import com.ssafy.backend.api.service.DebateBoardService;
+import com.ssafy.backend.api.service.MemberService;
 import com.ssafy.backend.api.service.ReplyService;
 import com.ssafy.backend.common.model.response.BaseResponseBody;
 import com.ssafy.backend.common.util.JWTUtil;
+import com.ssafy.backend.db.entity.DebateBoard;
 import com.ssafy.backend.db.entity.Member;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,22 +31,29 @@ public class ReplyController {
     ReplyService replyService;
 
     @Autowired
+    DebateBoardService debateBoardService;
+
+    @Autowired
+    MemberService memberService;
+
+    @Autowired
     JWTUtil jwtUtil;
     //매핑
     
     //댓글 등록
-    @PostMapping
+    @PostMapping("/{board_no}")
     @ApiOperation(value = "댓글 등록", notes = "<strong>댓글</strong>을 parent_no,depth에 맞춰서 context를 등록합니다")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseResponseBody> regiReply(HttpServletRequest request,@PathVariable long board_no, @RequestBody ReplyRegiPostReq regiReq){
+    public ResponseEntity<? extends BaseResponseBody> regiReply(HttpServletRequest request,@PathVariable int board_no, @RequestBody ReplyRegiPostReq regiReq){
         try {
             String token = request.getHeader(HEADER_AUTH);
-            Member member = jwtUtil.getInfo(token);
-
-            if(replyService.regiReply(board_no,regiReq,member)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
+            String loginID=jwtUtil.getInfo(token).getLoginId();
+            Member member = memberService.getInfoByLoginId(loginID);
+            DebateBoard debateBoard=debateBoardService.getBoard(board_no);
+            if(replyService.regiReply(board_no,regiReq,member,debateBoard)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
             else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
         } catch(Exception e) {
             //토큰이 유효하지 않은 경우
@@ -69,13 +79,13 @@ public class ReplyController {
 
     }
     //댓글 삭제
-    @DeleteMapping()
+    @DeleteMapping("/{reply_no}")
     @ApiOperation(value = "댓글 삭제", notes = "<strong>댓글</strong>을 삭제합니다")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseResponseBody> deleteReply(@PathVariable long reply_no){
+    public ResponseEntity<? extends BaseResponseBody> deleteReply(@PathVariable int reply_no){
 
         if(replyService.deleteReply(reply_no)){return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
         else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}

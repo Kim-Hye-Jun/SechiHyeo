@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DebateBoardRepository extends JpaRepository<DebateBoard,Long> {
+public interface DebateBoardRepository extends JpaRepository<DebateBoard,Integer> {
     // 아래와 같이, Query Method 인터페이스(반환값, 메소드명, 인자) 정의를 하면 자동으로 Query Method 구현됨.
     //Optional<DebateBoard> findById(String board_no);
 
@@ -22,5 +22,5 @@ public interface DebateBoardRepository extends JpaRepository<DebateBoard,Long> {
     //delete()
 
     //모집게시글 조회
-    DebateBoard findByBoardNo(Long boardNo);
+    DebateBoard findByBoardNo(int boardNo);
 }
