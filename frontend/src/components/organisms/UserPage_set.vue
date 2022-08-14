@@ -38,7 +38,7 @@
     />
     <input
       class="userpage-content-set-form-input-phone"
-      v-model="member.phone_number"
+      v-model="member.phoneNumber"
     />
   </div>
   <input
@@ -62,11 +62,11 @@ export default defineComponent({
   data() {
     return {
       member: {
-        profile_url: "",
+        profileUrl: "",
         nickname: "",
-        login_password: "",
+        loginPassword: "",
         introduce: "",
-        phone_number: "",
+        phoneNumber: "",
         email: "",
       },
       ps: "",
@@ -80,7 +80,7 @@ export default defineComponent({
   methods: {
     ...mapActions(["PROFILEUPDATE"]),
     profileUpdate() {
-      if (this.memberinfo.login_password === this.ps) {
+      if (this.memberinfo.loginPassword === this.ps) {
         if (this.newps1 === this.newps2) {
           this.PROFILEUPDATE(this.memberinfo);
         } else {

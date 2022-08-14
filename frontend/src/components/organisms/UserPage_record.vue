@@ -1,11 +1,11 @@
 <template>
   <div class="userpage-content-record-time-box">
-    {{ member.debate_number }} Fight Record
+    {{ member.debateNumber }} Fight Record
   </div>
   <div class="userpage-content-record-inform-box">
-    <div class="userpage-content-record-inform">{{ member.record_win }}</div>
-    <div class="userpage-content-record-inform">{{ member.record_lose }}</div>
-    <div class="userpage-content-record-inform">{{ member.record_draw }}</div>
+    <div class="userpage-content-record-inform">{{ member.recordWin }}</div>
+    <div class="userpage-content-record-inform">{{ member.recordLose }}</div>
+    <div class="userpage-content-record-inform">{{ member.recordDraw }}</div>
     <!-- <div class="userpage-content-record-pagination">1 2 3 4 5 6</div> -->
   </div>
 </template>
@@ -18,11 +18,11 @@ export default defineComponent({
     return {
       members: [],
       member: {
-        debate_number: "",
+        debateNumber: "",
         // debate_time: "",
-        record_win: "",
-        record_lose: "",
-        record_draw: "",
+        recordWin: "",
+        recordLose: "",
+        recordDraw: "",
       },
     };
   },

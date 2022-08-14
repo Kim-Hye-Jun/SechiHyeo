@@ -100,7 +100,6 @@ export default defineComponent({
       recruit: false,
       apply: false,
       set: false,
-      result: "",
     };
   },
   methods: {

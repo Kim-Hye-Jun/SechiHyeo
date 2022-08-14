@@ -1,6 +1,6 @@
 <template>
   <div class="userpage-user">
-    <div class="userpage-user-image">{{ member.profile_url }}</div>
+    <div class="userpage-user-image">{{ member.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
     <div class="userpage-user-nickname">토론킹 {{ member.nickname }}</div>
@@ -20,7 +20,7 @@ export default defineComponent({
   data() {
     return {
       member: {
-        profile_url: "",
+        profileUrl: "",
         level: "",
         nickname: "",
         exp: "",

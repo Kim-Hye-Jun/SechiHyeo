@@ -38,12 +38,12 @@
           :filter="`academy`"
           :filter-function="typeAcademy(room, '`academy`')"
         >
-          <div class="boards-content-write-no">{{ board.board_no }}</div>
+          <div class="boards-content-write-no">{{ board.boardNo }}</div>
           <div class="boards-content-write-title">
-            {{ board.board_title }}
+            {{ board.boardTitle }}
           </div>
           <div class="boards-content-write-count">
-            {{ board.current_applicant }}/{{ board.max_applicant }}
+            {{ board.currentApplicant }}/{{ board.maxApplicant }}
           </div>
         </div>
         <div class="boards-content-write-box1" @click="modalIn">
@@ -64,10 +64,10 @@
           :filter="`free`"
           :filter-function="typeFree(room, '`free`')"
         >
-          <div class="boards-content-write-no">{{ board.board_no }}</div>
-          <div class="boards-content-write-title">{{ board.board_title }}</div>
+          <div class="boards-content-write-no">{{ board.boardNo }}</div>
+          <div class="boards-content-write-title">{{ board.boardTitle }}</div>
           <div class="boards-content-write-count">
-            {{ board.current_applicant }}/{{ board.max_applicant }}
+            {{ board.currentApplicant }}/{{ board.maxApplicant }}
           </div>
         </div>
         <div class="boards-content-write-box2" @click="modalIn">
@@ -98,11 +98,11 @@ export default defineComponent({
       modal: false,
       boards: [],
       board: {
-        board_no: "",
-        board_title: "",
-        max_applicant: "",
-        current_applicant: "",
-        board_finished: "",
+        boardNo: "",
+        boardTitle: "",
+        maxApplicant: "",
+        currentApplicant: "",
+        boardFinished: "",
       },
       room: {
         debateType: "",
@@ -129,7 +129,7 @@ export default defineComponent({
     // 수정
     modalIn(num: any) {
       this.modal = true;
-      num.modal_no;
+      num.modalNo;
     },
     modalOut() {
       this.modal = false;

@@ -3,14 +3,14 @@
     class="userpage-content-room"
     v-for="board in boards"
     :key="board"
-    :filter="board.member_no"
+    :filter="board['memberNo']"
     :filter-function="myRecruit"
   >
     <div class="userpage-content-count">
-      {{ board.current_applicant }}/{{ board.max_applicant }}
+      {{ board["currentApplicant"] }}/{{ board["maxApplicant"] }}
     </div>
     <div class="userpage-content-topic">
-      {{ board.debate_topic }}미래와 토론의 연관
+      {{ board["debateTopic"] }}미래와 토론의 연관
     </div>
     <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
     <div class="userpage-content-room-button">
@@ -66,15 +66,15 @@ export default defineComponent({
   data() {
     return {
       member: {
-        member_no: "",
+        memberNo: "",
       },
       boards: [],
-      // board: [] = {
-      //   debate_topic: "",
-      //   max_applicant: "",
-      //   current_applicant: "",
-      //   board_finished: "",
-      // },
+      board: {
+        debateTopic: "",
+        maxApplicant: "",
+        currentApplicant: "",
+        boardFinished: "",
+      },
     };
   },
   computed: {
@@ -91,8 +91,8 @@ export default defineComponent({
     moveToRoom(board: { num: string }) {
       this.$router.push("/room/" + board.num);
     },
-    myRecruit(member: { member_no: any }, filter: any) {
-      if (member.member_no === filter) {
+    myRecruit(member: { memberNo: any }, filter: any) {
+      if (member.memberNo === filter) {
         return true;
       }
       return false;
