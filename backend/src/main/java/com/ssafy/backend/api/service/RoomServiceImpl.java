@@ -18,30 +18,27 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class RoomServiceImpl implements RoomService {
-    static class userInfo {
-        String nickname;
-        String side;
-        String profileName;
-        String profileUrl;
-    }
-
-    private final String DEFAULT_URL = "https://us.123rf.com/450wm/isselee/isselee1312/isselee131200018/24155958-%EC%82%AC%EC%9E%90%EC%9D%98-%EC%84%9C-%ED%9D%B0%EC%83%89%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%90%9C-10-%EC%84%B8-%ED%91%9C%EB%B2%94-%EC%86%8D-%EB%A0%88%EC%98%A4-.jpg?ver=6";
-
+    @Value("${thumbnail.path}")
+    private String thumbnailPath;
 
     //오픈비두 객체
     private OpenVidu openVidu;
 
-    // 오픈비두 세션을 저장할 Map
-//    private Map<String, Session> mapSessions = new ConcurrentHashMap<>();
-
-    //오픈비두 세션과 방 정보를 저장하는 Map..?
+    //오픈비두 세션과 방 정보를 저장하는 Map
     private Map<String, SessionRoom> roomWithSession = new ConcurrentHashMap<>();
 
     //방과 방 내부 접속자를 저장할 Map
@@ -51,10 +48,7 @@ public class RoomServiceImpl implements RoomService {
     // 오픈비두 서버 주소
     private String OPENVIDU_URL;
     // 오픈비두 서버와 공유
-
     private String OPENVIDU_SECRET;
-
-    //방과 방에 따
 
     @Autowired
     public RoomServiceImpl(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
@@ -63,7 +57,7 @@ public class RoomServiceImpl implements RoomService {
         this.OPENVIDU_URL = openviduUrl;
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 
-        testMethod();
+//        testMethod();
     }
 
     @Autowired
@@ -77,8 +71,8 @@ public class RoomServiceImpl implements RoomService {
                 .roomTitle("testTitle")
                 .roomType("public")
                 .debateTopic("너는 누구냐")
-                .headCount(6)
-                .openviduId("openViduId")
+                .maxNumOfPeople(6)
+                .roomId("openViduId")
                 .password("0213")
                 .sideA("나")
                 .sideB("너")
@@ -100,7 +94,7 @@ public class RoomServiceImpl implements RoomService {
         List<RoomSearchRes> tmp = new ArrayList<>();
 
         if (roomList.size() > (pageInfo - 1) * 6) {
-            for (int i = Math.max(0, roomList.size() - 1 - (pageInfo - 1) * 6); i > roomList.size() - 1 - (pageInfo - 1) * 6 - 6; i--) {
+            for (int i = Math.max(0, roomList.size() - 1 - (pageInfo - 1) * 6); i > roomList.size() - 1 - (pageInfo - 1) * 6 - 6 && i >= 0; i--) {
                 tmp.add(roomList.get(i).convertToRoomSearchRes(roomList.get(i)));
             }
             return tmp;
@@ -130,9 +124,11 @@ public class RoomServiceImpl implements RoomService {
         Room room = Room.builder()
                 .roomTitle(roomCreateReq.getRoomTitle())
                 .roomType(roomCreateReq.getRoomType())
-                .openviduId(String.valueOf(UUID.randomUUID()))
-                .headCount(roomCreateReq.getHeadCount())
-                .thumbnail(DEFAULT_URL)
+                .roomId(String.valueOf(UUID.randomUUID()))
+                .maxNumOfPeople(roomCreateReq.getHeadCount())
+                .curNumOfPeople(0)
+//                .thumbnail(thumbnailPath + saveName)
+                .thumbnail(null)
                 .debateTopic(roomCreateReq.getDebateTopic())
                 .debateType(roomCreateReq.getDebateType())
                 .password((roomCreateReq.getPassword()))
@@ -140,22 +136,23 @@ public class RoomServiceImpl implements RoomService {
                 .sideB(roomCreateReq.getSideB())
                 .build();
 
+        System.out.println(room);
+
         try {
 //            SessionProperties properties = new SessionProperties.Builder().build();
             Session session = openVidu.createSession(new SessionProperties.Builder().build());
 
             //아직 방에 입장하지 않았으므로 Host는 빈 칸
             SessionRoom sessionRoom = new SessionRoom(session, room, "");
-            roomWithSession.put(session.getSessionId(), sessionRoom);
+            roomWithSession.put(room.getRoomId(), sessionRoom);
+            roomList.add(room);
 
             //roomWithSession 생성 - 인원수 길이만큼 배열 생성
-            roomWithParticipant.put(room.getOpenviduId(), new String[2][(int) (room.getHeadCount()/2)]);
+            roomWithParticipant.put(room.getRoomId(), new String[2][(int) (room.getMaxNumOfPeople() / 2)]);
 
             //세션 아이디와 토큰, 사용자 닉네임을 반환할 것
             return RoomCreateRes.builder()
-                    .OpenviduId(session.getSessionId())
-//                    .token(token)
-//                    .nickname("nickname")
+                    .roomId(room.getRoomId())
                     .build();
         } catch (OpenViduJavaClientException e) {
             System.out.println(e);
@@ -168,27 +165,82 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public void uploadThumbnail(String roomId, MultipartFile thumbnail) {
+        //썸네일 업로드
+        //파일 업로드 경로 및 파일명
+        String fileName = thumbnail.getOriginalFilename(); // 원본 파일 이름
+        String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
+
+//        썸네일 업로드 테스트용
+//        String thumbnailPath = System.getProperty("user.dir") + "/src/main/resources/static/thumbnail";
+        try {
+            //파일객체 생성 및 업로드
+            File file = new File(thumbnailPath, saveName);
+            if(!new File(thumbnailPath).exists())
+                new File(thumbnailPath).mkdirs();
+            thumbnail.transferTo(file);
+
+            //기존 프로필 삭제(있으면)
+//            if(member.getProfileName() != null) {
+//                File deleteFile = new File(profilePath, member.getProfileName());
+//                System.out.println(member.getProfileName());
+//                if (deleteFile.exists()) deleteFile.delete();
+//            }
+
+//            //db에 프로필 이미지 정보 및 경로 저장
+//            member.setProfileName(saveName);
+//            member.setProfileUrl(profilePath + saveName);
+//            memberRepository.save(member);
+
+            //만들어진 방 객체를 찾아 thumbnail을 수정
+            //roomWithSession, roomList
+            roomWithSession.get(roomId).getRoom().setThumbnail(thumbnailPath+saveName);
+            for (int i = 0; i < roomList.size(); i++) {
+                if(roomList.get(i).getRoomId().equals(roomId)){
+                    roomList.get(i).setThumbnail(thumbnailPath+saveName);
+                    break;
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public RoomJoinRes joinRoom(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq) {
         //session_id를 파라미터로 받아와서 roomJoinReq 만들기
 
+        System.out.println("==============ALL ROOMS=============");
+        for (String s : roomWithSession.keySet()) {
+
+            System.out.println(roomWithSession.get(s).getRoom());
+        }
+        System.out.println("ROOM JOIN ID => " + roomJoinReq.getRoomId());
+
         try {
             //세션 가져오기
-            Session session = roomWithSession.get(roomJoinReq.getOpenviduId()).getSession();
+            SessionRoom sessionRoom = roomWithSession.get(roomJoinReq.getRoomId());
+            if (sessionRoom == null) throw new Error(roomJoinReq.getRoomId() + "not exists");
+            Session session = sessionRoom.getSession();
+            Room room = sessionRoom.getRoom();
+            room.setCurNumOfPeople(room.getCurNumOfPeople() + 1);
 
             //JWT 토큰에서 사용자 정보 받아오기
             String memberToken = httpServletRequest.getHeader("access-token");
+            System.out.println("TOKEN : " + memberToken);
             String loginId = jwtUtil.getInfo(memberToken).getLoginId();
+            System.out.println(loginId);
 
             Member member = memberService.getInfoByLoginId(loginId);
 
             //json
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("loginId", member.getLoginId());
+            jsonObject.put("userId", member.getLoginId());
             jsonObject.put("nickname", member.getNickname());
-//            jsonObject.put("side", "side");
-//            jsonObject.put("order", "order");
-            jsonObject.put("profileName", member.getProfileName());
             jsonObject.put("profileUrl", member.getProfileUrl());
+//            jsonObject.put("profileName", member.getProfileName());
+//            jsonObject.put("profileUrl", member.getProfileUrl());
 
             //접속자용 커넥션 생성
             OpenViduRole role = OpenViduRole.PUBLISHER;
@@ -198,68 +250,88 @@ public class RoomServiceImpl implements RoomService {
                     .data(jsonObject.toJSONString())
                     .build();
 
+            System.out.println("1. " + connectionProperties.getData());
+
+            System.out.println("TOKEN XXXXX");
             //토큰
             String token = session.createConnection(connectionProperties).getToken();
+            System.out.println("TOKEN OOOOO");
 
-            String[][] participants = roomWithParticipant.get(roomJoinReq.getOpenviduId());
+            String[][] participants = roomWithParticipant.get(roomJoinReq.getRoomId());
 
             //방에 접속하는 첫 번째 사람이라면 해당 사람의 아이디를 방장 변수에 저장
-            boolean check = false;
-            loop : for (int i = 0; i < 2; i++) {
+            boolean checkHost = true;
+            loop:
+            for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < participants[0].length; j++) {
-                    if(participants[i][j] != null){
-                        check = true;
+                    if (participants[i][j] != null) {
+                        checkHost = false;
                         break loop;
                     }
                 }
             }
-            if(!check)
-                roomWithSession.get(roomJoinReq.getOpenviduId()).setHost(loginId);
+            if (!checkHost)
+                roomWithSession.get(roomJoinReq.getRoomId()).setHost(loginId);
 
             //서버에서 랜덤으로 진영 순서를 배정한 후에 그 값을 반환할 것
             //roomWithParticipant 가져와서 빈자리 하나 배정
             //A진영의 첫번째 순서라면 A1을 반환
             String sideOrder = "";
-            loop : for (int i = 0; i < 2; i++) {
+            loop:
+            for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < participants[0].length; j++) {
-                    if(participants[i][j] == null){
+                    if (participants[i][j] == null) {
                         participants[i][j] = loginId;
                         if (i == 0)
-                            sideOrder+="A";
+                            sideOrder += "a";
                         else
-                            sideOrder+="B";
-                        sideOrder+=(j+1);
+                            sideOrder += "b";
+                        System.out.println("SIDEORDER : " + sideOrder);
+                        sideOrder += (j + 1);
+                        System.out.println("SIDEORDER : " + sideOrder);
                         break loop;
                     }
                 }
             }
 
-            //갱신한 접속자목록 반영
-            roomWithParticipant.replace(roomJoinReq.getOpenviduId(), participants);
+            List<String> emptySideOrderList = getEmptySideOrderList(participants);
 
+            //갱신한 접속자목록 반영
+            roomWithParticipant.replace(roomJoinReq.getRoomId(), participants);
+            System.out.println("2. " + connectionProperties.getData());
             //세션 아이디와 토큰, 사용자 닉네임을 반환할 것
             return RoomJoinRes.builder()
-                    .OpenviduId(session.getSessionId())
+                    .roomId(roomJoinReq.getRoomId())
                     .token(token)
-                    .nickname(member.getNickname())
-                    .sideOrder(sideOrder)
+                    .debateTopic(room.getDebateTopic())
+                    .sideA(room.getSideA())
+                    .sideB(room.getSideB())
+                    .userSideOrder(sideOrder)
+                    .isHost(checkHost)
+                    .maxNumOfPeople(room.getMaxNumOfPeople())
+                    .emptySideOrderList(emptySideOrderList)
                     .build();
 
         } catch (OpenViduJavaClientException e) {
+            System.out.println(e);
             throw new RuntimeException(e);
         } catch (OpenViduHttpException e) {
+            System.out.println(e);
             throw new RuntimeException(e);
         } catch (Exception e) {
+            System.out.println(e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void deleteRoom(String OpenviduId) {
+        //session 삭제
         List<Session> sessionList = openVidu.getActiveSessions();
         for (int i = 0; i < sessionList.size(); i++) {
             if (sessionList.get(i).getSessionId().equals(OpenviduId)) {
                 try {
+                    //openvidu session close
                     sessionList.get(i).close();
                     break;
                 } catch (OpenViduJavaClientException e) {
@@ -267,6 +339,13 @@ public class RoomServiceImpl implements RoomService {
                 } catch (OpenViduHttpException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+
+        //roomList 방 삭제
+        for (int i = 0; i < roomList.size(); i++) {
+            if(roomList.get(i).getRoomId().equals(OpenviduId)){
+                roomList.remove(i);
             }
         }
     }
@@ -302,12 +381,12 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void setSideOrder(RoomSetReq roomSetReq) {
         //RoomWithSession 객체에서 찾아 Room 객체 갱신
-        SessionRoom sessionRoom = roomWithSession.get(roomSetReq.getOpenviduId());
+        SessionRoom sessionRoom = roomWithSession.get(roomSetReq.getRoomId());
         //토론 포맷 수정
         sessionRoom.getRoom().setDebateFormat(roomSetReq.getDebateFormat());
 
         //RoomWithMember 객체에서 찾아 토론 참여자 배열에 넣기
-        String[][] participants = roomWithParticipant.get(roomSetReq.getOpenviduId());
+        String[][] participants = roomWithParticipant.get(roomSetReq.getRoomId());
         //A진영 참가자
         for (int a = 0; a < roomSetReq.getAParticipants().length; a++) {
             participants[0][a] = roomSetReq.getAParticipants()[a];
@@ -317,7 +396,7 @@ public class RoomServiceImpl implements RoomService {
             participants[0][b] = roomSetReq.getAParticipants()[b];
         }
 
-        roomWithParticipant.replace(roomSetReq.getOpenviduId(), participants);
+        roomWithParticipant.replace(roomSetReq.getRoomId(), participants);
 
     }
 
@@ -325,7 +404,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public RoomSetRes setDebateFormat(RoomSetReq roomSetReq) {
         //방 Dto의 debateFormat 수정
-        roomWithSession.get(roomSetReq.getOpenviduId()).getRoom().setDebateFormat(roomSetReq.getDebateFormat());
+        roomWithSession.get(roomSetReq.getRoomId()).getRoom().setDebateFormat(roomSetReq.getDebateFormat());
 
         //토론 규칙을 json으로 만들어 넣고 return
         JSONObject jsonObject = new JSONObject();
@@ -406,18 +485,87 @@ public class RoomServiceImpl implements RoomService {
         }
 
         jsonObject.put("debateOrder", jsonArray);
-        return new RoomSetRes(roomSetReq.getOpenviduId(), jsonObject);
+        return new RoomSetRes(roomSetReq.getRoomId(), jsonObject);
     }
 
     //방 내부 비어있는 진영, 순서 반환
     @Override
-    public String[][] validSideOrder(String OpenviduId) {
-
+    public String[][] validSideOrder(String roomId) {
         //오픈비두 세션 아이디로 RoomWithParticipant 찾기
         //해당 배열 반환
-        return roomWithParticipant.get(OpenviduId);
+        return roomWithParticipant.get(roomId);
     }
 
+    @Override
+    public void sendSignal(String roomId) {
+        try {
+            URL url = new URL("https://i7a508.p.ssafy.io:8443/openvidu/api/signal");
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 
+            conn.setRequestMethod("POST"); // http 메서드
+            conn.setRequestProperty("Content-Type", "application/json"); // header Content-Type 정보
+            conn.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString("OPENVIDUAPP:MY_SECRET".getBytes())); // header의 auth 정보
+            conn.setDoInput(true); // 서버에 전달할 값이 있다면 true
+            conn.setDoOutput(true); // 서버로부터 받는 값이 있다면 true
+
+            // 서버에 데이터 전달
+            String[][] participants = roomWithParticipant.get(roomId);
+//            String[][] participants = new String[2][3];
+
+            System.out.println(participants[0].length);
+
+            JSONArray jsonArray = new JSONArray();
+            int count = participants[0].length;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < count; j++) {
+                    JSONObject jsonObject = new JSONObject();
+
+                    if(i == 0)
+                        jsonObject.put("side", "A");
+                    else jsonObject.put("side", "B");
+                    jsonObject.put("order", j+1);
+                    jsonObject.put("user", participants[i][j]);
+
+                    jsonArray.add(jsonObject);
+                }
+            }
+
+//            ArrayList<String> al = new ArrayList<>();
+
+            JSONObject obj = new JSONObject();
+            obj.put("session", roomId);
+//            obj.put("to", al);
+            obj.put("type", "UPDATE_SIDE_ORDER");
+            obj.put("data", jsonArray.toJSONString());
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            bw.write(obj.toJSONString()); // 버퍼에 담기
+            System.out.println("obj : " + obj.toJSONString());
+            bw.flush(); // 버퍼에 담긴 데이터 전달
+            bw.close();
+
+            int responseCode = conn.getResponseCode();
+            System.out.println(responseCode);
+
+            if (responseCode == 200) {
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> getEmptySideOrderList(String[][] participants) {
+        List<String> returnList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < participants[0].length; j++) {
+                if (participants[i][j] == null) {
+                    returnList.add(String.format("%c%d", 'a' + i, j + 1)); // j=0,1,2 -> a123 b123
+                }
+            }
+        }
+        return returnList;
+    }
 
 }

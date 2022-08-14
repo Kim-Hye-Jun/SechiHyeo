@@ -11,6 +11,7 @@ import com.ssafy.backend.dto.response.RoomJoinRes;
 import com.ssafy.backend.dto.response.RoomSearchRes;
 import com.ssafy.backend.dto.response.RoomSetRes;
 import org.json.simple.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -26,6 +27,9 @@ public interface RoomService {
 
     //방 생성
     RoomCreateRes createRoom(RoomCreateReq roomCreateReq);
+
+    //방 썸네일 업로드
+    void uploadThumbnail(String roomId, MultipartFile thumbnail);
 
     //방 접속
     RoomJoinRes joinRoom(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
@@ -46,4 +50,6 @@ public interface RoomService {
     RoomSetRes setDebateFormat(RoomSetReq roomSetReq);
 
     String[][] validSideOrder(String OpenviduId);
+
+    void sendSignal(String OpenviduId);
 }

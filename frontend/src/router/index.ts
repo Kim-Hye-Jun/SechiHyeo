@@ -61,7 +61,14 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/main",
+    name: "Main",
     component: () => import("@/views/MainPage.vue"),
+    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
+  },
+  {
+    path: "/room/:joinCode",
+    component: () => import("@/views/RoomPage.vue"),
+    name: "Room",
     meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
   },
   {

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -29,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/sessions")
+@CrossOrigin("*")
 public class RoomController {
 
     @Autowired
@@ -56,15 +58,22 @@ public class RoomController {
 
     // 3. 방 생성
     @PostMapping("")
-    public ResponseEntity<RoomCreateRes> createRoom(RoomCreateReq roomCreateReq){
+    public ResponseEntity<RoomCreateRes> createRoom(@RequestBody RoomCreateReq roomCreateReq){
         RoomCreateRes roomCreateRes = roomService.createRoom(roomCreateReq);
         return ResponseEntity.ok(roomCreateRes);
     }
 
+    @PostMapping("/{roomId}/thumbnail")
+    public  ResponseEntity createRoomThumbnail(@PathVariable String roomId, @RequestPart MultipartFile thumbnail) {
+        roomService.uploadThumbnail(roomId, thumbnail);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
     // 4. 방 접속
-    @GetMapping("/{openvidu_id}/connection")
-    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String openvidu_id, HttpServletRequest httpServletRequest){
-        RoomJoinReq roomJoinReq = new RoomJoinReq(openvidu_id);
+    @GetMapping("/{roomId}/connection")
+    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String roomId, HttpServletRequest httpServletRequest){
+        RoomJoinReq roomJoinReq = new RoomJoinReq(roomId);
         RoomJoinRes roomJoinRes = roomService.joinRoom(httpServletRequest, roomJoinReq);
         return ResponseEntity.ok(roomJoinRes);
     }
@@ -99,6 +108,7 @@ public class RoomController {
         String[][] participants = roomService.validSideOrder(openvidu_id);
         return ResponseEntity.ok(participants);
     }
+
 
 
 }

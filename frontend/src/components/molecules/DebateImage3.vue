@@ -1,36 +1,44 @@
 <template>
-  <div class="file-upload">
-    <form @submit.prevent="formSubmit" method="post">
-      <input
-        type="file"
-        ref="selectFile"
-        @change="previewFile"
-        class="userpage-content-set-form-fix"
-      />
-      <div class="userpage-content-set-form-image">
-        <img
-          v-if="previewImgUrl"
-          :src="previewImgUrl"
-          style="width: 150px; height: 150px"
-        />
-      </div>
-      <button type="submit" :disabled="isUploading">Upload</button>
-    </form>
+  <div class="c">
+    <div>
+      <form>
+        <div style="height: 565px">
+          <img
+            v-if="previewImgUrl"
+            :src="previewImgUrl"
+            style="
+              max-width: 730px;
+              max-height: 600px;
+              margin-left: 50%;
+              transform: translate(-50%);
+              padding: 10px;
+            "
+          />
+        </div>
+      </form>
+    </div>
+    <input
+      type="file"
+      ref="selectFile"
+      @change="previewFile"
+      style="position: absolute; top: 100%"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import http from "@/http/index";
 export default defineComponent({
   components: {},
   data() {
     return {
-      name: "FormValidation",
       selectFile: null,
       previewImgUrl: null,
       isUploading: false,
       response: null,
+      data1: true,
+      data2: false,
+      data3: false,
     };
   },
   methods: {
@@ -66,33 +74,12 @@ export default defineComponent({
       }
       console.log(this.selectFile);
     },
-    async formSubmit() {
-      if (this.selectFile) {
-        let form = new FormData();
-        form.append("file", this.selectFile);
-        this.isUploading = true;
-        http
-          // 추후 주소 수정
-          .post("/api/fileUpload/", form, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res: any) => {
-            this.response = res;
-            this.isUploading = false;
-          })
-          .catch((error) => {
-            this.response = error;
-            this.isUploading = false;
-          });
-      } else {
-        alert("파일을 선택해 주세요.");
-      }
-      return true;
-    },
   },
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.hidden {
+  display: none;
+}
+</style>

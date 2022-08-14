@@ -3,14 +3,14 @@
     class="userpage-content-room"
     v-for="board in boards"
     :key="board"
-    :filter="(applicant.login_id, applicant.board_no)"
+    :filter="(applicant['loginId'], applicant['boardNo'])"
     :filter-function="myApply"
   >
     <div class="userpage-content-count">
-      {{ board.current_applicant }}/{{ board.max_applicant }}
+      {{ board["currentApplicant"] }}/{{ board["maxApplicant"] }}
     </div>
     <div class="userpage-content-topic">
-      {{ board.debate_topic }}토론의 시대
+      {{ board["debateTopic"] }}토론의 시대
     </div>
     <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
     <div class="userpage-content-room-button">
@@ -23,7 +23,7 @@
       <a
         href="#"
         class="userpage-content-room-button-start"
-        @click="moveToRoom(board.board_no)"
+        @click="moveToRoom(board['boardNo'])"
         v-if="applicant.accept === 1"
         >입장</a
       >
@@ -79,20 +79,20 @@ export default defineComponent({
   data() {
     return {
       member: {
-        member_no: 0,
-        login_id: "",
+        memberNo: 0,
+        loginId: "",
       },
       boards: [],
       board: {
-        board_no: 0,
-        debate_topic: "",
-        max_applicant: 0,
-        current_applicant: 0,
-        board_finished: "",
+        boardNo: 0,
+        debateTopic: "",
+        maxApplicant: 0,
+        currentApplicant: 0,
+        boardFinished: "",
       } as object,
       applicant: {
-        login_id: "",
-        board_no: 0,
+        loginId: "",
+        boardNo: 0,
         accept: 0,
       },
     };
@@ -108,16 +108,16 @@ export default defineComponent({
     debateApply() {
       this.DEBATEAPPLY();
     },
-    moveToRoom(board: { board_no: string }) {
-      this.$router.push("/room/" + board.board_no);
+    moveToRoom(board: { boardNo: string }) {
+      this.$router.push("/room/" + board.boardNo);
     },
     myApply(
-      member: { login_id: string },
-      board: { board_no: number },
+      member: { loginId: string },
+      board: { boardNo: number },
       filter: any[]
     ) {
-      if (member.login_id === filter[0]) {
-        if (board.board_no === filter[1]) return true;
+      if (member.loginId === filter[0]) {
+        if (board.boardNo === filter[1]) return true;
         return false;
       }
       return false;

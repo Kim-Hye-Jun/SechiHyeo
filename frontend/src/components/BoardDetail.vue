@@ -9,43 +9,43 @@
     </header>
     <div class="modal-container-body article">
       <h3 class="board-master">작성자 : {{ board.nickname }}</h3>
-      <h3 class="board-day">토론 일시 : {{ board.debate_time }}</h3>
-      <h3 class="board-count">인원 : {{ board.max_applicant }}</h3>
+      <h3 class="board-day">토론 일시 : {{ board.debateTime }}</h3>
+      <h3 class="board-count">인원 : {{ board.maxApplicant }}</h3>
       <h2 class="board-summary">개요</h2>
       <div class="board-summary-content">
-        <li class="board-a">A 진영 : {{ board.a_opinion }}</li>
-        <li class="board-b">B 진영 : {{ board.b_opinion }}</li>
-        <p class="board-summary-in">CONTENT {{ board.board_content }}</p>
+        <li class="board-a">A 진영 : {{ board.aOpinion }}</li>
+        <li class="board-b">B 진영 : {{ board.bOopinion }}</li>
+        <p class="board-summary-in">CONTENT {{ board.boardContent }}</p>
       </div>
       <div class="board-reply-box">
         <h3 class="board-reply">댓글</h3>
         <h5 class="board-reply-count">{{ reply.depth }} 개</h5>
       </div>
-      <img class="board-reply-create-profile" :src="member.profile_url" />
+      <img class="board-reply-create-profile" :src="member.profileUrl" />
       <textarea class="board-reply-create-input" placeholder="댓글"></textarea>
       <button class="board-reply-create-sign" @click="replyInsert()">
         등록
       </button>
       <!-- 댓글 반복 -->
-      <div v-for="reply in replies" :key="reply.reply_no">
-        <img class="board-reply-ex-profile" :src="reply.profile_url" />
-        <p class="board-reply-ex-user">User {{ reply.nickname }}</p>
-        <p class="board-reply-ex-user-content">댓글 {{ reply.context }}</p>
+      <div v-for="reply in replies" :key="reply['replyNo']">
+        <img class="board-reply-ex-profile" :src="reply['profileUrl']" />
+        <p class="board-reply-ex-user">User {{ reply["nickname"] }}</p>
+        <p class="board-reply-ex-user-content">댓글 {{ reply["context"] }}</p>
         <button
           class="board-reply-ex-delete"
-          @click="replyDelete(reply.reply_no)"
+          @click="replyDelete(reply['replyNo'])"
         >
           삭제
         </button>
         <button
           class="board-reply-ex-update"
-          @click="replyUpdate(reply.reply_no)"
+          @click="replyUpdate(reply['replyNo'])"
         >
           수정
         </button>
         <!-- 대댓글 토글 버튼 -->
         <button class="board-reply-ex-reply">답글</button>
-        <img class="board-reply2-create-profile" :src="member.profile_url" />
+        <img class="board-reply2-create-profile" :src="member.profileUrl" />
         <textarea
           class="board-reply2-create-input"
           placeholder="대댓글"
@@ -58,21 +58,21 @@
           class="board-reply2-ex"
           v-for="reply in replies"
           :key="reply"
-          :filter="reply.reply_no"
-          :filter-function="reReply(reply.parent_no, reply.reply_no)"
+          :filter="reply['replyNo']"
+          :filter-function="reReply(reply['parentNo'], reply['replyNo'])"
         >
-          <image class="board-reply2-ex-profile" :src="reply.profile_url" />
-          <p class="board-reply2-ex-user">User {{ reply.nickname }}</p>
-          <p>대댓글 {{ reply.context }}</p>
+          <image class="board-reply2-ex-profile" :src="reply['profileUrl']" />
+          <p class="board-reply2-ex-user">User {{ reply["nickname"] }}</p>
+          <p>대댓글 {{ reply["context"] }}</p>
           <button
             class="board-reply2-ex-delete"
-            @click="replyDelete(reply.reply_no)"
+            @click="replyDelete(reply['replyNo'])"
           >
             삭제
           </button>
           <button
             class="board-reply2-ex-update"
-            @click="replyUpdate(reply.reply_no)"
+            @click="replyUpdate(reply['replyNo'])"
           >
             수정
           </button>
@@ -99,31 +99,31 @@ export default defineComponent({
     return {
       modal: true,
       member: {
-        profile_url: "",
+        profileUrl: "",
       },
       boards: [],
       board: {
-        board_no: 0,
-        board_title: "",
-        debate_topic: "",
-        board_content: "",
-        debate_time: "",
-        max_applicant: 0,
-        a_opinion: "",
-        b_opinion: "",
+        boardNo: 0,
+        boardTitle: "",
+        debateTopic: "",
+        boardContent: "",
+        debateTime: "",
+        maxApplicant: 0,
+        aOpinion: "",
+        bOpinion: "",
         nickname: "",
       },
       replies: [],
       reply: {
-        reply_no: 0,
+        replyNo: 0,
         context: "",
         date: "",
         depth: 0,
         hidden: "",
-        board_no: 0,
-        parent_no: 0,
-        member_no: 0,
-        profile_url: "",
+        boardNo: 0,
+        parentNo: 0,
+        memberNo: 0,
+        profileUrl: "",
         nickname: "",
       },
     };
@@ -133,7 +133,7 @@ export default defineComponent({
   },
   created() {
     // 이 방법이 맞나 BE 검수 필요
-    this.boardOne(this.board.board_no);
+    this.boardOne(this.board.boardNo);
     this.replyAll();
   },
   methods: {
@@ -146,20 +146,20 @@ export default defineComponent({
     },
     // 자식 대댓글만을 걸러내기 위한 부모 댓글 필터
     reReply(reply: any, filter: number) {
-      if (reply.parent_no === filter) {
+      if (reply.parentNo === filter) {
         return true;
       }
       return false;
     },
     replyAll() {
-      axios.get("debate-reply/" + this.reply.reply_no).then((res) => {
+      axios.get("debate-reply/" + this.reply.replyNo).then((res) => {
         this.replies = res.data;
       });
     },
     replyInsert() {
       axios
-        .post("debate-reply/" + this.board.board_no, {
-          parent_no: this.reply.parent_no,
+        .post("debate-reply/" + this.board.boardNo, {
+          parent_no: this.reply.parentNo,
           context: this.reply.context,
           depth: this.reply.depth,
         })
@@ -167,15 +167,15 @@ export default defineComponent({
           this.replyAll();
         });
     },
-    replyUpdate(reply_no: number) {
-      axios.put(`debate-reply/`, reply_no).then((res) => {
+    replyUpdate(replyNo: number) {
+      axios.put(`debate-reply/`, replyNo).then((res) => {
         console.log(res.data);
       });
     },
-    replyDelete(reply_no: number) {
+    replyDelete(replyNo: number) {
       let flag = confirm("정말로 삭제하시겠습니까??");
       if (flag) {
-        axios.delete("debate-reply/" + reply_no).then(() => {
+        axios.delete("debate-reply/" + replyNo).then(() => {
           this.replyAll();
         });
       }
@@ -219,7 +219,7 @@ a {
 .modal-container {
   margin-left: auto;
   margin-right: auto;
-  background-color: #111845;
+  background: #757f9a;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
@@ -244,38 +244,13 @@ a {
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
   font-size: 1.125;
-  color: white;
+  color: #000000;
 }
 .modal-container-body {
   padding: 24px 32px 51px;
   font-family: serif;
   overflow-y: auto;
-  color: white;
-}
-.artcicle {
-  h1 {
-    font-size: 1.5rem;
-    line-height: 1.125;
-  }
-  h2 {
-    font-size: 1.25rem;
-    line-height: 1.25;
-  }
-  h3 {
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-  ul,
-  ol {
-    margin-left: 20px;
-    list-style-position: inside;
-  }
-  ol {
-    list-style: numeric;
-  }
-  ul {
-    list-style: disc;
-  }
+  color: #000000;
 }
 .modal-container-footer {
   padding: 20px 32px;
@@ -290,7 +265,7 @@ a {
   padding: 12px 20px;
   border-radius: 8px;
   background-color: transparent;
-  color: white;
+  color: #000000;
   border: 0;
   font-weight: 600;
   font-size: 20px;
@@ -413,7 +388,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 .board-day {
@@ -427,7 +402,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 .board-count {
@@ -442,7 +417,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 .board-summary {
@@ -456,7 +431,7 @@ a {
   font-style: normal;
   font-weight: 800;
   font-size: 20px;
-  color: #ffffff;
+  color: #000000;
   border-right: 3px solid #ddd;
 }
 .board-summary-content {
@@ -476,7 +451,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-b {
   position: relative;
@@ -489,7 +464,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 3px solid #ddd;
 }
 .board-summary-in {
@@ -539,7 +514,7 @@ a {
   width: 460px;
   height: 40px;
   top: -15px;
-  color: #fff;
+  color: #000000;
   padding: 5px;
   background-color: #111845;
   border-radius: 5px;
@@ -600,7 +575,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply-ex-delete {
   position: relative;
@@ -614,7 +589,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply-ex-reply {
   position: relative;
@@ -628,7 +603,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply-ex-user {
   position: relative;
@@ -641,7 +616,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create {
   position: relative;
@@ -670,7 +645,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create-cancle {
   position: relative;
@@ -680,7 +655,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create-sign {
   position: relative;
@@ -690,7 +665,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create-button {
   position: relative;
@@ -714,7 +689,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-ex-delete {
   position: relative;
@@ -727,7 +702,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-ex-profile {
   position: relative;
@@ -752,6 +727,6 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 </style>
