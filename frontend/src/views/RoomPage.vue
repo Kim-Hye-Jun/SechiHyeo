@@ -10,7 +10,7 @@
       :key="sub.stream.connection.connectionId"
       :stream-manager="sub"
     />
-    <!-- <debate-chat></debate-chat> -->
+    <debate-chat></debate-chat>
   </div>
 </template>
 
@@ -34,7 +34,7 @@ export default defineComponent({
   components: {
     UserVideo,
     DebateTimer,
-    // DebateChat,
+    DebateChat,
   },
 
   methods: {
