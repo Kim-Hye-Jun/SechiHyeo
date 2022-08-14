@@ -79,31 +79,31 @@ export default defineComponent({
   components: { UserVideoComponentVue },
   methods: {
     test(arr: Array<string>, index: number, name: string): string {
-      console.log("name : ", name);
-      console.log("arr : ", arr);
-      console.log("index : ", index);
+      // console.log("name : ", name);
+      // console.log("arr : ", arr);
+      // console.log("index : ", index);
       return arr[index];
     },
     isRoomAdmin(): boolean {
-      console.log("HOST : ", this.roomAndUserData?.host);
-      return this.roomAndUserData?.isHost;
+      // console.log("HOST : ", this.roomAndUserData?.host);
+      return this.roomAndUserData?.host;
     },
     dragOver(e: Event): void {
       e.preventDefault();
-      console.log("OVER", e);
+      // console.log("OVER", e);
     },
     dragEnter(e: Event): void {
-      e.preventDefault();
-      console.log("ENTER", e);
+      // e.preventDefault();
+      // console.log("ENTER", e);
     },
     dragLeave(e: Event): void {
-      e.preventDefault();
-      console.log("LEAVE", e);
+      // e.preventDefault();
+      // console.log("LEAVE", e);
     },
     dragDrop(e: Event): void {
       e.preventDefault();
-      console.log("DROP", e.target);
-      console.log("START", this.startElement);
+      // console.log("DROP", e.target);
+      // console.log("START", this.startElement);
 
       const dropVideoClassName = (e.target as HTMLDivElement).className;
       const startVideoClassName = (this.startElement as HTMLDivElement)
@@ -111,22 +111,23 @@ export default defineComponent({
 
       (this.startElement as HTMLDivElement).className = dropVideoClassName;
       (e.target as HTMLDivElement).className = startVideoClassName;
+      // console.log("START //  DROP", startVideoClassName, dropVideoClassName);
+
+      // 클래스 이름 변경 하고 서버에 요청보내주기
     },
     dragStart(e: Event): void {
-      console.log("START", e.target);
       this.startElement = e.target;
     },
     dragEnd(e: Event): void {
-      e.preventDefault();
+      // e.preventDefault();
       // console.log("END", e.target);
       // console.log("START", this.startElement);
-
       // console.log((e.target as HTMLDivElement).className);
       // console.log((this.startElement as HTMLDivElement).className);
     },
   },
   mounted() {
-    const videos = document.querySelectorAll(".video");
+    const videos = document.querySelectorAll("video");
     for (const video of videos) {
       video.addEventListener("dragstart", this.dragStart);
       video.addEventListener("dragover", this.dragOver);

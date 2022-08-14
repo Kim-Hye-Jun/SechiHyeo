@@ -19,12 +19,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, toRaw } from "vue";
 import DebateTitleTabComponent from "@components/molecules/room-inside/DebateTitleTabComponent.vue";
 import RoomVideoComponent from "@components/organisms/room-inside/RoomVideoComponent.vue";
 import MenuTabComponent from "@components/organisms/room-inside/MenuTabComponent.vue";
 import DebateTopicComponent from "@components/atoms/room-inside/DebateTopicComponent.vue";
-import { member } from "@/api/index";
+import { member2 } from "@/api/index";
 
 import http from "@/http";
 import * as openVidu from "openvidu-browser";
@@ -50,9 +50,9 @@ export default defineComponent({
 
     const apiCall = async () => {
       try {
-        console.log("here");
+        console.log("here", `${useRoute().params.roomId}`);
         testReturnData = (
-          await member.get(`/sessions/${useRoute().params.roomId}/connection`)
+          await member2.get(`/sessions/${useRoute().params.roomId}/connection`)
         ).data;
         console.log("testReturnData token : ", testReturnData?.token);
         console.log("testReturnData : ", testReturnData);
@@ -61,16 +61,27 @@ export default defineComponent({
       }
     };
     await apiCall();
+    const emptyVideoArr = ref([]);
+    for (const data of (testReturnData as unknown as RoomJoinResponseInfo)[
+      "emptySideOrderList"
+    ]) {
+      (emptyVideoArr.value as string[]).push(data);
+    }
 
     let mainStreamManager: openVidu.Publisher | undefined = undefined;
     let publisher: openVidu.Publisher | undefined = undefined;
 
     session.on("streamCreated", ({ stream }) => {
+      // 1. 서버에 추가 요청 => x
+      // 완료
+
       if (session) {
         const subscriber = session.subscribe(
           stream,
           undefined as unknown as HTMLElement
         );
+
+        // (##구현) emptyArr에 sub의 class 제거
         console.log("subscript create @@ ", subscriber);
         console.log(
           JSON.parse(subscriber.stream.connection.data.split("%/%")[0])
@@ -78,6 +89,7 @@ export default defineComponent({
         console.log(
           JSON.parse(subscriber.stream.connection.data.split("%/%")[1])
         );
+        // 2. map user class name 추가
         mapUserClassName.value.set(
           JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
             "userId"
@@ -85,17 +97,42 @@ export default defineComponent({
           testReturnData?.userSideOrder
         );
         (subscribers.value as openVidu.Subscriber[]).push(subscriber);
+
+        // 3. empty arr 삭제
+
+        const index = (emptyVideoArr.value as string[]).indexOf(
+          testReturnData?.userSideOrder as string
+        );
+        if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
         console.log("MAP : ", mapUserClassName);
         console.log("SUBSCRIBERS : ", subscribers);
+        console.log("EMPTY VIDEO ARR : ", emptyVideoArr);
       }
     });
 
     session.on("streamDestroyed", ({ stream }) => {
       // Remove the stream from 'subscribers' array
+
+      // 1. 서버에 삭제 요청 *****
+
+      // 2. map user-class name 삭제
       const index = (subscribers.value as openVidu.Subscriber[]).indexOf(
         stream.streamManager as openVidu.Subscriber,
         0
       );
+
+      // 3. empty arr 에 추가
+
+      const currentUserSideOrder = mapUserClassName.value.get(
+        JSON.parse(
+          (subscribers.value as openVidu.Subscriber[])[
+            index
+          ].stream.connection.data.split("%/%")[1]
+        )["userId"]
+      );
+
+      (emptyVideoArr.value as string[]).push(currentUserSideOrder);
+
       mapUserClassName.value.delete(
         JSON.parse(
           (subscribers.value as openVidu.Subscriber[])[
@@ -113,6 +150,12 @@ export default defineComponent({
     });
 
     session.on("signal:UPDATE_SIDE_ORDER", (event) => {
+      // user(login_id)가 진영이 어디로 바뀌었는지 시그널 받음
+      // 1. map user classname 변경
+      // 2. empty로 갔으면 empty 삭제 or 추가
+      // 기존 side, order 을 받아야 될듯
+      // ***** 변경필요
+
       if (typeof event.data === "string") {
         const data = JSON.parse(event.data);
         const userId = data["login_id"];
@@ -125,30 +168,6 @@ export default defineComponent({
     console.log(testReturnData);
     if (testReturnData === undefined) return;
     console.log("no return");
-    const emptyVideoArr = ref([]);
-    switch (testReturnData["maxNumOfPeople"]) {
-      case 2:
-        (emptyVideoArr.value as string[]).push("a1");
-        (emptyVideoArr.value as string[]).push("b1");
-        break;
-      case 4:
-        (emptyVideoArr.value as string[]).push("a1");
-        (emptyVideoArr.value as string[]).push("b1");
-
-        (emptyVideoArr.value as string[]).push("a2");
-        (emptyVideoArr.value as string[]).push("b2");
-        break;
-      case 6:
-        (emptyVideoArr.value as string[]).push("a1");
-        (emptyVideoArr.value as string[]).push("b1");
-
-        (emptyVideoArr.value as string[]).push("a2");
-        (emptyVideoArr.value as string[]).push("b2");
-
-        (emptyVideoArr.value as string[]).push("a3");
-        (emptyVideoArr.value as string[]).push("b3");
-        break;
-    }
 
     await session
       .connect(testReturnData["token"], testReturnData)
@@ -207,6 +226,15 @@ export default defineComponent({
     console.log("sub : ", subscribers);
 
     console.log("empty Video Arr : ", emptyVideoArr);
+    console.log("subscribers Value : ", toRaw(subscribers.value));
+    // for (let i = 0; i < toRaw(subscribers.value).length; i++) {
+    //   const sideOrder = JSON.parse(
+    //     (
+    //       toRaw(subscribers.value)[i] as openVidu.Subscriber
+    //     ).stream.connection.data.split("%/%")[0] as any
+    //   )["userSideOrder"];
+    //   const index = emptyVideoArr.value.indexOf((sideOrder as string));
+    // }
 
     return {
       publisher,
