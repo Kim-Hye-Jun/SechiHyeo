@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/sessions")
+@CrossOrigin("*")
 public class RoomController {
 
     @Autowired
