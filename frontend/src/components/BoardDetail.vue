@@ -219,7 +219,7 @@ a {
 .modal-container {
   margin-left: auto;
   margin-right: auto;
-  background-color: #111845;
+  background: #757f9a;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
@@ -244,13 +244,13 @@ a {
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
   font-size: 1.125;
-  color: white;
+  color: #000000;
 }
 .modal-container-body {
   padding: 24px 32px 51px;
   font-family: serif;
   overflow-y: auto;
-  color: white;
+  color: #000000;
 }
 .modal-container-footer {
   padding: 20px 32px;
@@ -265,7 +265,7 @@ a {
   padding: 12px 20px;
   border-radius: 8px;
   background-color: transparent;
-  color: white;
+  color: #000000;
   border: 0;
   font-weight: 600;
   font-size: 20px;
@@ -388,7 +388,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 .board-day {
@@ -402,7 +402,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 .board-count {
@@ -417,7 +417,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 .board-summary {
@@ -431,7 +431,7 @@ a {
   font-style: normal;
   font-weight: 800;
   font-size: 20px;
-  color: #ffffff;
+  color: #000000;
   border-right: 3px solid #ddd;
 }
 .board-summary-content {
@@ -451,7 +451,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-b {
   position: relative;
@@ -464,7 +464,7 @@ a {
   font-size: 16px;
   text-align: left;
   line-height: 34px;
-  color: #ffffff;
+  color: #000000;
   border-bottom: 3px solid #ddd;
 }
 .board-summary-in {
@@ -514,7 +514,7 @@ a {
   width: 460px;
   height: 40px;
   top: -15px;
-  color: #fff;
+  color: #000000;
   padding: 5px;
   background-color: #111845;
   border-radius: 5px;
@@ -575,7 +575,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply-ex-delete {
   position: relative;
@@ -589,7 +589,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply-ex-reply {
   position: relative;
@@ -603,7 +603,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply-ex-user {
   position: relative;
@@ -616,7 +616,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create {
   position: relative;
@@ -645,7 +645,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create-cancle {
   position: relative;
@@ -655,7 +655,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create-sign {
   position: relative;
@@ -665,7 +665,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-create-button {
   position: relative;
@@ -689,7 +689,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-ex-delete {
   position: relative;
@@ -702,7 +702,7 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 .board-reply2-ex-profile {
   position: relative;
@@ -727,6 +727,6 @@ a {
   font-weight: 400;
   font-size: 12px;
   line-height: 30px;
-  color: #ffffff;
+  color: #000000;
 }
 </style>

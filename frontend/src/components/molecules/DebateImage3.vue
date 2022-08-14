@@ -1,6 +1,6 @@
 <template>
   <div class="c">
-    <div class="file-upload">
+    <div>
       <form>
         <div style="height: 565px">
           <img
@@ -21,7 +21,7 @@
       type="file"
       ref="selectFile"
       @change="previewFile"
-      style="position: absolute; top: 90%"
+      style="position: absolute; top: 100%"
     />
   </div>
 </template>
@@ -32,7 +32,6 @@ export default defineComponent({
   components: {},
   data() {
     return {
-      name: "FormValidation",
       selectFile: null,
       previewImgUrl: null,
       isUploading: false,
