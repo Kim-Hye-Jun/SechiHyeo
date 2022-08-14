@@ -12,5 +12,6 @@ public class ApplicantStateRes {
     int max_applicant;
     int current_applicant;
     boolean board_finished;
+    String nickname;
     int accept;
 }

@@ -110,9 +110,15 @@ public class ApplicantStateController {
 
             for (ApplicantState as: list
                  ) {
-                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
-                        .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
-                        .board_finished(as.getDebateBoard().isBoardFinished()).build());
+                arrayList.add(ApplicantStateRes
+                        .builder()
+                            .debate_topic(as.getDebateBoard().getDebateTopic())
+                            .current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                            .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
+                            .board_finished(as.getDebateBoard().isBoardFinished())
+                            .nickname(as.getMember().getNickname())
+                            .accept(as.getAccept())
+                        .build());
             }
 
             return ResponseEntity.status(200).body(arrayList);
@@ -144,9 +150,13 @@ public class ApplicantStateController {
 
             for (ApplicantState as: list
             ) {
-                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
-                        .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
-                        .board_finished(as.getDebateBoard().isBoardFinished()).build());
+                arrayList.add(ApplicantStateRes
+                        .builder()
+                            .debate_topic(as.getDebateBoard().getDebateTopic())
+                            .current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                            .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
+                            .board_finished(as.getDebateBoard().isBoardFinished())
+                        .build());
             }
 
             return ResponseEntity.status(200).body(arrayList);
