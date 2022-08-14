@@ -111,20 +111,20 @@ export default defineComponent({
     },
     dragOver(e: Event): void {
       e.preventDefault();
-      // console.log("OVER", e);
+      console.log("OVER", e);
     },
     dragEnter(e: Event): void {
       // e.preventDefault();
-      // console.log("ENTER", e);
+      console.log("ENTER", e);
     },
     dragLeave(e: Event): void {
       // e.preventDefault();
-      // console.log("LEAVE", e);
+      console.log("LEAVE", e);
     },
     dragDrop(e: Event): void {
       e.preventDefault();
-      // console.log("DROP", e.target);
-      // console.log("START", this.startElement);
+      console.log("DROP", e.target);
+      console.log("START", this.startElement);
 
       const dropVideoClassName = (e.target as HTMLDivElement).className;
       const startVideoClassName = (this.startElement as HTMLDivElement)
@@ -138,6 +138,7 @@ export default defineComponent({
     },
     dragStart(e: Event): void {
       this.startElement = e.target;
+      console.log("START : ", e);
     },
     dragEnd(e: Event): void {
       // e.preventDefault();

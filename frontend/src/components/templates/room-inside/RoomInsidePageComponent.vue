@@ -94,14 +94,18 @@ export default defineComponent({
           JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
             "userId"
           ],
-          testReturnData?.userSideOrder
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+            "userSideOrder"
+          ]
         );
         (subscribers.value as openVidu.Subscriber[]).push(subscriber);
 
         // 3. empty arr 삭제
 
         const index = (emptyVideoArr.value as string[]).indexOf(
-          testReturnData?.userSideOrder as string
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+            "userSideOrder"
+          ]
         );
         if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
         console.log("MAP : ", mapUserClassName);
