@@ -22,8 +22,8 @@ public class JWTUtil {
 	
 	private static String SALT = "A508";
 	
-	//토큰 유효시간 30분
-	private long tokenValidTime = 30 * 60 * 1000L;
+	//토큰 유효시간 1일
+	private long tokenValidTime = 12 * 60 * 60 * 1000L;
 	
 	//JWT 토큰 생성(User 객체를 담아 전송)
 	public String createToken(String claimId) throws Exception {
