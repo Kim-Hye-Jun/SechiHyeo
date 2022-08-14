@@ -2,6 +2,8 @@ package com.ssafy.backend.dto.response;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,4 +20,5 @@ public class RoomJoinRes {
     private int maxNumOfPeople;
     private boolean isHost;
     private String userSideOrder;
+    private List<String> emptySideOrderList;
 }

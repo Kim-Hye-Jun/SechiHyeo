@@ -294,6 +294,8 @@ public class RoomServiceImpl implements RoomService {
                 }
             }
 
+            List<String> emptySideOrderList = getEmptySideOrderList(participants);
+
             //갱신한 접속자목록 반영
             roomWithParticipant.replace(roomJoinReq.getRoomId(), participants);
             System.out.println("2. " + connectionProperties.getData());
@@ -307,6 +309,7 @@ public class RoomServiceImpl implements RoomService {
                     .userSideOrder(sideOrder)
                     .isHost(checkHost)
                     .maxNumOfPeople(room.getMaxNumOfPeople())
+                    .emptySideOrderList(emptySideOrderList)
                     .build();
 
         } catch (OpenViduJavaClientException e) {
@@ -553,6 +556,16 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
-
+    private List<String> getEmptySideOrderList(String[][] participants) {
+        List<String> returnList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < participants[0].length; j++) {
+                if (participants[i][j] == null) {
+                    returnList.add(String.format("%c%d", 'a' + i, j + 1)); // j=0,1,2 -> a123 b123
+                }
+            }
+        }
+        return returnList;
+    }
 
 }

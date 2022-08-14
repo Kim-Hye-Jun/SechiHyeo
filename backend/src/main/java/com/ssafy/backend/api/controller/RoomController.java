@@ -57,9 +57,9 @@ public class RoomController {
 
     // 3. 방 생성
     @PostMapping("")
-    public ResponseEntity<String> createRoom(@RequestBody RoomCreateReq roomCreateReq){
+    public ResponseEntity<RoomCreateRes> createRoom(@RequestBody RoomCreateReq roomCreateReq){
         RoomCreateRes roomCreateRes = roomService.createRoom(roomCreateReq);
-        return ResponseEntity.ok(roomCreateRes.getRoomId());
+        return ResponseEntity.ok(roomCreateRes);
     }
 
     @PostMapping("/{roomId}/thumbnail")
