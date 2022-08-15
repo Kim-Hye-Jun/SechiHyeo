@@ -1,6 +1,8 @@
 package com.ssafy.backend.api.service;
 
 import com.ssafy.backend.db.entity.Member;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
 	//아이디 중복 체크
@@ -19,7 +21,9 @@ public interface MemberService {
 	//회원정보 수정
 	void changeMemberInfo(Member editedMember, String loginId);
 	//프로필 업로드
-	void changeProfileImage(String loginId, String profileName, String profileUrl);
+	void changeProfileImage(Member member, MultipartFile profileImage);
+	//경험치 갱신
+	void changeDebateInfo(String loginId);
 	//비밀번호 재설정
 	void changeLoginPassword(String loginId, String newLoginPassword) throws Exception;
 	//회원 탈퇴

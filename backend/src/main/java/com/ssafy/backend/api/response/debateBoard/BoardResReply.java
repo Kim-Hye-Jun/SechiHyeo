@@ -12,13 +12,13 @@ import java.util.Date;
 @Builder
 @ApiModel("reply in Response")
 public class BoardResReply {
-    long reply_no;
+    int reply_no;
     String context;
     Date date;
     int depth;
     boolean hidden;
-    long board_no;
-    long parent_no;
+    int board_no;
+    int parent_no;
     String login_id;
     String nickname;
 }

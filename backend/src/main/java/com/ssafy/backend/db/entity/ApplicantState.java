@@ -16,12 +16,16 @@ import javax.persistence.*;
 public class ApplicantState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="applicant_no")
-    Long applicantNo = null;
+    @Column(name="applicant_no", columnDefinition = "int unsigned")
+    private int applicantNo;
 
+    @Column(name = "side", nullable = false, columnDefinition = "int unsigned default 0")
     int side;
+    @Column(name = "turn", nullable = false, columnDefinition = "int unsigned default 0")
     int turn;
+
     // 0:거절 , 1:승인 , 2:대기
+    @Column(name = "accept", nullable = false, columnDefinition = "int unsigned default 2")
     int accept;
 
     //연관

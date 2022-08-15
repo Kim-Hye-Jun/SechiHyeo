@@ -1,5 +1,6 @@
 <template>
   <div class="contents">
+    <background></background>
     <div class="form-wrapper form-wrapper-sm">
       <form @submit.prevent="signUp" class="form">
         <h2><b>회원 가입</b></h2>
@@ -23,6 +24,10 @@
         <div>
           <label for="nickname">닉네임: </label>
           <input id="nickname" type="text" v-model="member.nickname" />
+          <button type="button" @click="nickNameDuplicateCheck">
+            닉네임 중복 체크
+          </button>
+          <div>{{ nickNameMessage }}</div>
         </div>
         <div>
           <label for="email">이메일: </label>
@@ -50,9 +55,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { registerUser, checkUserId, checkEmail, checkPhone } from "@/api/auth";
-
+import {
+  registerUser,
+  checkUserId,
+  checkNickName,
+  checkEmail,
+  checkPhone,
+} from "@/api/auth";
+import Background from "./common/Background.vue";
 export default defineComponent({
+  components: { Background },
   data() {
     return {
       // form values
@@ -65,6 +77,7 @@ export default defineComponent({
       },
       loginPassword2: "",
       idDuplicate: true,
+      nickNameDuplicate: true,
       emailDuplicate: true,
       phoneDuplicate: true,
     };
@@ -74,7 +87,7 @@ export default defineComponent({
       return this.member.loginId.length > 4 && this.member.loginId.length < 13;
     },
     validName(): boolean {
-      return this.member.nickname.length > 0;
+      return this.member.nickname.length > 3;
     },
     validPw(): boolean {
       return (
@@ -104,6 +117,7 @@ export default defineComponent({
         this.validEmail &&
         this.validPhone &&
         !this.idDuplicate &&
+        !this.nickNameDuplicate &&
         !this.emailDuplicate &&
         !this.phoneDuplicate
       ) {
@@ -128,6 +142,15 @@ export default defineComponent({
         return "비밀번호가 일치합니다.";
       } else {
         return "비밀번호가 일치하지 않습니다.";
+      }
+    },
+    nickNameMessage() {
+      if (!this.validName) {
+        return "닉네임의 길이를 3글자 이상입니다.";
+      } else if (this.nickNameDuplicate) {
+        return "닉네임 중복 체크 해주세요.";
+      } else {
+        return "사용가능한 닉네임 입니다.";
       }
     },
     emailMessage() {
@@ -156,6 +179,14 @@ export default defineComponent({
         this.idDuplicate = false;
       } catch {
         alert("이미 사용중인 아이디 입니다!");
+      }
+    },
+    async nickNameDuplicateCheck() {
+      try {
+        const response = await checkNickName(this.member.nickname);
+        this.nickNameDuplicate = false;
+      } catch {
+        alert("이미 사용중인 닉네임 입니다!");
       }
     },
     async emailDuplicateCheck() {

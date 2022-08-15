@@ -10,7 +10,7 @@ import lombok.Setter;
 @Builder
 @ApiModel("AllboardResponse")
 public class AllBoardRes {
-    long board_no;
+    int board_no;
     String board_title;
     int max_applicant;
     boolean board_finished;

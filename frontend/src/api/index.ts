@@ -17,5 +17,13 @@ function createInstanceWithAuth(url: string) {
   return setInterceptors(instance); // JWT를
 }
 
+function createInstanceWithAuth2() {
+  const instance = axios.create({
+    baseURL: `${API_BASE_URL}`,
+  });
+  return setInterceptors(instance); // JWT를
+}
+
 export const instance = createInstance();
 export const member = createInstanceWithAuth("member");
+export const member2 = createInstanceWithAuth2();

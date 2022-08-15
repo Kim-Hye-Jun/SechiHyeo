@@ -8,7 +8,9 @@ import com.ssafy.backend.db.entity.Reply;
 import com.ssafy.backend.db.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,15 +23,13 @@ public class ReplyServiceImpl implements  ReplyService{
     DebateBoardService debateBoardService;
 
     @Override
-    public List<Reply> GetReplies(long boardNo) {
+    public ArrayList<Reply> GetReplies(int boardNo) {
         return replyRepository.findByDebateBoardBoardNo(boardNo);
     }
 
+    @Transactional
     @Override
-    public boolean regiReply(long board_no, ReplyRegiPostReq regiReq, Member member) {
-        DebateBoard debateBoard=debateBoardService.getBoard(board_no);
-        if(debateBoard==null) return false;
-
+    public boolean regiReply(int board_no, ReplyRegiPostReq regiReq, Member member,DebateBoard debateBoard) {
         Reply reply=new Reply();
         reply.setContext(regiReq.getContext());
         reply.setDate(new Date());
@@ -39,11 +39,13 @@ public class ReplyServiceImpl implements  ReplyService{
         reply.setDebateBoard(debateBoard);
 
         //회원 처리
+        reply.setMember(member);
 
         if(replyRepository.save(reply)==null)return false;
         return true;
     }
 
+    @Transactional
     @Override
     public boolean chageReply(ReplyChangeReq changeReq) {
         Reply reply=replyRepository.findByReplyNo(changeReq.getReply_no());
@@ -55,8 +57,9 @@ public class ReplyServiceImpl implements  ReplyService{
         else  return true;
     }
 
+    @Transactional
     @Override
-    public boolean deleteReply(long reply_no) {
+    public boolean deleteReply(int reply_no) {
         Reply reply= replyRepository.findByReplyNo(reply_no);
         if(reply==null) return false;
 

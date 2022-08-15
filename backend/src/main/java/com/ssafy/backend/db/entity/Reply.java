@@ -17,16 +17,21 @@ import java.util.Date;
 public class Reply  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="reply_no")
-    Long replyNo = null;
+    @Column(name="reply_no", columnDefinition = "int unsigned")
+    private int replyNo;
 
+    @Column(name = "context",columnDefinition = "varchar(150)")
     String context;
     Date date;
+
+    @Column(name = "depth", nullable = false, columnDefinition = "int unsigned default 0")
     int depth;
+
+    @Column(name = "hidden", nullable = false, columnDefinition = "boolean default false")
     boolean hidden;
 
-    @Column(name="parent_no")
-    long parentNo;
+    @Column(name="parent_no",nullable = false, columnDefinition = "int unsigned default 0")
+    int parentNo;
     
     //연관
     //게시판

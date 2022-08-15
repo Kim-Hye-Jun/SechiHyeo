@@ -8,6 +8,7 @@ import com.ssafy.backend.db.repository.ApplicantStateRepository;
 import com.ssafy.backend.db.repository.DebateBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class ApplicantServiceImpl implements  ApplicantService{
 
     @Autowired
     DebateBoardRepository debateBoardRepository;
+
+    @Transactional
     @Override
     public boolean regiApplicant(ApplicantStateRegiPostReq regiReq, Member member) {
         ApplicantState as=new ApplicantState();
@@ -37,8 +40,9 @@ public class ApplicantServiceImpl implements  ApplicantService{
         else return true;
     }
 
+    @Transactional
     @Override
-    public boolean changeApplicant(ApplicantStateRegiPostReq regiReq, Member member, long apply_no) {
+    public boolean changeApplicant(ApplicantStateRegiPostReq regiReq, Member member, int apply_no) {
         ApplicantState as=applicantStateRepository.getReferenceById(apply_no);
 
         if(as==null)return false;
@@ -57,8 +61,9 @@ public class ApplicantServiceImpl implements  ApplicantService{
         else return true;
     }
 
+    @Transactional
     @Override
-    public boolean deleteApplicant(long apply_no) {
+    public boolean deleteApplicant(int apply_no) {
         ApplicantState as=applicantStateRepository.getReferenceById(apply_no);
 
         if(as==null)return false;
@@ -68,22 +73,22 @@ public class ApplicantServiceImpl implements  ApplicantService{
 
     //내가 모집한 게시판의 applicant_state 정보
     @Override
-    public List<ApplicantState> getRecruitingApplicant(long memberNo) {
-        List<ApplicantState> list=applicantStateRepository.getCountOfRecruitingApplicant(String.valueOf(memberNo));
+    public List<ApplicantState> getRecruitingApplicant(int memberNo) {
+        List<ApplicantState> list=applicantStateRepository.getCountOfRecruitingApplicant(memberNo);
         return list;
     }
 
     //내가 신청한 게시판의 applicant_state 정보
     @Override
-    public List<ApplicantState> getApplyingApplicant(long memberNo) {
-        List<ApplicantState> list = applicantStateRepository.getCountOfApplyingApplicant(String.valueOf(memberNo));
+    public List<ApplicantState> getApplyingApplicant(int memberNo) {
+        List<ApplicantState> list = applicantStateRepository.getCountOfApplyingApplicant(memberNo);
         return list;
     }
 
     //boardNo로 찾은 보드에 현재 승인된 인원수 count
     @Override
-    public int countCurrentApplicantByBoardNo(long boardNo) {
-        int cnt=applicantStateRepository.getCountOfCurrentApplicant(String.valueOf(boardNo));
+    public long countCurrentApplicantByBoardNo(int boardNo) {
+        long cnt=applicantStateRepository.getCountOfCurrentApplicant(boardNo);
         return cnt;
     }
 

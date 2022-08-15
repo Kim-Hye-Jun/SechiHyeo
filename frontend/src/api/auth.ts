@@ -14,6 +14,13 @@ function checkUserId(memberId: string) {
   // console.log(memberId);
   return instance.get(`register/user-id/${memberId}`);
 }
+
+// 닉네임 중복체크
+function checkNickName(nickName: string) {
+  console.log(nickName);
+  return instance.get(`register/nickname/${nickName}`);
+}
+
 //Email 중복체크
 function checkEmail(email: string) {
   // console.log(email);
@@ -30,4 +37,11 @@ function loginUser(member: object) {
   return instance.post("member/login", null, { params: member });
 }
 
-export { registerUser, checkUserId, checkEmail, checkPhone, loginUser };
+export {
+  registerUser,
+  checkUserId,
+  checkNickName,
+  checkEmail,
+  checkPhone,
+  loginUser,
+};

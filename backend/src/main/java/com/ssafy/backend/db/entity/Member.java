@@ -47,20 +47,20 @@ public class Member {
     @Column(name = "debate_number", nullable = false, columnDefinition = "int unsigned default 0")
     private int debateNumber;
 
-    @Column(name = "record_win", nullable = false, columnDefinition = "int unsigned default 0")
-    private int recordWin;
-
-    @Column(name = "record_draw", nullable = false, columnDefinition = "int unsigned default 0")
-    private int recordDraw;
-
-    @Column(name = "record_lose", nullable = false, columnDefinition = "int unsigned default 0")
-    private int recordLose;
-
-    @Column(name = "debate_time", nullable = false, columnDefinition = "int unsigned default 0")
-    private int debateTime;
+//    @Column(name = "record_win", nullable = false, columnDefinition = "int unsigned default 0")
+//    private int recordWin;
+//
+//    @Column(name = "record_draw", nullable = false, columnDefinition = "int unsigned default 0")
+//    private int recordDraw;
+//
+//    @Column(name = "record_lose", nullable = false, columnDefinition = "int unsigned default 0")
+//    private int recordLose;
+//
+//    @Column(name = "debate_time", nullable = false, columnDefinition = "int unsigned default 0")
+//    private int debateTime;
 
     @Builder
-    public Member(int memberNo, String loginId, String loginPassword, String phoneNumber, String nickname, String email, String introduce, String profileName, String profileUrl, int exp, int debateNumber, int recordWin, int recordDraw, int recordLose, int debateTime) {
+    public Member(int memberNo, String loginId, String loginPassword, String phoneNumber, String nickname, String email, String introduce, String profileName, String profileUrl, int exp, int debateNumber) {
         this.memberNo = memberNo;
         this.loginId = loginId;
         this.loginPassword = loginPassword;
@@ -72,9 +72,5 @@ public class Member {
         this.profileUrl = profileUrl;
         this.exp = exp;
         this.debateNumber = debateNumber;
-        this.recordWin = recordWin;
-        this.recordDraw = recordDraw;
-        this.recordLose = recordLose;
-        this.debateTime = debateTime;
     }
 }

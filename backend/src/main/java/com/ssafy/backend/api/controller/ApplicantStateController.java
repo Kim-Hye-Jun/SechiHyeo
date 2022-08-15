@@ -4,6 +4,7 @@ import com.ssafy.backend.api.request.applicantState.ApplicantStateRegiPostReq;
 import com.ssafy.backend.api.request.debateBoard.DebateBoardRegiPostReq;
 import com.ssafy.backend.api.response.applicantState.ApplicantStateRes;
 import com.ssafy.backend.api.service.ApplicantService;
+import com.ssafy.backend.api.service.MemberService;
 import com.ssafy.backend.common.model.response.BaseResponseBody;
 import com.ssafy.backend.common.util.JWTUtil;
 import com.ssafy.backend.db.entity.ApplicantState;
@@ -31,6 +32,8 @@ public class ApplicantStateController {
     private JWTUtil jwtUtil;
 
     @Autowired
+    MemberService memberService;
+    @Autowired
     ApplicantService applicantService;
 
 
@@ -43,7 +46,8 @@ public class ApplicantStateController {
     public ResponseEntity<? extends BaseResponseBody> registerApplicantState(HttpServletRequest request, @RequestBody ApplicantStateRegiPostReq regiReq){
         try {
             String token = request.getHeader(HEADER_AUTH);
-            Member member = jwtUtil.getInfo(token);
+            String loginID=jwtUtil.getInfo(token).getLoginId();
+            Member member = memberService.getInfoByLoginId(loginID);
             if(applicantService.regiApplicant(regiReq,member)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
             else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
         } catch(Exception e) {
@@ -60,10 +64,11 @@ public class ApplicantStateController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseResponseBody> changeApplicantState(HttpServletRequest request, @RequestBody ApplicantStateRegiPostReq regiReq,@RequestParam long apply_no){
+    public ResponseEntity<? extends BaseResponseBody> changeApplicantState(HttpServletRequest request, @RequestBody ApplicantStateRegiPostReq regiReq,@RequestParam int apply_no){
         try {
             String token = request.getHeader(HEADER_AUTH);
-            Member member = jwtUtil.getInfo(token);
+            String loginID=jwtUtil.getInfo(token).getLoginId();
+            Member member = memberService.getInfoByLoginId(loginID);
             if(applicantService.changeApplicant(regiReq,member,apply_no)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
             else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
         } catch(Exception e) {
@@ -80,7 +85,7 @@ public class ApplicantStateController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseResponseBody> deleteApplicantState(@RequestParam long apply_no){
+    public ResponseEntity<? extends BaseResponseBody> deleteApplicantState(@RequestParam int apply_no){
         if(applicantService.deleteApplicant(apply_no)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
         else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
     }
@@ -94,7 +99,8 @@ public class ApplicantStateController {
     public ResponseEntity<List<ApplicantStateRes>> getRecruitingApplicantState(HttpServletRequest request){
         try {
             String token = request.getHeader(HEADER_AUTH);
-            Member member = jwtUtil.getInfo(token);
+            String loginID=jwtUtil.getInfo(token).getLoginId();
+            Member member = memberService.getInfoByLoginId(loginID);
 
             List<ApplicantState> list=applicantService.getRecruitingApplicant(member.getMemberNo());
             if(list==null){
@@ -104,9 +110,15 @@ public class ApplicantStateController {
 
             for (ApplicantState as: list
                  ) {
-                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant(applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
-                        .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
-                        .board_finished(as.getDebateBoard().isBoardFinished()).build());
+                arrayList.add(ApplicantStateRes
+                        .builder()
+                            .debate_topic(as.getDebateBoard().getDebateTopic())
+                            .current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                            .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
+                            .board_finished(as.getDebateBoard().isBoardFinished())
+                            .nickname(as.getMember().getNickname())
+                            .accept(as.getAccept())
+                        .build());
             }
 
             return ResponseEntity.status(200).body(arrayList);
@@ -127,7 +139,8 @@ public class ApplicantStateController {
     public ResponseEntity<List<ApplicantStateRes>> getApplyingApplicantState(HttpServletRequest request){
         try {
             String token = request.getHeader(HEADER_AUTH);
-            Member member = jwtUtil.getInfo(token);
+            String loginID=jwtUtil.getInfo(token).getLoginId();
+            Member member = memberService.getInfoByLoginId(loginID);
 
             List<ApplicantState> list=applicantService.getApplyingApplicant(member.getMemberNo());
             if(list==null){
@@ -137,9 +150,13 @@ public class ApplicantStateController {
 
             for (ApplicantState as: list
             ) {
-                arrayList.add(ApplicantStateRes.builder().debate_topic(as.getDebateBoard().getDebateTopic()).current_applicant(applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
-                        .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
-                        .board_finished(as.getDebateBoard().isBoardFinished()).build());
+                arrayList.add(ApplicantStateRes
+                        .builder()
+                            .debate_topic(as.getDebateBoard().getDebateTopic())
+                            .current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
+                            .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
+                            .board_finished(as.getDebateBoard().isBoardFinished())
+                        .build());
             }
 
             return ResponseEntity.status(200).body(arrayList);
