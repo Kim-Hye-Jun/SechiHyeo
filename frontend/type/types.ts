@@ -30,3 +30,10 @@ export interface RoomJoinResponseInfo {
   userSideOrder: string;
   emptySideOrderList: Array<string>;
 }
+
+export interface RoomUpdateUserSideOrderRequestInfo {
+  roomId: string;
+  loginId: string;
+  preSideOrder: string;
+  newSideOrder: string;
+}
