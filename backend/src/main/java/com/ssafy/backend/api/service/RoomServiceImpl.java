@@ -8,6 +8,7 @@ import com.ssafy.backend.dto.SessionRoom;
 import com.ssafy.backend.dto.request.RoomCreateReq;
 import com.ssafy.backend.dto.request.RoomJoinReq;
 import com.ssafy.backend.dto.request.RoomSetReq;
+import com.ssafy.backend.dto.request.RoomUpdateUserSideOrderReq;
 import com.ssafy.backend.dto.response.RoomCreateRes;
 import com.ssafy.backend.dto.response.RoomJoinRes;
 import com.ssafy.backend.dto.response.RoomSearchRes;
@@ -183,7 +184,7 @@ public class RoomServiceImpl implements RoomService {
         try {
             //파일객체 생성 및 업로드
             File file = new File(thumbnailPath, saveName);
-            if(!new File(thumbnailPath).exists())
+            if (!new File(thumbnailPath).exists())
                 new File(thumbnailPath).mkdirs();
             thumbnail.transferTo(file);
 
@@ -201,10 +202,10 @@ public class RoomServiceImpl implements RoomService {
 
             //만들어진 방 객체를 찾아 thumbnail을 수정
             //roomWithSession, roomList
-            roomWithSession.get(roomId).getRoom().setThumbnail(thumbnailPath+saveName);
+            roomWithSession.get(roomId).getRoom().setThumbnail(thumbnailPath + saveName);
             for (int i = 0; i < roomList.size(); i++) {
-                if(roomList.get(i).getRoomId().equals(roomId)){
-                    roomList.get(i).setThumbnail(thumbnailPath+saveName);
+                if (roomList.get(i).getRoomId().equals(roomId)) {
+                    roomList.get(i).setThumbnail(thumbnailPath + saveName);
                     break;
                 }
             }
@@ -351,7 +352,7 @@ public class RoomServiceImpl implements RoomService {
 
         //roomList 방 삭제
         for (int i = 0; i < roomList.size(); i++) {
-            if(roomList.get(i).getRoomId().equals(roomId)){
+            if (roomList.get(i).getRoomId().equals(roomId)) {
                 roomList.remove(i);
             }
         }
@@ -370,18 +371,18 @@ public class RoomServiceImpl implements RoomService {
         boolean check = false;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < participants[0].length; j++) {
-                if(participants[i][j].equals(loginId)){
+                if (participants[i][j].equals(loginId)) {
                     participants[i][j] = "";
                     break;
                 }
-                if(!participants[i][j].equals("")){
+                if (!participants[i][j].equals("")) {
                     check = true;
                 }
             }
         }
 
         //if문으로 만약 배열의 모든 값들이 다 ""이면 roomWithParticipant, roomWithSession에서 해당 세션 정보 삭제
-        if(!check) {
+        if (!check) {
             roomWithParticipant.remove(roomId);
             roomWithSession.remove(roomId);
             //세션 닫기
@@ -421,11 +422,11 @@ public class RoomServiceImpl implements RoomService {
         //토론 규칙을 json으로 만들어 넣고 return
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        switch (roomSetReq.getDebateFormat()){
+        switch (roomSetReq.getDebateFormat()) {
             //1:1토론
             case "Lincoln-Douglas":
                 String[][] LDorder = {
-                        {"A", "1", "Constructive",  "6"},
+                        {"A", "1", "Constructive", "6"},
                         {"B", "1", "CrossExamination", "3"},
                         {"B", "1", "Constructive_And_NegativeRebuttal", "7"},
                         {"A", "1", "CrossExamination", "3"},
@@ -448,7 +449,7 @@ public class RoomServiceImpl implements RoomService {
             //2:2토론
             case "CEDA":
                 String[][] CEDAorder = {
-                        {"A", "1", "Constructive",  "9"},
+                        {"A", "1", "Constructive", "9"},
                         {"B", "2", "CrossExamination", "3"},
                         {"B", "1", "Constructive", "9"},
                         {"A", "1", "CrossExamination", "3"},
@@ -472,7 +473,7 @@ public class RoomServiceImpl implements RoomService {
             //3:3토론
             case "KarlPopper":
                 String[][] KPorder = {
-                        {"A", "1", "Constructive",  "6"},
+                        {"A", "1", "Constructive", "6"},
                         {"B", "3", "CrossExamination", "3"},
                         {"B", "1", "Constructive", "6"},
                         {"A", "3", "CrossExamination", "3"},
@@ -509,10 +510,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void sendSignal(String roomId) {
+    public void sendSignal(RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq) {
         try {
+            String roomId = roomUpdateUserSideOrderReq.getRoomId();
+
             URL url = new URL("https://i7a508.p.ssafy.io:8443/openvidu/api/signal");
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST"); // http 메서드
             conn.setRequestProperty("Content-Type", "application/json"); // header Content-Type 정보
@@ -524,29 +527,38 @@ public class RoomServiceImpl implements RoomService {
             String[][] participants = roomWithParticipant.get(roomId);
 //            String[][] participants = new String[2][3];
 
-            JSONArray jsonArray = new JSONArray();
-            int count = participants[0].length;
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < count; j++) {
-                    JSONObject jsonObject = new JSONObject();
 
-                    if(i == 0)
-                        jsonObject.put("side", "A");
-                    else jsonObject.put("side", "B");
-                    jsonObject.put("order", j+1);
-                    jsonObject.put("user", participants[i][j]);
+            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("userId", roomUpdateUserSideOrderReq.getLoginId());
+            jsonObject.put("preSideOrder", roomUpdateUserSideOrderReq.getPreSideOrder());
+            jsonObject.put("newSideOrder", roomUpdateUserSideOrderReq.getNewSideOrder());
 
-                    jsonArray.add(jsonObject);
-                }
-            }
+            // room with participant 변경
+            String preSideOrder = roomUpdateUserSideOrderReq.getPreSideOrder();
+            String newSideOrder = roomUpdateUserSideOrderReq.getNewSideOrder();
 
-//            ArrayList<String> al = new ArrayList<>();
+            // 서로 위치 바꾸기
+            System.out.println(preSideOrder.charAt(0));
+            System.out.println(preSideOrder.charAt(0) - 'a');
+            System.out.println((int) preSideOrder.charAt(0) - 'a');
+
+            System.out.println(preSideOrder.charAt(1));
+            System.out.println(preSideOrder.charAt(1) - '1');
+            System.out.println((int) preSideOrder.charAt(1) - '1');
+
+            System.out.println(roomWithParticipant.get(roomId)[(int) preSideOrder.charAt(0) - 'a'][(int) preSideOrder.charAt(1) - '1']);
+            System.out.println(roomWithParticipant.get(roomId)[(int) newSideOrder.charAt(0) - 'a'][(int) newSideOrder.charAt(1) - '1']);
+
+            roomWithParticipant.get(roomId)[preSideOrder.charAt(0) - 'a'][preSideOrder.charAt(1) - '1']
+                    = swap(roomWithParticipant.get(roomId)[preSideOrder.charAt(0) - 'a'][preSideOrder.charAt(1) - '1']
+                            = roomWithParticipant.get(roomId)[newSideOrder.charAt(0) - 'a'][newSideOrder.charAt(1) - '1']
+                    , roomWithParticipant.get(roomId)[newSideOrder.charAt(0) - 'a'][newSideOrder.charAt(1) - '1']);
 
             JSONObject obj = new JSONObject();
-            obj.put("session", roomId);
+            obj.put("session", roomWithSession.get(roomId).getSession().getSessionId());
 //            obj.put("to", al);
             obj.put("type", "UPDATE_SIDE_ORDER");
-            obj.put("data", jsonArray.toJSONString());
+            obj.put("data", jsonObject.toJSONString());
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             bw.write(obj.toJSONString()); // 버퍼에 담기
@@ -555,6 +567,7 @@ public class RoomServiceImpl implements RoomService {
             bw.close();
 
             int responseCode = conn.getResponseCode();
+            System.out.println(responseCode);
             if (responseCode == 200) {
                 System.out.println("success send signal");
             }
@@ -562,6 +575,10 @@ public class RoomServiceImpl implements RoomService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String swap(String a, String b) {
+        return b;
     }
 
     private List<String> getEmptySideOrderList(String[][] participants) {

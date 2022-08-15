@@ -6,6 +6,7 @@ import com.ssafy.backend.dto.Room;
 import com.ssafy.backend.dto.request.RoomCreateReq;
 import com.ssafy.backend.dto.request.RoomJoinReq;
 import com.ssafy.backend.dto.request.RoomSetReq;
+import com.ssafy.backend.dto.request.RoomUpdateUserSideOrderReq;
 import com.ssafy.backend.dto.response.RoomCreateRes;
 import com.ssafy.backend.dto.response.RoomJoinRes;
 import com.ssafy.backend.dto.response.RoomSearchRes;
@@ -51,5 +52,5 @@ public interface RoomService {
 
     String[][] validSideOrder(String OpenviduId);
 
-    void sendSignal(String OpenviduId);
+    void sendSignal(RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq);
 }
