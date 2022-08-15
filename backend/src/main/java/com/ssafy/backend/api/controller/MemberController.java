@@ -126,7 +126,7 @@ public class MemberController {
             @ApiResponse(code = 400, message = "잘못된 접근"),
             @ApiResponse(code = 500, message = "서버에러")
     })
-    public ResponseEntity<Map<String, Object>> uploadProfileImage(HttpServletRequest request, @RequestPart MultipartFile profileImage){
+    public ResponseEntity<Map<String, Object>> uploadProfileImage(HttpServletRequest request, @RequestPart(required = false) MultipartFile profileImage){
         HttpStatus status = null;
         HashMap<String, Object> result = new HashMap<>();
         if(profileImage.getSize() != 0) {
