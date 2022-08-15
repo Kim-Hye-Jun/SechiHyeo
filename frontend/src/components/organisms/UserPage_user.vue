@@ -1,9 +1,6 @@
 <template>
   <div class="userpage-user">
-    <img
-      class="userpage-user-image"
-      src="@/../../../../fileDir/profile/0ae50d4f-34c6-46e1-a2fa-cc7e235d26d4_IMG_0250-removebg-preview.png"
-    />
+    <img class="userpage-user-image" :src="profileName()" />
     <div>{{ memberinfo.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
@@ -20,9 +17,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "vuex";
+import { BASE_FILE_DIR } from "@/config/index";
 export default defineComponent({
   data() {
-    return {};
+    return {
+      baseUrl: BASE_FILE_DIR,
+    };
   },
   computed: {
     ...mapState(["memberinfo"]),
@@ -30,6 +30,9 @@ export default defineComponent({
   created() {
     this.memberProfile();
     // this.memberExp();
+  },
+  mounted() {
+    this.profileName();
   },
   methods: {
     ...mapActions(["MEMBERPROFILE"]),
@@ -39,6 +42,9 @@ export default defineComponent({
     // memberExp() {
     //   this.MEMBEREXP();
     // },
+    profileName() {
+      return BASE_FILE_DIR + this.memberinfo.profileUrl;
+    },
   },
 });
 </script>
