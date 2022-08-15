@@ -31,10 +31,10 @@ export default defineComponent({
   width: 100%;
   padding: 10px 0;
   font-size: 16px;
-  color: #fff;
+  color: rgb(255, 255, 255);
   margin-bottom: 30px;
   border: none;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid rgb(255, 255, 255);
   outline: none;
   background: transparent;
 }
@@ -45,7 +45,7 @@ export default defineComponent({
   left: 0;
   padding: 10px 0;
   font-size: 16px;
-  color: #fff;
+  color: rgb(255, 255, 255);
   pointer-events: none;
   transition: 0.5s;
 }

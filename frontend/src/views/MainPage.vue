@@ -38,8 +38,6 @@ import { OpenVidu } from "openvidu-browser";
 // import { mapState } from "vuex";
 import { OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET } from "@/config/index";
 
-axios.defaults.headers.post["Content-Type"] = "application/json";
-
 export default defineComponent({
   setup() {
     const store = useStore();
