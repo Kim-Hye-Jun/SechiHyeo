@@ -9,7 +9,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 .bg {
   background: #0f0c29;
   background: -webkit-linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
