@@ -1,11 +1,11 @@
 <template>
   <div class="userpage-user">
-    <img class="userpage-user-image" :src="memberinfo?.profileUrl" />
+    <div class="userpage-user-image">{{ member.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
-    <div class="userpage-user-nickname">토론킹 {{ memberinfo?.nickname }}</div>
-    <div class="userpage-user-level">level.{{ memberinfo?.level }}</div>
-    <div class="userpage-user-exp">exp {{ memberinfo?.exp }}%</div>
+    <div class="userpage-user-nickname">토론킹 {{ member.nickname }}</div>
+    <div class="userpage-user-level">level.{{ member.level }}</div>
+    <div class="userpage-user-exp">exp {{ member.exp }}%</div>
     <div class="userpage-user-bar">
       <div class="userpage-user-bar-exp"></div>
       <div class="userpage-user-bar-bar"></div>
@@ -15,31 +15,35 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 export default defineComponent({
   data() {
-    return {};
-  },
-  computed: {
-    ...mapState(["memberinfo"]),
+    return {
+      member: {
+        profileUrl: "",
+        level: "",
+        nickname: "",
+        exp: "",
+      },
+    };
   },
   created() {
     this.memberProfile();
-    // this.memberExp();
+    this.memberExp();
   },
   methods: {
-    ...mapActions(["MEMBERPROFILE"]),
+    ...mapActions(["MEMBERPROFILE", "MEMBEREXP"]),
     memberProfile() {
       this.MEMBERPROFILE();
     },
-    // memberExp() {
-    //   this.MEMBEREXP();
-    // },
+    memberExp() {
+      this.MEMBEREXP();
+    },
   },
 });
 </script>
 
-<style scoped>
+<style>
 .userpage-user {
   position: absolute;
   width: 1000px;
@@ -198,7 +202,7 @@ export default defineComponent({
 .userpage-user-bar-bar {
   position: absolute;
   left: 0%;
-  /* right: 38%; */
+  right: 38%;
   top: 0%;
   bottom: 0%;
   background-image: linear-gradient(

@@ -1,6 +1,6 @@
 <template>
   <div class="file-upload">
-    <form @submit.prevent="formSubmit">
+    <form @submit.prevent="formSubmit" method="post">
       <input
         type="file"
         ref="selectFile"
@@ -22,7 +22,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import http from "@/http/index";
-import { mapActions } from "vuex";
 export default defineComponent({
   components: {},
   data() {
@@ -35,7 +34,6 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions(["PROFILEIMAGE"]),
     previewFile() {
       if (
         0 < ((this.$refs["selectFile"] as any)["files"]["length"] as number)
@@ -55,6 +53,8 @@ export default defineComponent({
             this.previewImgUrl = e.target.result;
           };
           reader.readAsDataURL(this.selectFile);
+        } else if (((this.selectFile as any)["size"] as number) <= 1048576) {
+          this.previewImgUrl = null;
         } else {
           alert("파일을 다시 선택해 주세요.");
           this.selectFile = null;
@@ -64,26 +64,25 @@ export default defineComponent({
         this.selectFile = null;
         this.previewImgUrl = null;
       }
-      // console.log(this.selectFile);
+      console.log(this.selectFile);
     },
     async formSubmit() {
       if (this.selectFile) {
         let form = new FormData();
         form.append("file", this.selectFile);
         this.isUploading = true;
-        // http
-        //   // 추후 주소 수정
-        //   .put("https://i7a508.p.ssafy.io/api/member/profile-image", form, {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //   })
-        this.PROFILEIMAGE()
+        http
+          // 추후 주소 수정
+          .post("/api/fileUpload/", form, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then((res: any) => {
             this.response = res;
             this.isUploading = false;
           })
-          .catch((error: any) => {
+          .catch((error) => {
             this.response = error;
             this.isUploading = false;
           });

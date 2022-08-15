@@ -1,18 +1,19 @@
 <template>
   <div class="userpage-content-intro-text">
-    토론이 삶이다! {{ memberinfo?.introduce }}
+    토론이 삶이다! {{ member.introduce }}
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 export default defineComponent({
   data() {
-    return {};
-  },
-  computed: {
-    ...mapState(["memberinfo"]),
+    return {
+      member: {
+        introduce: "",
+      },
+    };
   },
   created() {
     this.memberProfile();
@@ -26,7 +27,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 .userpage-content-intro {
   position: relative;
   top: 460px;

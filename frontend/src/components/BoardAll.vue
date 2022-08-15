@@ -38,12 +38,12 @@
           :filter="`academy`"
           :filter-function="typeAcademy(room, '`academy`')"
         >
-          <div class="boards-content-write-no">{{ board["board_no"] }}</div>
+          <div class="boards-content-write-no">{{ board.boardNo }}</div>
           <div class="boards-content-write-title">
-            {{ board["board_title"] }}
+            {{ board.boardTitle }}
           </div>
           <div class="boards-content-write-count">
-            {{ board["current_applicant"] }}/{{ board["max_applicant"] }}
+            {{ board.currentApplicant }}/{{ board.maxApplicant }}
           </div>
         </div>
         <div class="boards-content-write-box1" @click="modalIn">
@@ -64,12 +64,10 @@
           :filter="`free`"
           :filter-function="typeFree(room, '`free`')"
         >
-          <div class="boards-content-write-no">{{ board["board_no"] }}</div>
-          <div class="boards-content-write-title">
-            {{ board["board_title"] }}
-          </div>
+          <div class="boards-content-write-no">{{ board.boardNo }}</div>
+          <div class="boards-content-write-title">{{ board.boardTitle }}</div>
           <div class="boards-content-write-count">
-            {{ board["current_applicant"] }}/{{ board["max_applicant"] }}
+            {{ board.currentApplicant }}/{{ board.maxApplicant }}
           </div>
         </div>
         <div class="boards-content-write-box2" @click="modalIn">
@@ -79,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div class="modalZero" :class="[modal === false ? 'hidden' : '']">
+    <div class="modal" :class="[modal === false ? 'hidden' : '']">
       <board-detail @modalOut="modalOut"></board-detail>
     </div>
   </div>
@@ -99,14 +97,20 @@ export default defineComponent({
       free: false,
       modal: false,
       boards: [],
-      board: {},
+      board: {
+        boardNo: "",
+        boardTitle: "",
+        maxApplicant: "",
+        currentApplicant: "",
+        boardFinished: "",
+      },
       room: {
-        debate_type: "",
+        debateType: "",
       },
     };
   },
   computed: {
-    ...mapState(["boards, board"]),
+    ...mapState(["boards"]),
   },
   created() {
     this.boardAll();
@@ -130,14 +134,14 @@ export default defineComponent({
     modalOut() {
       this.modal = false;
     },
-    typeAcademy(room: { debate_type: string }, filter: string) {
-      if (room.debate_type === filter) {
+    typeAcademy(room: { debateType: string }, filter: string) {
+      if (room.debateType === filter) {
         return true;
       }
       return false;
     },
-    typeFree(room: { debate_type: string }, filter: string) {
-      if (room.debate_type === filter) {
+    typeFree(room: { debateType: string }, filter: string) {
+      if (room.debateType === filter) {
         return true;
       }
       return false;
@@ -146,7 +150,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
 * {

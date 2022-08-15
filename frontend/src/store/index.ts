@@ -8,36 +8,11 @@ import {
   saveUserToCookie,
 } from "@/utils/cookies";
 import { loginUser } from "@/api/auth";
-import {
-  getMemberInfo,
-  getExpInfo,
-  getRecord,
-  putIntroduce,
-  putProfileImage,
-  postAuthPw,
-  putPassword,
-  deleteMember,
-} from "@/api/member";
-import {
-  postApply,
-  putApply,
-  deleteApply,
-  getDebateApply,
-  getDebateRecruit,
-} from "@/api/debateApply";
-import {
-  getBoards,
-  getBoard,
-  postBoard,
-  putBoard,
-  deleteBoard,
-} from "@/api/board";
-import { postReply, putReply, deleteReply } from "@/api/reply";
+import { getMemberInfo } from "@/api/member";
 import axios from "axios";
 import router from "@/router";
 
 const API_BASE_URL = "https://i7a508.p.ssafy.io/api/";
-let form = new FormData();
 
 export default createStore({
   state: {
@@ -114,19 +89,6 @@ export default createStore({
     BOARDONE: (state, payload) => {
       state.board = payload.board;
     },
-    //USERPAGE Mutation
-    MEMBERPROFILE: (state, payload) => {
-      state.memberinfo = payload.memberinfo;
-    },
-    MEMBERRECORD: (state, payload) => {
-      state.memberinfo = payload.memberinfo;
-    },
-    DEBATERECRUIT: (state, payload) => {
-      state.memberinfo = payload.memberinfo;
-    },
-    DEBATEAPPLY: (state, payload) => {
-      state.memberinfo = payload.memberinfo;
-    },
   },
   actions: {
     async loginMember({ commit }, member) {
@@ -144,14 +106,14 @@ export default createStore({
     },
     // BOARD Action
     BOARDALL: (store) => {
-      getBoards().then((res: any) => {
+      axios.get(API_BASE_URL + "/debate-board").then((res) => {
         store.commit("BOARDALL", {
           boards: res.data,
         });
       });
     },
     BOARDONE: (store, num) => {
-      getBoard(num).then((res: any) => {
+      axios.get(API_BASE_URL + "/debate-board/" + num).then((res) => {
         store.commit("BOARDONE", {
           board: res.data,
         });
@@ -195,82 +157,50 @@ export default createStore({
     },
     //MyPage Action
     MEMBERPROFILE: (store) => {
+      // const memberInfo = await getMemberInfo();
       getMemberInfo().then((res: any) => {
         store.commit("MEMBERPROFILE", {
-          memberinfo: res.data,
+          member: res.data,
         });
       });
+      // axios.get(API_BASE_URL + "/member/profile").then((res) => {
+      //   store.commit("MEMBERPROFILE", {
+      //     member: res.data,
+      //   });
+      // });
     },
     MEMBEREXP: (store) => {
-      getExpInfo().then((res: any) => {
+      axios.get(API_BASE_URL + "/member/exp").then((res) => {
         store.commit("MEMBEREXP", {
-          memberinfo: res.data,
+          member: res.data,
         });
       });
     },
     MEMBERRECORD: (store) => {
-      getRecord().then((res: any) => {
+      axios.get(API_BASE_URL + "/member/record").then((res) => {
         store.commit("MEMBERRECORD", {
-          memberinfo: res.data,
+          member: res.data,
         });
       });
     },
     DEBATERECRUIT: (store) => {
-      getDebateRecruit().then((res: any) => {
+      axios.get(API_BASE_URL + "/debate-apply/recruiting").then((res) => {
         store.commit("DEBATERECRUIT", {
           debate_board: res.data,
         });
       });
     },
     DEBATEAPPLY: (store) => {
-      getDebateApply().then((res: any) => {
+      axios.get(API_BASE_URL + "/debate-apply/applying").then((res) => {
         store.commit("DEBATEAPPLY", {
           debate_board: res.data,
         });
       });
     },
-    PROFILEIMAGE: (store) => {
-      putProfileImage().then((res: any) => {
-        store.commit("PROFILEIMAGE", {
-          memberinfo: res.data,
-        });
+    PROFILEUPDATE: (store, member) => {
+      axios.put(API_BASE_URL + "/member/introduce", member).then(() => {
+        alert("수정이 완료되었습니다!!!");
       });
-    },
-    PROFILEUPDATE: (store, num: string) => {
-      putIntroduce().then((res: any) => {
-        store.commit("PROFILEUPDATE", {
-          memberinfo: res.data,
-        });
-      });
-    },
-    PASSWORD: (store) => {
-      putPassword().then((res: any) => {
-        store.commit("PROFILEUPDATE", {
-          memberinfo: res.data,
-        });
-      });
-    },
-    AUTHPW: (store) => {
-      postAuthPw().then((res: any) => {
-        store.commit("AUTHPW", {
-          memberinfo: res.data,
-        });
-      });
-    },
-    PROFILEDELETE: (store) => {
-      let flag = confirm("정말로 탈퇴하시겠습니까??");
-      if (flag) {
-        deleteMember()
-          .then((res: { data: any }) => {
-            store.commit("PROFILEDELETE", {
-              memberinfo: res.data,
-            });
-          })
-          .then(() => {
-            alert("또 뵐 수 있는 날을 기다리고 있겠습니다!!");
-            router.push("/");
-          });
-      }
     },
   },
 });

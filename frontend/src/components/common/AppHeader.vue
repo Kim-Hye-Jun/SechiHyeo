@@ -3,7 +3,7 @@
     <div>
       <router-link :to="headerLink" class="logo">
         세치혀
-        <span v-if="isLogin">by {{ isMemberInfo?.nickname }}</span>
+        <span v-if="isLogin">by {{ isMemberInfo.nickname }}</span>
       </router-link>
     </div>
     <div class="navigations">

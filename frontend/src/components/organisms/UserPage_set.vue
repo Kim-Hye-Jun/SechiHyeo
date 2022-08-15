@@ -12,7 +12,7 @@
     <div class="userpage-content-set-form-phone">Phone</div>
     <input
       class="userpage-content-set-form-input-id"
-      v-model="memberinfo.nickname"
+      v-model="member.nickname"
     />
     <input
       class="userpage-content-set-form-input-pw"
@@ -34,25 +34,22 @@
     />
     <input
       class="userpage-content-set-form-input-email"
-      v-model="memberinfo.email"
+      v-model="member.email"
     />
     <input
       class="userpage-content-set-form-input-phone"
-      v-model="memberinfo.phoneNumber"
+      v-model="member.phoneNumber"
     />
   </div>
   <input
     class="userpage-content-set-form-intro"
     type="text"
     placeholder="한줄 소개"
-    v-model="memberinfo.introduce"
+    v-model="member.introduce"
   />
   <div class="userpage-content-set-form-intro-word">글자 수</div>
   <button class="userpage-content-set-form-button" @click="profileUpdate">
     수정 완료
-  </button>
-  <button class="userpage-content-set-form-button2" @click="profileDelete">
-    회원 탈퇴
   </button>
 </template>
 
@@ -64,6 +61,14 @@ export default defineComponent({
   components: { ImageUpload },
   data() {
     return {
+      member: {
+        profileUrl: "",
+        nickname: "",
+        loginPassword: "",
+        introduce: "",
+        phoneNumber: "",
+        email: "",
+      },
       ps: "",
       newps1: "",
       newps2: "",
@@ -72,38 +77,24 @@ export default defineComponent({
   computed: {
     ...mapState(["memberinfo"]),
   },
-  // putProfileImage,
   methods: {
-    ...mapActions([
-      "PROFILEIMAGE",
-      "PROFILEUPDATE",
-      "PASSWORD",
-      "AUTHPW",
-      "PROFILEDELETE",
-    ]),
-    async profileUpdate() {
-      if (await this.AUTHPW()) {
-        this.PASSWORD();
-        this.PROFILEUPDATE();
-      } else {
-        // alert("새 비밀번호가 일치하지 않습니다!!!");
-        alert("비밀번호가 틀렸습니다!!");
-      }
-      // console.log(this.memberinfo.password);
-      // console.log(this.ps);
-    },
-    profileDelete() {
+    ...mapActions(["PROFILEUPDATE"]),
+    profileUpdate() {
       if (this.memberinfo.loginPassword === this.ps) {
-        this.PROFILEDELETE(this.memberinfo);
+        if (this.newps1 === this.newps2) {
+          this.PROFILEUPDATE(this.memberinfo);
+        } else {
+          alert("새 비밀번호가 일치하지 않습니다!!!");
+        }
       } else {
-        alert("비밀번호가 일치하지 않습니다!!!");
+        alert("비밀번호가 틀렸습니다!!");
       }
     },
   },
 });
 </script>
 
-<style scoped>
+<style>
 .userpage-content-set {
   position: relative;
   width: 800px;
@@ -187,7 +178,7 @@ export default defineComponent({
   position: absolute;
   width: 130px;
   height: 50px;
-  left: 40%;
+  left: 50%;
   transform: translate(-50%);
   top: 470px;
   background: #070707;
@@ -201,28 +192,6 @@ export default defineComponent({
   color: #ffffff;
 }
 .userpage-content-set-form-button:hover {
-  background: #ff0080;
-  box-shadow: 0 0 5px #ff0080, 0 0 25px #ff0080, 0 0 50px #ff0080,
-    0 0 100px #ff0080;
-}
-.userpage-content-set-form-button2 {
-  position: absolute;
-  width: 130px;
-  height: 50px;
-  left: 60%;
-  transform: translate(-50%);
-  top: 470px;
-  background: #070707;
-  border: #ffffff solid 1px;
-  border-radius: 5px;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 36px;
-  color: #ffffff;
-}
-.userpage-content-set-form-button2:hover {
   background: #ff0080;
   box-shadow: 0 0 5px #ff0080, 0 0 25px #ff0080, 0 0 50px #ff0080,
     0 0 100px #ff0080;

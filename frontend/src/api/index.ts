@@ -27,6 +27,3 @@ function createInstanceWithAuth2() {
 export const instance = createInstance();
 export const member = createInstanceWithAuth("member");
 export const member2 = createInstanceWithAuth2();
-export const debateApply = createInstanceWithAuth("debate-apply");
-export const board = createInstanceWithAuth("debate-board");
-export const reply = createInstanceWithAuth("debate-board");
