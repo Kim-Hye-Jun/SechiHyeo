@@ -3,13 +3,13 @@
     <div>
       <router-link :to="headerLink" class="logo">
         세치혀
-        <span v-if="isLogin">by {{ isMemberInfo?.nickname }}</span>
+        <span v-if="isLogin">by {{ isMemberInfo.nickname }}</span>
       </router-link>
     </div>
     <div class="navigations">
       <!-- 1 -->
       <template v-if="isLogin">
-        <router-link to="/dev">방 조회</router-link>
+        <router-link to="/entrance">방 조회</router-link>
         <router-link to="/boards">토론 모집 게시판</router-link>
         <router-link to="/userPage">Mypage</router-link>
         <a href="javascript:;" @click="logoutUser" class="logout-button">
