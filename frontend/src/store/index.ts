@@ -18,6 +18,7 @@ import {
   putPassword,
   deleteMember,
 } from "@/api/member";
+// import { putProfileImage } from "@/api/member3";
 import {
   postApply,
   putApply,
@@ -236,6 +237,11 @@ export default createStore({
         });
       });
     },
+    // PROFILEIMAGE: (store, board) => {
+    //   axios.put(`${API_BASE_URL}/profile-image/`).then((res) => {
+    //     console.log(res.data);
+    //   });
+    // },
     PROFILEUPDATE: (store, num: string) => {
       putIntroduce().then((res: any) => {
         store.commit("PROFILEUPDATE", {

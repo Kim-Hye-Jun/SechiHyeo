@@ -1,6 +1,6 @@
 import { member } from "./index";
 
-const form = new FormData();
+// const form = new FormData();
 function getMemberInfo() {
   return member.get("/profile");
 }
@@ -10,12 +10,15 @@ function getExpInfo() {
 function getRecord() {
   return member.get("/record");
 }
+// function putProfileImage() {
+//   return member.put("/profile-image", form, {
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//     },
+//   });
+// }
 function putProfileImage() {
-  return member.put("/profile-image", form, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return member.put("/profile-image");
 }
 function putIntroduce() {
   return member.put("/introduce");
