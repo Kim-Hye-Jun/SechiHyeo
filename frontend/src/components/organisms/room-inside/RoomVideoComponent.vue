@@ -1,36 +1,6 @@
 <template>
-  <Background></Background>
+  <!-- <Background></Background> -->
   <div class="grid">
-    <!-- <user-video-component-vue
-      class="a1 video"
-      :draggable="isRoomAdmin()"
-      value="1"
-    ></user-video-component-vue>
-    <user-video-component-vue
-      class="a2 video"
-      :draggable="isRoomAdmin()"
-      value="2"
-    ></user-video-component-vue>
-    <user-video-component-vue
-      class="a3 video"
-      :draggable="isRoomAdmin()"
-      value="3"
-    ></user-video-component-vue>
-    <user-video-component-vue
-      class="b1 video"
-      :draggable="isRoomAdmin()"
-      value="4"
-    ></user-video-component-vue>
-    <user-video-component-vue
-      class="b2 video"
-      :draggable="isRoomAdmin()"
-      value="5"
-    ></user-video-component-vue>
-    <user-video-component-vue
-      class="b3 video"
-      :draggable="isRoomAdmin()"
-      value="6"
-    ></user-video-component-vue> -->
     <user-video-component-vue
       :stream-manager="publisher"
       :class="roomAndUserData?.userSideOrder"
@@ -46,6 +16,7 @@
         )
       "
       :draggable="isRoomAdmin()"
+      @click="testC"
     ></user-video-component-vue>
     <user-video-component-vue
       v-for="empty in emptyVideoClasses"
@@ -53,27 +24,34 @@
       :class="empty"
     >
     </user-video-component-vue>
-    <DebateImage1 :class="[data1 === true ? '' : 'hidden']"></DebateImage1>
-    <DebateImage2 :class="[data2 === true ? '' : 'hidden']"></DebateImage2>
-    <DebateImage3 :class="[data3 === true ? '' : 'hidden']"></DebateImage3>
+    <div class="c">
+      <img :src="imgSrc" style="width: 500px; height: 500px" />
+    </div>
   </div>
   <div style="margin-left: 26%">
-    <button @click="data1Click">1</button>
-    <button @click="data2Click">2</button>
-    <button @click="data3Click">3</button>
+    <button
+      v-for="(item, index) in store.state.uploadImageArr"
+      v-bind:key="item"
+      @click="updateImg(item)"
+    >
+      {{ index + 1 }}
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, ref } from "vue";
 import http from "@/http";
 import * as openVidu from "openvidu-browser";
-import { RoomJoinResponseInfo } from "@type/types";
+import { RoomUpdateUserSideOrderRequestInfo } from "@type/types";
 import UserVideoComponentVue from "@/components/atoms/room-inside/UserVideoComponent.vue";
-import Background from "@/components/common/Background.vue";
+// import Background from "@/components/common/Background.vue";
 import DebateImage1 from "../../molecules/DebateImage1.vue";
 import DebateImage2 from "../../molecules/DebateImage2.vue";
 import DebateImage3 from "../../molecules/DebateImage3.vue";
+import { member2 } from "@/api/index";
+
+import { useStore } from "vuex";
 
 export default defineComponent({
   props: {
@@ -83,27 +61,34 @@ export default defineComponent({
     userSideOrderMap: Map,
     emptyVideoClasses: Array(Object),
   },
+  setup() {
+    const store = ref(useStore());
+    return { store };
+  },
   data() {
     return {
       startElement: null as EventTarget | null,
       data1: true,
       data2: false,
       data3: false,
+      imgSrc: "",
     };
   },
   components: {
     UserVideoComponentVue,
-    DebateImage1,
-    DebateImage2,
-    DebateImage3,
-    Background,
+    // Background,
   },
   methods: {
-    test(arr: Array<string>, index: number, name: string): string {
-      // console.log("name : ", name);
-      // console.log("arr : ", arr);
-      // console.log("index : ", index);
-      return arr[index];
+    updateImg(src: string): void {
+      this.imgSrc = src;
+    },
+    test(a: string, b: string): void {
+      console.log(a, b);
+    },
+    testC(e: Event): void {
+      console.log("CLICK e : ", e);
+      console.log("CLIECK this : ", this);
+      this.startElement = e.target;
     },
     isRoomAdmin(): boolean {
       // console.log("HOST : ", this.roomAndUserData?.host);
@@ -123,18 +108,23 @@ export default defineComponent({
     },
     dragDrop(e: Event): void {
       e.preventDefault();
-      console.log("DROP", e.target);
-      console.log("START", this.startElement);
+      console.log("DROP e.target : ", e.target);
+      console.log("START this.startElemtnt : ", this.startElement);
 
       const dropVideoClassName = (e.target as HTMLDivElement).className;
       const startVideoClassName = (this.startElement as HTMLDivElement)
         .className;
 
-      (this.startElement as HTMLDivElement).className = dropVideoClassName;
-      (e.target as HTMLDivElement).className = startVideoClassName;
+      // (this.startElement as HTMLDivElement).className = dropVideoClassName;
+      // (e.target as HTMLDivElement).className = startVideoClassName;
       // console.log("START //  DROP", startVideoClassName, dropVideoClassName);
 
       // 클래스 이름 변경 하고 서버에 요청보내주기
+      member2.put("/sessions/sideOrder", {
+        roomId: this.roomAndUserData?.roomId,
+        preSideOrder: dropVideoClassName,
+        newSideOrder: startVideoClassName,
+      } as RoomUpdateUserSideOrderRequestInfo);
     },
     dragStart(e: Event): void {
       this.startElement = e.target;
@@ -175,7 +165,10 @@ export default defineComponent({
   mounted() {
     const videos = document.querySelectorAll("video");
     for (const video of videos) {
-      video.addEventListener("dragstart", this.dragStart);
+      video.addEventListener("dragstart", (e) => {
+        this.startElement = e.target;
+        console.log("START : ", e);
+      });
       video.addEventListener("dragover", this.dragOver);
       video.addEventListener("dragenter", this.dragEnter);
       video.addEventListener("dragleave", this.dragLeave);
