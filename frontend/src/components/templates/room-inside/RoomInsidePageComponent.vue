@@ -15,7 +15,12 @@
         :emptyVideoClasses="emptyVideoArr"
       ></room-video-component>
     </suspense>
-    <menu-tab-component class="room__inside__class3"></menu-tab-component>
+    <menu-tab-component
+      class="room__inside__class3"
+      :session="session"
+      :OV="OV"
+      :token="token"
+    ></menu-tab-component>
   </div>
 </template>
 
@@ -206,9 +211,10 @@ export default defineComponent({
     console.log(testReturnData);
     if (testReturnData === undefined) return;
     console.log("no return");
+    const token = testReturnData["token"];
 
     await session
-      .connect(testReturnData["token"], testReturnData)
+      .connect(token, testReturnData)
       .then(() => {
         // --- Get your own camera stream with the desired properties ---
         if (OV) {
@@ -274,7 +280,7 @@ export default defineComponent({
     //   )["userSideOrder"];
     //   const index = emptyVideoArr.value.indexOf((sideOrder as string));
     // }
-
+    console.log("pre SESSION : ", session);
     return {
       publisher,
       testReturnData,
@@ -283,6 +289,8 @@ export default defineComponent({
       mapClassNameUser,
       emptyVideoArr,
       session,
+      OV,
+      token,
     };
   },
 });

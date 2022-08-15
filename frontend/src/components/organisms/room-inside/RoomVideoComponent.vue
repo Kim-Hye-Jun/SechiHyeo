@@ -25,7 +25,7 @@
     >
     </user-video-component-vue>
     <div class="c">
-      <img :src="imgSrc" style="width: 500px; height: 500px" />
+      <img :src="imgSrc" id="shareImg" style="width: 500px; height: 500px" />
     </div>
   </div>
   <div style="margin-left: 26%">

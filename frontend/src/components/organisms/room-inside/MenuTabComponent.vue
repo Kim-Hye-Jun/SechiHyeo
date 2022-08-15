@@ -8,6 +8,7 @@
     ></menu-tab-cam-icon-component>
     <menu-tab-doc-icon-component
       class="svg border"
+      @click="screenShare"
     ></menu-tab-doc-icon-component>
     <menu-tab-chat-icon-component
       class="svg border"
@@ -41,6 +42,11 @@ import MenuTabShareIconComponent from "@/components/molecules/room-inside/icon/M
 import { useStore } from "vuex";
 
 export default defineComponent({
+  props: {
+    OV: Object,
+    session: Object,
+    token: String,
+  },
   components: {
     MenuTabMicIconComponent,
     MenuTabDocIconComponent,
@@ -60,6 +66,40 @@ export default defineComponent({
     };
   },
   methods: {
+    screenShare() {
+      console.log("화면 공유");
+      console.log("next session : ", this.session);
+      console.log("next oV : ", this.OV);
+      console.log("next token : ", this.token);
+      this.session
+        ?.connect(this.token)
+        .then(() => {
+          let publisher = this.OV?.initPublisher("shareImg", {
+            videoSource: "screen",
+          });
+
+          publisher.once("accessAllowed", (error: any) => {
+            publisher.stream
+              .getMediaStream()
+              .getVideoTracks()[0]
+              .addEventListener("ended", () => {
+                console.log('User pressed the "Stop sharing" button');
+              });
+            this.session?.publish(publisher);
+          });
+
+          publisher.once("accessDenied", (error: any) => {
+            console.warn("ScreenShare: Access Denied");
+          });
+        })
+        .catch((error: any) => {
+          console.warn(
+            "There was an error connecting to the session:",
+            error.code,
+            error.message
+          );
+        });
+    },
     clickButton() {
       console.log("click", document.getElementById("file"));
       document.getElementById("file")?.click();
