@@ -22,9 +22,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import http from "@/http/index";
-import { mapActions } from "vuex";
+import { mapActions, useStore } from "vuex";
 export default defineComponent({
   components: {},
+  setup() {
+    const store = useStore();
+    return { store };
+  },
   data() {
     return {
       name: "FormValidation",
@@ -68,17 +72,25 @@ export default defineComponent({
     },
     async formSubmit() {
       if (this.selectFile) {
-        let form = new FormData();
-        form.append("file", this.selectFile);
+        let profileImage = new FormData();
+        profileImage.append("profileImage", this.selectFile);
         this.isUploading = true;
-        // http
-        //   // 추후 주소 수정
-        //   .put("https://i7a508.p.ssafy.io/api/member/profile-image", form, {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //   })
-        this.PROFILEIMAGE()
+        http
+          .put(
+            "https://i7a508.p.ssafy.io/api/member/profile-image",
+            profileImage,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                "access-token": this.store.state.token,
+              },
+            }
+          )
+          // this.PROFILEIMAGE(profileImage, {
+          //   headers: {
+          //     "Content-Type": "multipart/form-data",
+          //   },
+          // })
           .then((res: any) => {
             this.response = res;
             this.isUploading = false;
