@@ -1,11 +1,15 @@
 <template>
   <div class="userpage-user">
-    <img class="userpage-user-image" :src="memberinfo?.profileUrl" />
+    <img
+      class="userpage-user-image"
+      src="@/../../../../fileDir/profile/0ae50d4f-34c6-46e1-a2fa-cc7e235d26d4_IMG_0250-removebg-preview.png"
+    />
+    <div>{{ memberinfo.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
-    <div class="userpage-user-nickname">토론킹 {{ memberinfo?.nickname }}</div>
-    <div class="userpage-user-level">level.{{ memberinfo?.level }}</div>
-    <div class="userpage-user-exp">exp {{ memberinfo?.exp }}%</div>
+    <div class="userpage-user-nickname">토론킹 {{ memberinfo.nickname }}</div>
+    <div class="userpage-user-level">level.{{ memberinfo.level }}</div>
+    <div class="userpage-user-exp">exp {{ memberinfo.exp }}%</div>
     <div class="userpage-user-bar">
       <div class="userpage-user-bar-exp"></div>
       <div class="userpage-user-bar-bar"></div>
@@ -53,7 +57,7 @@ export default defineComponent({
   top: -50px;
   width: 180px;
   height: 180px;
-  background-color: #1b2431;
+  /* background-color: #1b2431; */
   display: flex;
   align-items: center;
   justify-content: center;
