@@ -3,14 +3,14 @@
     class="userpage-content-room"
     v-for="board in boards"
     :key="board"
-    :filter="board['memberNo']"
+    :filter="board['member_no']"
     :filter-function="myRecruit"
   >
     <div class="userpage-content-count">
-      {{ board["currentApplicant"] }}/{{ board["maxApplicant"] }}
+      {{ board["current_applicant"] }}/{{ board["max_applicant"] }}
     </div>
     <div class="userpage-content-topic">
-      {{ board["debateTopic"] }}미래와 토론의 연관
+      {{ board["debate_topic"] }}미래와 토론의 연관
     </div>
     <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
     <div class="userpage-content-room-button">
@@ -65,15 +65,9 @@ import { mapActions, mapState } from "vuex";
 export default defineComponent({
   data() {
     return {
-      member: {
-        memberNo: "",
-      },
       boards: [],
-      board: {
-        debateTopic: "",
-        maxApplicant: "",
-        currentApplicant: "",
-        boardFinished: "",
+      apllicant_state: {
+        accept: 0,
       },
     };
   },
@@ -91,8 +85,8 @@ export default defineComponent({
     moveToRoom(board: { num: string }) {
       this.$router.push("/room/" + board.num);
     },
-    myRecruit(member: { memberNo: any }, filter: any) {
-      if (member.memberNo === filter) {
+    myRecruit(memberinfo: { memberNo: any }, filter: any) {
+      if (memberinfo.memberNo === filter) {
         return true;
       }
       return false;
@@ -101,7 +95,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .userpage-content-recruit {
   position: relative;
   width: 800px;
