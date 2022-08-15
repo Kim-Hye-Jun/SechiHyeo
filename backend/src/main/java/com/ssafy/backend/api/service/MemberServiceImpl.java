@@ -85,6 +85,7 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+    //프로필 이미지 업로드
     @Transactional
     @Override
     public void changeProfileImage(Member member, MultipartFile profileImage) {
@@ -115,6 +116,18 @@ public class MemberServiceImpl implements MemberService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //토론 전적 갱신
+    @Transactional
+    @Override
+    public void changeDebateInfo(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId);
+
+        member.setDebateNumber(member.getDebateNumber() + 1);
+        member.setExp(member.getExp() + 10);
+
+        memberRepository.save(member);
     }
 
     //비밀번호 재설정
