@@ -2,7 +2,7 @@
   <div class="userpage-user">
     <img
       class="userpage-user-image"
-      src="/../../fileDir/profile/0ae50d4f-34c6-46e1-a2fa-cc7e235d26d4_IMG_0250-removebg-preview.png"
+      src="@/../../../../fileDir/profile/0ae50d4f-34c6-46e1-a2fa-cc7e235d26d4_IMG_0250-removebg-preview.png"
     />
     <div>{{ memberinfo.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
