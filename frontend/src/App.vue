@@ -18,7 +18,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-@import "./css/reset.css";
-@import "./css/common.css";
-</style>
+<style></style>
