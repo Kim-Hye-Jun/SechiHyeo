@@ -9,43 +9,43 @@
     </header>
     <div class="modal-container-body article">
       <h3 class="board-master">작성자 : {{ board.nickname }}</h3>
-      <h3 class="board-day">토론 일시 : {{ board.debateTime }}</h3>
-      <h3 class="board-count">인원 : {{ board.maxApplicant }}</h3>
+      <h3 class="board-day">토론 일시 : {{ board.debate_time }}</h3>
+      <h3 class="board-count">인원 : {{ board.max_applicant }}</h3>
       <h2 class="board-summary">개요</h2>
       <div class="board-summary-content">
-        <li class="board-a">A 진영 : {{ board.aOpinion }}</li>
-        <li class="board-b">B 진영 : {{ board.bOopinion }}</li>
-        <p class="board-summary-in">CONTENT {{ board.boardContent }}</p>
+        <li class="board-a">A 진영 : {{ board.a_opinion }}</li>
+        <li class="board-b">B 진영 : {{ board.b_opinion }}</li>
+        <p class="board-summary-in">CONTENT {{ board.board_content }}</p>
       </div>
       <div class="board-reply-box">
         <h3 class="board-reply">댓글</h3>
         <h5 class="board-reply-count">{{ reply.depth }} 개</h5>
       </div>
-      <img class="board-reply-create-profile" :src="member.profileUrl" />
+      <img class="board-reply-create-profile" :src="memberinfo.profileUrl" />
       <textarea class="board-reply-create-input" placeholder="댓글"></textarea>
       <button class="board-reply-create-sign" @click="replyInsert()">
         등록
       </button>
       <!-- 댓글 반복 -->
-      <div v-for="reply in replies" :key="reply['replyNo']">
-        <img class="board-reply-ex-profile" :src="reply['profileUrl']" />
+      <div v-for="reply in replies" :key="reply['reply_no']">
+        <img class="board-reply-ex-profile" :src="reply['profile_url']" />
         <p class="board-reply-ex-user">User {{ reply["nickname"] }}</p>
         <p class="board-reply-ex-user-content">댓글 {{ reply["context"] }}</p>
         <button
           class="board-reply-ex-delete"
-          @click="replyDelete(reply['replyNo'])"
+          @click="replyDelete(reply['reply_no'])"
         >
           삭제
         </button>
         <button
           class="board-reply-ex-update"
-          @click="replyUpdate(reply['replyNo'])"
+          @click="replyUpdate(reply['reply_no'])"
         >
           수정
         </button>
         <!-- 대댓글 토글 버튼 -->
         <button class="board-reply-ex-reply">답글</button>
-        <img class="board-reply2-create-profile" :src="member.profileUrl" />
+        <img class="board-reply2-create-profile" :src="memberinfo.profileUrl" />
         <textarea
           class="board-reply2-create-input"
           placeholder="대댓글"
@@ -58,21 +58,21 @@
           class="board-reply2-ex"
           v-for="reply in replies"
           :key="reply"
-          :filter="reply['replyNo']"
-          :filter-function="reReply(reply['parentNo'], reply['replyNo'])"
+          :filter="reply['reply_no']"
+          :filter-function="reReply(reply['parent_no'], reply['reply_no'])"
         >
-          <image class="board-reply2-ex-profile" :src="reply['profileUrl']" />
+          <image class="board-reply2-ex-profile" :src="reply['profile_url']" />
           <p class="board-reply2-ex-user">User {{ reply["nickname"] }}</p>
           <p>대댓글 {{ reply["context"] }}</p>
           <button
             class="board-reply2-ex-delete"
-            @click="replyDelete(reply['replyNo'])"
+            @click="replyDelete(reply['reply_no'])"
           >
             삭제
           </button>
           <button
             class="board-reply2-ex-update"
-            @click="replyUpdate(reply['replyNo'])"
+            @click="replyUpdate(reply['reply_no'])"
           >
             수정
           </button>
@@ -98,43 +98,30 @@ export default defineComponent({
   data() {
     return {
       modal: true,
-      member: {
-        profileUrl: "",
-      },
       boards: [],
-      board: {
-        boardNo: 0,
-        boardTitle: "",
-        debateTopic: "",
-        boardContent: "",
-        debateTime: "",
-        maxApplicant: 0,
-        aOpinion: "",
-        bOpinion: "",
-        nickname: "",
-      },
+      board: {},
       replies: [],
       reply: {
-        replyNo: 0,
+        reply_no: 0,
         context: "",
         date: "",
         depth: 0,
         hidden: "",
-        boardNo: 0,
-        parentNo: 0,
-        memberNo: 0,
-        profileUrl: "",
+        board_no: 0,
+        parent_no: 0,
+        member_no: 0,
+        profile_url: "",
         nickname: "",
       },
     };
   },
   computed: {
-    ...mapState(["boards", "board"]),
+    ...mapState(["boards", "board", "memberinfo"]),
   },
   created() {
     // 이 방법이 맞나 BE 검수 필요
-    this.boardOne(this.board.boardNo);
-    this.replyAll();
+    this.boardOne(this.board.board_no);
+    // this.replyAll();
   },
   methods: {
     ...mapActions(["BOARDONE"]),
@@ -147,38 +134,49 @@ export default defineComponent({
     },
     // 자식 대댓글만을 걸러내기 위한 부모 댓글 필터
     reReply(reply: any, filter: number) {
-      if (reply.parentNo === filter) {
+      if (reply.parent_no === filter) {
         return true;
       }
       return false;
     },
-    replyAll() {
-      axios.get("debate-reply/" + this.reply.replyNo).then((res) => {
-        this.replies = res.data;
-      });
-    },
+    // replyAll() {
+    //   axios
+    //     .get(
+    //       "https://i7a508.p.ssafy.io/api/debate-board/" + this.board.board_no
+    //     )
+    //     .then((res) => {
+    //       this.replies = res.data;
+    //     });
+    // },
     replyInsert() {
       axios
-        .post("debate-reply/" + this.board.boardNo, {
-          parent_no: this.reply.parentNo,
-          context: this.reply.context,
-          depth: this.reply.depth,
-        })
+        .post(
+          "https://i7a508.p.ssafy.io/api/debate-reply/" + this.board.board_no,
+          {
+            parent_no: this.reply.parent_no,
+            context: this.reply.context,
+            depth: this.reply.depth,
+          }
+        )
         .then(() => {
-          this.replyAll();
+          this.BOARDONE();
         });
     },
-    replyUpdate(replyNo: number) {
-      axios.put(`debate-reply/`, replyNo).then((res) => {
-        console.log(res.data);
-      });
+    replyUpdate(reply_no: number) {
+      axios
+        .put(`https://i7a508.p.ssafy.io/api/debate-reply/`, reply_no)
+        .then((res) => {
+          console.log(res.data);
+        });
     },
-    replyDelete(replyNo: number) {
+    replyDelete(reply_no: number) {
       let flag = confirm("정말로 삭제하시겠습니까??");
       if (flag) {
-        axios.delete("debate-reply/" + replyNo).then(() => {
-          this.replyAll();
-        });
+        axios
+          .delete("https://i7a508.p.ssafy.io/api/debate-reply/" + reply_no)
+          .then(() => {
+            this.BOARDONE();
+          });
       }
     },
   },
@@ -207,7 +205,7 @@ a {
   background-color: #ddd;
   border: 2px solid #fff;
 }
-.modal {
+.modalZero {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -288,7 +286,7 @@ a {
   border-radius: 8px;
   transition: 0.15s ease;
 }
-.modal {
+.modalZero {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -302,7 +300,7 @@ a {
   border: 2px solid #2a3cad;
   padding: 20px;
 }
-.modal:before {
+.modalZero:before {
   content: "";
   position: absolute;
   top: 0;
@@ -313,11 +311,11 @@ a {
   transition: 0.5s;
   pointer-events: none;
 }
-.modal:hover:before {
+.modalZero:hover:before {
   left: -50%;
   transform: skewX(-5deg);
 }
-.modal .modal-container {
+.modalZero .modal-container {
   position: absolute;
   top: 15px;
   left: 15px;
@@ -328,7 +326,7 @@ a {
   text-align: center;
   box-shadow: 0 5px 10px rgba(9, 0, 0, 0.5);
 }
-.modal .span-modal {
+.modalZero .span-modal {
   position: absolute;
   top: 0;
   left: 0;
@@ -337,19 +335,19 @@ a {
   display: block;
   box-sizing: border-box;
 }
-.modal .span-modal:nth-child(1) {
+.modalZero .span-modal:nth-child(1) {
   transform: rotate(0deg);
 }
-.modal .span-modal:nth-child(2) {
+.modalZero .span-modal:nth-child(2) {
   transform: rotate(90deg);
 }
-.modal .span-modal:nth-child(3) {
+.modalZero .span-modal:nth-child(3) {
   transform: rotate(180deg);
 }
-.modal .span-modal:nth-child(4) {
+.modalZero .span-modal:nth-child(4) {
   transform: rotate(270deg);
 }
-.modal .span-modal:before {
+.modalZero .span-modal:before {
   content: "";
   position: absolute;
   width: 100%;
