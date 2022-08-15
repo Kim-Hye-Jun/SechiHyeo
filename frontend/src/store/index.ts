@@ -19,6 +19,7 @@ export default createStore({
     // 로그인 관련
     userid: getUserFromCookie() || "",
     token: getAuthFromCookie() || "",
+    uploadImageArr: [],
 
     //memberinfo 저장되는 정보
     // memberNo:-1

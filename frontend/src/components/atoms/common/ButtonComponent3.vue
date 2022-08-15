@@ -31,12 +31,13 @@ export default defineComponent({
 .button-circle {
   background: black;
   border-radius: 50%;
-  border: 2px solid rgb(11, 255, 251);
+  color: red;
+  /* border: 2px solid rgb(11, 255, 251); */
   width: 30px;
   height: 30px;
   position: relative;
   cursor: pointer;
-  opacity: 0.7;
+  /* opacity: 0.7; */
 }
 .button-circle:hover {
   color: blue;

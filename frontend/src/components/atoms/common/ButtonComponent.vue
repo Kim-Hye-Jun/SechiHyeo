@@ -4,12 +4,15 @@
     <span></span>
     <span></span>
     <span></span>
-    Submit
+    {{ buttonName }}
   </a>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
+  props: {
+    buttonName: String,
+  },
   components: {},
   data() {
     return {
@@ -31,7 +34,7 @@ a {
   text-transform: uppercase;
   overflow: hidden;
   transition: 0.5s;
-  margin-top: 40px;
+  /* margin-top: 10px; */
   letter-spacing: 4px;
 }
 

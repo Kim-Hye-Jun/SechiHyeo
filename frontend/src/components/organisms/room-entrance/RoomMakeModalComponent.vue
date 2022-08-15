@@ -48,7 +48,10 @@
         :selector="numOfPeopleRadioSelecter"
       ></modal-radio-button-component>
     </div>
-    <button-component-vue @click="myFunc()"></button-component-vue>
+    <button-component-vue
+      @click="myFunc()"
+      buttonName="CREATE"
+    ></button-component-vue>
   </div>
 
   <!-- 방 제목 -->

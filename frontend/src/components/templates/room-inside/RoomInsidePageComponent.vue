@@ -4,6 +4,7 @@
     <debate-title-tab-component
       class="room__inside__class1"
     ></debate-title-tab-component>
+    <debate-timer-component :session="session"></debate-timer-component>
     <suspense>
       <room-video-component
         class="room__inside__class2"
@@ -25,6 +26,7 @@ import RoomVideoComponent from "@components/organisms/room-inside/RoomVideoCompo
 import MenuTabComponent from "@components/organisms/room-inside/MenuTabComponent.vue";
 import DebateTopicComponent from "@components/atoms/room-inside/DebateTopicComponent.vue";
 import { member2 } from "@/api/index";
+import DebateTimerComponent from "@components/organisms/room-inside/DebateTimerComponent.vue";
 
 import http from "@/http";
 import * as openVidu from "openvidu-browser";
@@ -37,6 +39,7 @@ export default defineComponent({
     MenuTabComponent,
     DebateTitleTabComponent,
     DebateTopicComponent,
+    DebateTimerComponent,
   },
   async setup(): Promise<any> {
     // 뭘 반응형으로 설정해야 할지...?
@@ -47,6 +50,7 @@ export default defineComponent({
     let testReturnData: RoomJoinResponseInfo | undefined = undefined;
 
     const mapUserClassName = ref(new Map());
+    const mapClassNameUser = ref(new Map());
 
     const apiCall = async () => {
       try {
@@ -94,14 +98,26 @@ export default defineComponent({
           JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
             "userId"
           ],
-          testReturnData?.userSideOrder
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+            "userSideOrder"
+          ]
+        );
+        mapClassNameUser.value.set(
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+            "userSideOrder"
+          ],
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
+            "userId"
+          ]
         );
         (subscribers.value as openVidu.Subscriber[]).push(subscriber);
 
         // 3. empty arr 삭제
 
         const index = (emptyVideoArr.value as string[]).indexOf(
-          testReturnData?.userSideOrder as string
+          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+            "userSideOrder"
+          ]
         );
         if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
         console.log("MAP : ", mapUserClassName);
@@ -140,6 +156,8 @@ export default defineComponent({
           ].stream.connection.data.split("%/%")[1]
         )["userId"]
       );
+      mapClassNameUser.value.delete(currentUserSideOrder);
+
       if (index >= 0) {
         subscribers.value.splice(index, 1);
       }
@@ -158,9 +176,29 @@ export default defineComponent({
 
       if (typeof event.data === "string") {
         const data = JSON.parse(event.data);
-        const userId = data["login_id"];
-        const sideOrder = data["side"] + data["order"];
-        mapUserClassName.value.set(userId, sideOrder);
+        // data["preSideOrder"] 와 data["newSideOrder"]의 교환
+        const preSideOrder = data["preSideOrder"];
+        const newSideOrder = data["newSideOrder"];
+
+        mapClassNameUser.value.set(
+          preSideOrder,
+          mapUserClassName.value.get(newSideOrder)
+        );
+
+        mapClassNameUser.value.set(
+          newSideOrder,
+          mapUserClassName.value.get(preSideOrder)
+        );
+
+        mapUserClassName.value.set(
+          mapClassNameUser.value.get(preSideOrder),
+          preSideOrder
+        );
+
+        mapUserClassName.value.set(
+          mapClassNameUser.value.get(newSideOrder),
+          newSideOrder
+        );
       }
     });
 
@@ -210,6 +248,7 @@ export default defineComponent({
       subscribers.value = [];
       OV = undefined;
       mapUserClassName.value = new Map();
+      mapClassNameUser.value = new Map();
 
       window.removeEventListener("beforeunload", leaveSession);
       window.removeEventListener("beforeunload", removeUser);
@@ -241,7 +280,9 @@ export default defineComponent({
       testReturnData,
       subscribers,
       mapUserClassName,
+      mapClassNameUser,
       emptyVideoArr,
+      session,
     };
   },
 });
@@ -271,7 +312,7 @@ body {
 }
 .room__inside__class3 {
   width: 100%;
-  height: 50px;
+  height: 100px;
   background: #0e0e23;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <debate-memo-component
-    v-if="isModalView"
+    v-show="isModalView"
     @close-modal="isModalView = false"
   ></debate-memo-component>
   <button-component3
-    v-if="!isModalView"
+    v-show="!isModalView"
     @click="isModalView = true"
   ></button-component3>
 </template>

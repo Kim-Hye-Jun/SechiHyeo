@@ -1,16 +1,24 @@
 <template>
-  <video autoplay></video>
+  <div class="flex">
+    <video autoplay id="video"></video>
+    <debate-memo-modal-component></debate-memo-modal-component>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import DebateMemoModalComponent from "@components/molecules/room-inside/DebateMemoModalComponent.vue";
+
 export default defineComponent({
+  components: {
+    DebateMemoModalComponent,
+  },
   props: {
     streamManager: Object,
   },
   mounted() {
     console.log("추가", this.streamManager);
-    this.streamManager?.addVideoElement(this.$el);
+    this.streamManager?.addVideoElement(document.getElementById("video"));
   },
   data() {
     return {
@@ -28,5 +36,11 @@ video {
   padding: 5px;
   box-sizing: border-box;
   background-clip: content-box;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

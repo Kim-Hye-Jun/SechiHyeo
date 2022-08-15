@@ -1,13 +1,31 @@
 <template>
   <div class="table">
-    <menu-tab-mic-icon-component class="border"></menu-tab-mic-icon-component>
-    <menu-tab-cam-icon-component class="border"></menu-tab-cam-icon-component>
-    <menu-tab-doc-icon-component class="border"></menu-tab-doc-icon-component>
-    <menu-tab-chat-icon-component class="border"></menu-tab-chat-icon-component>
+    <menu-tab-mic-icon-component
+      class="svg border"
+    ></menu-tab-mic-icon-component>
+    <menu-tab-cam-icon-component
+      class="svg border"
+    ></menu-tab-cam-icon-component>
+    <menu-tab-doc-icon-component
+      class="svg border"
+    ></menu-tab-doc-icon-component>
+    <menu-tab-chat-icon-component
+      class="svg border"
+    ></menu-tab-chat-icon-component>
+    <input
+      type="file"
+      id="file"
+      ref="selectFile"
+      @change="previewFile"
+      style="display: none"
+    />
     <menu-tab-share-icon-component
-      class="border"
+      class="svg border"
+      @click="clickButton"
     ></menu-tab-share-icon-component>
-    <menu-tab-exit-icon-component class="border"></menu-tab-exit-icon-component>
+    <menu-tab-exit-icon-component
+      class="svg border"
+    ></menu-tab-exit-icon-component>
   </div>
 </template>
 
@@ -20,6 +38,8 @@ import MenuTabChatIconComponent from "@components/molecules/room-inside/icon/Men
 import MenuTabExitIconComponent from "@/components/molecules/room-inside/icon/MenuTabExitIconComponent.vue";
 import MenuTabShareIconComponent from "@/components/molecules/room-inside/icon/MenuTabShareIconComponent.vue";
 
+import { useStore } from "vuex";
+
 export default defineComponent({
   components: {
     MenuTabMicIconComponent,
@@ -29,12 +49,46 @@ export default defineComponent({
     MenuTabExitIconComponent,
     MenuTabShareIconComponent,
   },
+  setup() {
+    const store = useStore();
+    return { store };
+  },
   data() {
     return {
-      example: "",
+      selectFile: null,
+      previewImgUrl: null,
     };
   },
-  methods: {},
+  methods: {
+    clickButton() {
+      console.log("click", document.getElementById("file"));
+      document.getElementById("file")?.click();
+    },
+    previewFile() {
+      if (
+        0 < ((this.$refs["selectFile"] as any)["files"]["length"] as number)
+      ) {
+        this.selectFile = (this.$refs["selectFile"] as any)["files"][0] as null;
+        let fileExt = ((this.selectFile as any)["name"] as string).substring(
+          ((this.selectFile as any)["name"] as string).lastIndexOf(".") + 1
+        );
+        fileExt = fileExt.toLowerCase();
+        if (
+          ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
+          this.selectFile != null &&
+          this.selectFile["size"] <= 1048576
+        ) {
+          var reader = new FileReader();
+          reader.onload = (e: any) => {
+            console.log(e.target.result);
+            this.store.state.uploadImageArr.push(e.target.result);
+            console.log(this.store.state.uploadImageArr);
+          };
+          reader.readAsDataURL(this.selectFile);
+        }
+      }
+    },
+  },
 });
 </script>
 
@@ -42,8 +96,11 @@ export default defineComponent({
 .table {
   width: 500px;
   background: #252954;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
-svg {
+.svg {
   width: 45px;
   height: 45px;
   fill: currentColor;
@@ -51,8 +108,8 @@ svg {
   cursor: pointer;
 }
 
-svg active,
-svg:hover {
+.svg active,
+.svg:hover {
   color: #4255d4;
 }
 
