@@ -49,6 +49,7 @@ export default defineComponent({
     this.session?.on("signal:countdown-stop", (event: any) => {
       this.stopTimer();
     });
+    // this.settings();
   },
   data() {
     return {
@@ -66,6 +67,45 @@ export default defineComponent({
         ["A", "3", "결론", "5"], //300
         ["B", "3", "결론", "5"], //300
       ],
+      // 1:1
+      LincolnDouglas: [
+        ["A", "1", "입론", "360"],
+        ["B", "1", "교차조사", "180"],
+        ["B", "1", "입론 및 반론", "420"],
+        ["A", "1", "교차 조사", "180"],
+        ["A", "1", "반론", "240"],
+        ["B", "1", "결론", "360"],
+        ["A", "1", "결론", "180"],
+      ],
+      // 2:2
+      CEDA: [
+        ["A", "1", "입론", "360"],
+        ["B", "2", "교차 조사", "180"],
+        ["B", "1", "입론", "360"],
+        ["A", "1", "교차 조사", "180"],
+        ["A", "2", "입론", "360"],
+        ["B", "1", "교차 조사", "180"],
+        ["B", "2", "입론", "360"],
+        ["A", "2", "교차조사", "180"],
+        ["B", "1", "반론", "240"],
+        ["A", "1", "반론", "240"],
+        ["B", "2", "결론", "240"],
+        ["A", "2", "결론", "240"],
+      ],
+      // 3:3
+      KarlPopper: [
+        ["A", "1", "입론", "360"], //360
+        ["B", "3", "교차조사", "180"], //180
+        ["B", "1", "입론", "360"], //360
+        ["A", "3", "교차조사", "180"], //180
+        ["A", "2", "반론", "300"], //300
+        ["B", "1", "교차조사", "180"], //180
+        ["B", "2", "반론", "300"], //300
+        ["A", "1", "교차조사", "180"], //180
+        ["A", "3", "결론", "300"], //300
+        ["B", "3", "결론", "300"], //300
+      ],
+
       // 현재 턴
       turn: 0,
       turnUser: "현재 발표자 : " + "A1 " + "입론",
@@ -75,7 +115,7 @@ export default defineComponent({
       // inputMin: "",
       // inputSec: "",
       time: 5, // props로 받아야할듯? store나
-      breakTime: 3, //쉬는 시간 길이
+      breakTime: 20, //쉬는 시간 길이
       resetButton: false,
       edit: false,
     };
@@ -132,6 +172,19 @@ export default defineComponent({
   },
 
   methods: {
+    settings() {
+      // 방 정보로 세팅해주기
+      this.rule = this.KarlPopper;
+      this.time = Number(this.rule[0][3]);
+      this.turnUser =
+        "현재 발표자 : " +
+        this.rule[0][0] +
+        " " +
+        this.rule[0][1] +
+        " " +
+        this.rule[0][2];
+      // this.breakTime = 20;
+    },
     sendStartTimer() {
       this.session?.signal({
         data: "hello",
