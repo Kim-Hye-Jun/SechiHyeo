@@ -1,6 +1,6 @@
 <template>
   <div class="userpage-user">
-    <img class="userpage-user-image" :src="profileName()" />
+    <img class="userpage-user-image" :src="memberinfo.profileUrl" />
     <div>{{ memberinfo.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
