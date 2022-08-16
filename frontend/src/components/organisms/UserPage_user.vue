@@ -43,7 +43,7 @@ export default defineComponent({
     //   this.MEMBEREXP();
     // },
     profileName() {
-      return BASE_FILE_DIR + this.memberinfo.profileUrl;
+      return this.memberinfo.profileUrl;
     },
   },
 });
