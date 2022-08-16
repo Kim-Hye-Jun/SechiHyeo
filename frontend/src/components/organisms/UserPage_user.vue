@@ -1,11 +1,12 @@
 <template>
   <div class="userpage-user">
-    <img class="userpage-user-image" :src="memberinfo?.profileUrl" />
+    <img class="userpage-user-image" :src="profileName()" />
+    <div>{{ memberinfo.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
-    <div class="userpage-user-nickname">토론킹 {{ memberinfo?.nickname }}</div>
-    <div class="userpage-user-level">level.{{ memberinfo?.level }}</div>
-    <div class="userpage-user-exp">exp {{ memberinfo?.exp }}%</div>
+    <div class="userpage-user-nickname">토론킹 {{ memberinfo.nickname }}</div>
+    <div class="userpage-user-level">level.{{ memberinfo.level }}</div>
+    <div class="userpage-user-exp">exp {{ memberinfo.exp }}%</div>
     <div class="userpage-user-bar">
       <div class="userpage-user-bar-exp"></div>
       <div class="userpage-user-bar-bar"></div>
@@ -16,9 +17,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "vuex";
+import { BASE_FILE_DIR } from "@/config/index";
 export default defineComponent({
   data() {
-    return {};
+    return {
+      baseUrl: BASE_FILE_DIR,
+    };
   },
   computed: {
     ...mapState(["memberinfo"]),
@@ -26,6 +30,9 @@ export default defineComponent({
   created() {
     this.memberProfile();
     // this.memberExp();
+  },
+  mounted() {
+    this.profileName();
   },
   methods: {
     ...mapActions(["MEMBERPROFILE"]),
@@ -35,6 +42,9 @@ export default defineComponent({
     // memberExp() {
     //   this.MEMBEREXP();
     // },
+    profileName() {
+      return BASE_FILE_DIR + this.memberinfo.profileUrl;
+    },
   },
 });
 </script>
@@ -53,7 +63,7 @@ export default defineComponent({
   top: -50px;
   width: 180px;
   height: 180px;
-  background-color: #1b2431;
+  /* background-color: #1b2431; */
   display: flex;
   align-items: center;
   justify-content: center;
