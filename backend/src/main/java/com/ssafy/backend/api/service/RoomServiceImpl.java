@@ -109,28 +109,30 @@ public class RoomServiceImpl implements RoomService {
                 //sideOrderList를 만들기 위해 roomWithParticipant에서 찾는다.
                 ArrayList<SideOrderInfo> sideOrderList = new ArrayList<>();
                 String[][] participants = roomWithParticipant.get(roomList.get(i).getRoomId());
-                for (int j = 0; j < 2; j++) {
-                    for (int k = 0; k < participants[0].length; k++) {
+                for (int j = 0; j < participants[0].length; j++) {
+                    for (int k = 0; k < 2; k++) {
                         SideOrderInfo sideOrderInfo = new SideOrderInfo();
                         //A진영이면 A, B진영이면 B를 sideOrder에 저장
                         //순서에 따라 sideOrder에 저장
-                        if(j==0){
-                            sideOrderInfo.setSideOrder("a"+(k+1));
+                        if(k==0){
+                            sideOrderInfo.setSideOrder("a"+(j+1));
                         } else {
-                            sideOrderInfo.setSideOrder("b"+(k+1));
+                            sideOrderInfo.setSideOrder("b"+(j+1));
                         }
 
                         //해당 칸이 ""이면 isEmpty를 true, 아니면 false로 저장
-                        if(participants[j][k].equals("")){
+                        if(participants[k][j].equals("")){
                             sideOrderInfo.setEmpty(true);
                         } else {
                             sideOrderInfo.setEmpty(false);
                         }
+
+                        sideOrderList.add(sideOrderInfo);
                     }
                 }
 
                 //테스트용 출력
-                System.out.println(sideOrderList);
+                System.out.println("sideOrderList : " + sideOrderList);
                 roomSearchRes.setSideOrderList(sideOrderList);
                 tmp.add(roomSearchRes);
             }
@@ -441,16 +443,16 @@ public class RoomServiceImpl implements RoomService {
             //participants에서 사용자가 요청한 진영순서 칸에 loginId가 있으면 에러, 없으면 사용자를 저장
             //여기서 에러나면 아예 요청을 취소해야하나..? 접속자 수 +1 한 거 빼줘야하는디
             if(roomJoinReq.getSide().equals("a")){
-                if(participants[0][roomJoinReq.getOrder()].equals("")) {
-                    participants[0][roomJoinReq.getOrder()] = member.getLoginId();
-                    sideOrder+="a"+roomJoinReq.getOrder();
+                if(participants[0][roomJoinReq.getOrder()-1].equals("")) {
+                    participants[0][roomJoinReq.getOrder()-1] = member.getLoginId();
+                    sideOrder+="a"+(roomJoinReq.getOrder()-1);
                 } else {
                     System.out.println("이미 다른 사용자가 배정되었습니다.");
                 }
             } else if(roomJoinReq.getSide().equals("b")){
-                if(participants[1][roomJoinReq.getOrder()].equals("")) {
-                    participants[1][roomJoinReq.getOrder()] = member.getLoginId();
-                    sideOrder+="b"+roomJoinReq.getOrder();
+                if(participants[1][roomJoinReq.getOrder()-1].equals("")) {
+                    participants[1][roomJoinReq.getOrder()-1] = member.getLoginId();
+                    sideOrder+="b"+(roomJoinReq.getOrder()-1);
                 } else {
                     System.out.println("이미 다른 사용자가 배정되었습니다.");
                 }
