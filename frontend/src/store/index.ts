@@ -48,6 +48,8 @@ export default createStore({
 
     // 룸 내부 정보
     uploadImageArr: [],
+    uploadImageFileArr: [],
+    selectedFileIndex: -1,
     roomId: "",
     isRoomHost: false,
     mySideOrder: "",
