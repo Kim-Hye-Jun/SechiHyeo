@@ -2,7 +2,7 @@
   <img
     class="thumbnail"
     :src="thumbnailSrc"
-    alt="Grapefruit slice atop a pile of other slices"
+    alt="서버에서 이미지를 불러오지 못했습니다."
   />
 </template>
 

@@ -49,10 +49,11 @@
         <div class="card login-content shadow-lg border-0">
           <div class="card-body">
             <div class="text-center">
-              <img
+              <!-- <img
                 class="logo"
                 src="https://cdn3.iconfinder.com/data/icons/galaxy-open-line-gradient-i/200/account-256.png"
-              />
+              /> -->
+              <img class="logo" src="@/assets/logo.png" alt="세치혀 로고" />
             </div>
             <h3 class="text-logo">Sign In</h3>
             <br />
@@ -68,7 +69,7 @@
               <input
                 class="form-control border-0"
                 id="userPW"
-                type="text"
+                type="password"
                 v-model="member.loginPassword"
                 placeholder="비밀번호를 입력하세요."
               />
