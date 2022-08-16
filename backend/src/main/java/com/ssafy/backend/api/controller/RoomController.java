@@ -71,11 +71,19 @@ public class RoomController {
     }
 
 
-    // 4. 방 접속
-    @GetMapping("/{room_id}/connection")
-    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String room_id, HttpServletRequest httpServletRequest){
-        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id);
-        RoomJoinRes roomJoinRes = roomService.joinRoom(httpServletRequest, roomJoinReq);
+    // 4. 방 접속 - 랜덤
+    @PostMapping("/connection_random")
+    public ResponseEntity<RoomJoinRes> joinRoom_random (@RequestBody RoomJoinReq roomJoinReq, HttpServletRequest httpServletRequest){
+//        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id, side, order);
+        RoomJoinRes roomJoinRes = roomService.joinRoom_random(httpServletRequest, roomJoinReq);
+        return ResponseEntity.ok(roomJoinRes);
+    }
+
+    // 4. 방 접속 - 선택
+    @PostMapping("/connection_select")
+    public ResponseEntity<RoomJoinRes> joinRoom_select (@RequestBody RoomJoinReq roomJoinReq, HttpServletRequest httpServletRequest){
+//        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id, side, order);
+        RoomJoinRes roomJoinRes = roomService.joinRoom_select(httpServletRequest, roomJoinReq);
         return ResponseEntity.ok(roomJoinRes);
     }
 

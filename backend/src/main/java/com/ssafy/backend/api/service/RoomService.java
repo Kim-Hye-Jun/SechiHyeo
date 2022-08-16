@@ -33,7 +33,9 @@ public interface RoomService {
     void uploadThumbnail(String roomId, MultipartFile thumbnail);
 
     //방 접속
-    RoomJoinRes joinRoom(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
+    RoomJoinRes joinRoom_random(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
+
+    RoomJoinRes joinRoom_select(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
 
     //방 삭제
     void deleteRoom(String roomId);
