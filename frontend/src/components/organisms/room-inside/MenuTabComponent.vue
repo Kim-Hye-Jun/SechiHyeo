@@ -83,18 +83,12 @@ export default defineComponent({
           ]
         );
         http
-          .post(
-            "https://i7a508.p.ssafy.io/api/sessions/" +
-              "prooftest" +
-              "/uploadProof",
-            proof,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "access-token": this.store.state.token,
-              },
-            }
-          )
+          .post("https://i7a508.p.ssafy.io/api/sessions/uploadProof", proof, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "access-token": this.store.state.token,
+            },
+          })
           .then((res) => {
             console.log(res);
             // 시그널
