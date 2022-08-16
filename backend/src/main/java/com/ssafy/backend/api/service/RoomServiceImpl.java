@@ -109,28 +109,30 @@ public class RoomServiceImpl implements RoomService {
                 //sideOrderList를 만들기 위해 roomWithParticipant에서 찾는다.
                 ArrayList<SideOrderInfo> sideOrderList = new ArrayList<>();
                 String[][] participants = roomWithParticipant.get(roomList.get(i).getRoomId());
-                for (int j = 0; j < 2; j++) {
-                    for (int k = 0; k < participants[0].length; k++) {
+                for (int j = 0; j < participants[0].length; j++) {
+                    for (int k = 0; k < 2; k++) {
                         SideOrderInfo sideOrderInfo = new SideOrderInfo();
                         //A진영이면 A, B진영이면 B를 sideOrder에 저장
                         //순서에 따라 sideOrder에 저장
-                        if(j==0){
-                            sideOrderInfo.setSideOrder("a"+(k+1));
+                        if(k==0){
+                            sideOrderInfo.setSideOrder("a"+(j+1));
                         } else {
-                            sideOrderInfo.setSideOrder("b"+(k+1));
+                            sideOrderInfo.setSideOrder("b"+(j+1));
                         }
 
                         //해당 칸이 ""이면 isEmpty를 true, 아니면 false로 저장
-                        if(participants[j][k].equals("")){
+                        if(participants[k][j].equals("")){
                             sideOrderInfo.setEmpty(true);
                         } else {
                             sideOrderInfo.setEmpty(false);
                         }
+
+                        sideOrderList.add(sideOrderInfo);
                     }
                 }
 
                 //테스트용 출력
-                System.out.println(sideOrderList);
+                System.out.println("sideOrderList : " + sideOrderList);
                 roomSearchRes.setSideOrderList(sideOrderList);
                 tmp.add(roomSearchRes);
             }
