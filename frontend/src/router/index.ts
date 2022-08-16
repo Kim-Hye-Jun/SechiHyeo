@@ -57,7 +57,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     redirect: "/main",
-    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수, 로그인해야하는 path면 추가해주세요
+    // meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수, 로그인해야하는 path면 추가해주세요
   },
   {
     path: "/login",
@@ -73,7 +73,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/main",
     name: "Main",
     component: () => import("@/views/MainPage.vue"),
-    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
+    // meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
   },
   {
     path: "/room/:joinCode",

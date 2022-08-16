@@ -57,10 +57,6 @@
         <div class="card signUp-content shadow-lg border-0">
           <div class="card-body">
             <div class="text-center">
-              <!-- <img
-                class="logo"
-                src="https://cdn3.iconfinder.com/data/icons/galaxy-open-line-gradient-i/200/account-256.png"
-              /> -->
               <img class="logo" src="@/assets/logo.png" alt="세치혀 로고" />
             </div>
             <h3 class="text-logo">회원 가입</h3>
@@ -94,23 +90,24 @@
                 </div>
               </div>
               <br />
-              <!-- <input
-                class="form-control border-0"
-                id="userPW"
-                type="text"
-                v-model="member.loginPassword"
-                placeholder="비밀번호를 입력하세요."
-              /> -->
               <div>
                 <label for="password">비밀번호: </label>
                 <div class="input-group mb-3">
                   <input
                     id="password"
-                    type="text"
+                    type="password"
                     class="form-control border-0"
                     v-model="member.loginPassword"
                     placeholder="비밀번호를 입력하세요."
                   />
+                </div>
+                <div
+                  :class="{
+                    inValid: !validPw,
+                    Valid: validPw,
+                  }"
+                >
+                  {{ pwMessage }}
                 </div>
               </div>
               <br />
@@ -119,13 +116,20 @@
                 <div class="input-group mb-3">
                   <input
                     id="password"
-                    type="text"
+                    type="password"
                     class="form-control border-0"
                     v-model="loginPassword2"
                     placeholder="비밀번호를 확인해주세요."
                   />
                 </div>
-                <div>{{ pwMessage }}</div>
+                <div
+                  :class="{
+                    inValid: !validPw || !validPw_Re,
+                    Valid: validPw && validPw_Re,
+                  }"
+                >
+                  {{ pwReMessage }}
+                </div>
               </div>
               <br />
               <div>
@@ -135,7 +139,8 @@
                     id="nickname"
                     type="text"
                     class="form-control border-0"
-                    v-model="member.nickname"
+                    :value="member.nickname"
+                    @input="changeNickName"
                     placeholder="닉네임을 입력하세요"
                   />
                   <button
@@ -146,7 +151,14 @@
                     닉네임 중복 체크
                   </button>
                 </div>
-                <div>{{ nickNameMessage }}</div>
+                <div
+                  :class="{
+                    inValid: !validName || this.nickNameDuplicate,
+                    Valid: validName && !this.nickNameDuplicate,
+                  }"
+                >
+                  {{ nickNameMessage }}
+                </div>
               </div>
               <br />
               <div>
@@ -167,7 +179,14 @@
                     이메일 중복 체크
                   </button>
                 </div>
-                <div>{{ emailMessage }}</div>
+                <div
+                  :class="{
+                    inValid: !validEmail || this.emailDuplicate,
+                    Valid: validEmail && !this.emailDuplicate,
+                  }"
+                >
+                  {{ emailMessage }}
+                </div>
               </div>
               <br />
               <div>
@@ -188,7 +207,14 @@
                     전화번호 중복 체크
                   </button>
                 </div>
-                <div>{{ phoneMessage }}</div>
+                <div
+                  :class="{
+                    inValid: !validPhone || this.phoneDuplicate,
+                    Valid: validPhone && !this.phoneDuplicate,
+                  }"
+                >
+                  {{ phoneMessage }}
+                </div>
               </div>
             </form>
           </div>
@@ -244,7 +270,7 @@ export default defineComponent({
       return this.member.loginId.length > 4 && this.member.loginId.length < 13;
     },
     validName(): boolean {
-      return this.member.nickname.length > 3;
+      return this.member.nickname.length > 2;
     },
     validPw(): boolean {
       return (
@@ -262,7 +288,10 @@ export default defineComponent({
     validPhone(): boolean {
       // oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
       const exptext = /^[0-9]+$/;
-      return exptext.test(this.member.phoneNumber);
+      return (
+        exptext.test(this.member.phoneNumber) &&
+        this.member.phoneNumber.length > 5
+      );
     },
     // 회원가입 버튼 활성화
     isDisabled() {
@@ -295,6 +324,13 @@ export default defineComponent({
     pwMessage() {
       if (!this.validPw) {
         return "비밀번호 길이는 4~12자입니다.";
+      } else {
+        return "가능한 비밀번호 입니다.";
+      }
+    },
+    pwReMessage() {
+      if (!this.validPw) {
+        return "비밀번호 길이는 4~12자입니다.";
       } else if (this.validPw_Re) {
         return "비밀번호가 일치합니다.";
       } else {
@@ -321,7 +357,7 @@ export default defineComponent({
     },
     phoneMessage() {
       if (!this.validPhone) {
-        return "전화번호 양식을 지켜주세요";
+        return "숫자만 입력해주세요";
       } else if (this.phoneDuplicate) {
         return "전화 중복 체크 해주세요.";
       } else {
@@ -330,6 +366,10 @@ export default defineComponent({
     },
   },
   methods: {
+    changeNickName(e: any) {
+      //한글 v-model 버그 해결을 위한 함수
+      this.member.nickname = e.target.value;
+    },
     async idDuplicateCheck() {
       try {
         const response = await checkUserId(this.member.loginId);
@@ -369,6 +409,7 @@ export default defineComponent({
       console.log(response);
       this.initForm();
       alert(response.data);
+      this.$router.push("/login");
     },
     initForm() {
       this.member.loginId = "";
@@ -390,10 +431,10 @@ body {
 .signUp-content {
   max-width: 800px;
   width: 100%;
-  height: 1200px;
+  height: 1100px;
   z-index: 1;
   position: absolute;
-  top: 50%;
+  top: 38%;
   left: 40%;
   margin-left: -200px;
   margin-top: -286px;
