@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SessionRoom {
     private Session sessionCamera;
-    private Session sessionScreen;
+//    private Session sessionScreen;
     private Room room;
     private String Host;
 }

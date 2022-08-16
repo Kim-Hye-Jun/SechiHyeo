@@ -1,7 +1,7 @@
 import axios from "axios";
 // import http from "@/http/index";
 import { API_BASE_URL } from "@/config";
-import { setInterceptors } from "./common/interceptors";
+import { setInterceptors, setInterceptorsJson } from "./common/interceptors";
 
 // JWT 인증이 따로 필요없는 axios
 function createInstance() {
@@ -29,7 +29,7 @@ function createInstanceWithAuth2() {
   const instance = axios.create({
     baseURL: `${API_BASE_URL}`,
   });
-  return setInterceptors(instance); // JWT를
+  return setInterceptorsJson(instance); // JWT를
 }
 
 export const instance = createInstance();

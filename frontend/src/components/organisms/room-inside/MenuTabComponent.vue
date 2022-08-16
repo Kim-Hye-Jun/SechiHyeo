@@ -40,11 +40,12 @@ import MenuTabExitIconComponent from "@/components/molecules/room-inside/icon/Me
 import MenuTabShareIconComponent from "@/components/molecules/room-inside/icon/MenuTabShareIconComponent.vue";
 
 import { useStore } from "vuex";
+import http from "@/http";
 
 export default defineComponent({
   props: {
     // OVScreen: Object,
-    // sessionScreen: Object,
+    session: Object,
     // tokenScreen: String,
   },
   components: {
@@ -63,11 +64,51 @@ export default defineComponent({
     return {
       selectFile: null,
       previewImgUrl: null,
+      fileIndex: -1,
     };
+  },
+  mounted() {
+    this.session?.on("signal:image-share", (event: any) => {
+      console.log("?");
+      (document.getElementById("shareImg") as HTMLImageElement).src =
+        event.data;
+    });
   },
   methods: {
     screenShare() {
       console.log("화면 공유");
+      if (this.store.state.selectedFileIndex > -1) {
+        let proof = new FormData();
+        proof.append(
+          "proof",
+          this.store.state.uploadImageFileArr[
+            this.store.state.selectedFileIndex
+          ]
+        );
+        http
+          .post(
+            "https://i7a508.p.ssafy.io/api/sessions/" +
+              "prooftest" +
+              "/uploadProof",
+            proof,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                "access-token": this.store.state.token,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            // 시그널
+            console.log("singal");
+            this.session?.signal({
+              data: res.data,
+              to: [],
+              type: "image-share",
+            });
+          });
+      }
 
       // console.log("next session : ", this.sessionScreen);
       // console.log("next oV : ", this.OVScreen);
@@ -127,6 +168,7 @@ export default defineComponent({
           reader.onload = (e: any) => {
             console.log(e.target.result);
             this.store.state.uploadImageArr.push(e.target.result);
+            this.store.state.uploadImageFileArr.push(this.selectFile);
             console.log(this.store.state.uploadImageArr);
           };
           reader.readAsDataURL(this.selectFile);
