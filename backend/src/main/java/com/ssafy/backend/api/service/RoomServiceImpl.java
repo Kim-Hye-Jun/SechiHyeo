@@ -182,10 +182,10 @@ public class RoomServiceImpl implements RoomService {
 //            SessionProperties properties = new SessionProperties.Builder().build();
             //카메라용, 화면공유용 세션 2개 생성
             Session sessionCamera = openVidu.createSession(new SessionProperties.Builder().build());
-            Session sessionScreen = openVidu.createSession(new SessionProperties.Builder().build());
+//            Session sessionScreen = openVidu.createSession(new SessionProperties.Builder().build());
 
             //아직 방에 입장하지 않았으므로 Host는 빈 칸
-            SessionRoom sessionRoom = new SessionRoom(sessionCamera, sessionScreen, room, "");
+            SessionRoom sessionRoom = new SessionRoom(sessionCamera, room, "");
             roomWithSession.put(room.getRoomId(), sessionRoom);
             roomList.add(room);
 
@@ -283,7 +283,7 @@ public class RoomServiceImpl implements RoomService {
             if (sessionRoom == null) throw new Error(roomJoinReq.getRoomId() + "not exists");
 
             Session sessionCamera = sessionRoom.getSessionCamera();
-            Session sessionScreen = sessionRoom.getSessionScreen();
+//            Session sessionScreen = sessionRoom.getSessionScreen();
 
             //방 정보 가져오기
             Room room = sessionRoom.getRoom();
@@ -317,7 +317,7 @@ public class RoomServiceImpl implements RoomService {
 
             //토큰 2개 생성
             String tokenCamera = sessionCamera.createConnection(connectionProperties).getToken();
-            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
+//            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
 
             System.out.println("TOKEN OOOOO");
 
@@ -368,7 +368,7 @@ public class RoomServiceImpl implements RoomService {
             return RoomJoinRes.builder()
                     .roomId(roomJoinReq.getRoomId())
                     .tokenCamera(tokenCamera)
-                    .tokenScreen(tokenScreen)
+//                    .tokenScreen(tokenScreen)
                     .sideA(room.getSideA())
                     .sideB(room.getSideB())
                     .userSideOrder(sideOrder)
@@ -407,7 +407,7 @@ public class RoomServiceImpl implements RoomService {
             if (sessionRoom == null) throw new Error(roomJoinReq.getRoomId() + "not exists");
 
             Session sessionCamera = sessionRoom.getSessionCamera();
-            Session sessionScreen = sessionRoom.getSessionScreen();
+//            Session sessionScreen = sessionRoom.getSessionScreen();
 
             //방 정보 가져오기
             Room room = sessionRoom.getRoom();
@@ -443,7 +443,7 @@ public class RoomServiceImpl implements RoomService {
 
             //토큰 2개 생성
             String tokenCamera = sessionCamera.createConnection(connectionProperties).getToken();
-            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
+//            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
 
             System.out.println("TOKEN OOOOO");
 
@@ -470,14 +470,14 @@ public class RoomServiceImpl implements RoomService {
             if(roomJoinReq.getSide().equals("a")){
                 if(participants[0][roomJoinReq.getOrder()-1].equals("")) {
                     participants[0][roomJoinReq.getOrder()-1] = member.getLoginId();
-                    sideOrder+="a"+(roomJoinReq.getOrder()-1);
+                    sideOrder+="a"+(roomJoinReq.getOrder());
                 } else {
                     System.out.println("이미 다른 사용자가 배정되었습니다.");
                 }
             } else if(roomJoinReq.getSide().equals("b")){
                 if(participants[1][roomJoinReq.getOrder()-1].equals("")) {
                     participants[1][roomJoinReq.getOrder()-1] = member.getLoginId();
-                    sideOrder+="b"+(roomJoinReq.getOrder()-1);
+                    sideOrder+="b"+(roomJoinReq.getOrder());
                 } else {
                     System.out.println("이미 다른 사용자가 배정되었습니다.");
                 }
@@ -492,7 +492,7 @@ public class RoomServiceImpl implements RoomService {
             return RoomJoinRes.builder()
                     .roomId(roomJoinReq.getRoomId())
                     .tokenCamera(tokenCamera)
-                    .tokenScreen(tokenScreen)
+//                    .tokenScreen(tokenScreen)
                     .sideA(room.getSideA())
                     .sideB(room.getSideB())
                     .userSideOrder(sideOrder)
