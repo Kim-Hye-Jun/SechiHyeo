@@ -50,6 +50,10 @@ export default defineComponent({
     // 뭘 반응형으로 설정해야 할지...?
     let OV: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
     let session: openVidu.Session | undefined = OV.initSession();
+
+    let OVScreen: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
+    let sessionScreen: openVidu.Session | undefined = OVScreen.initSession();
+
     const subscribers = ref([]);
     // let subscribers: openVidu.Subscriber[] = [];
     let testReturnData: RoomJoinResponseInfo | undefined = undefined;
@@ -83,51 +87,67 @@ export default defineComponent({
     session.on("streamCreated", ({ stream }) => {
       // 1. 서버에 추가 요청 => x
       // 완료
+      if (stream.typeOfVideo == "CAMERA") {
+        if (session) {
+          const subscriber = session.subscribe(
+            stream,
+            undefined as unknown as HTMLElement
+          );
 
-      if (session) {
-        const subscriber = session.subscribe(
-          stream,
-          undefined as unknown as HTMLElement
-        );
+          // (##구현) emptyArr에 sub의 class 제거
+          console.log("subscript create @@ ", subscriber);
+          console.log(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])
+          );
+          console.log(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[1])
+          );
+          // 2. map user class name 추가
+          mapUserClassName.value.set(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
+              "userId"
+            ],
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+              "userSideOrder"
+            ]
+          );
+          mapClassNameUser.value.set(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+              "userSideOrder"
+            ],
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
+              "userId"
+            ]
+          );
+          (subscribers.value as openVidu.Subscriber[]).push(subscriber);
 
-        // (##구현) emptyArr에 sub의 class 제거
-        console.log("subscript create @@ ", subscriber);
-        console.log(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])
-        );
-        console.log(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])
-        );
-        // 2. map user class name 추가
-        mapUserClassName.value.set(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
-            "userId"
-          ],
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
-            "userSideOrder"
-          ]
-        );
-        mapClassNameUser.value.set(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
-            "userSideOrder"
-          ],
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
-            "userId"
-          ]
-        );
-        (subscribers.value as openVidu.Subscriber[]).push(subscriber);
+          // 3. empty arr 삭제
 
-        // 3. empty arr 삭제
+          const index = (emptyVideoArr.value as string[]).indexOf(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+              "userSideOrder"
+            ]
+          );
+          if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
+          console.log("MAP : ", mapUserClassName);
+          console.log("SUBSCRIBERS : ", subscribers);
+          console.log("EMPTY VIDEO ARR : ", emptyVideoArr);
+        }
+      }
+    });
 
-        const index = (emptyVideoArr.value as string[]).indexOf(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
-            "userSideOrder"
-          ]
+    sessionScreen.on("streamCreated", (event) => {
+      if (event.stream.typeOfVideo == "SCREEN") {
+        // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+        var subscriberScreen = sessionScreen?.subscribe(
+          event.stream,
+          "shareImg"
         );
-        if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
-        console.log("MAP : ", mapUserClassName);
-        console.log("SUBSCRIBERS : ", subscribers);
-        console.log("EMPTY VIDEO ARR : ", emptyVideoArr);
+        // When the HTML video has been appended to DOM...
+        subscriberScreen?.on("videoElementCreated", (event) => {
+          // Add a new <p> element for the user's nickname just below its video
+          // appendUserData(event.element, subscriberScreen?.stream.connection);
+        });
       }
     });
 
@@ -185,25 +205,31 @@ export default defineComponent({
         const preSideOrder = data["preSideOrder"];
         const newSideOrder = data["newSideOrder"];
 
+        console.log("UPDATE_SIDE_ORDER", preSideOrder, newSideOrder);
+
+        console.log(mapClassNameUser);
         mapClassNameUser.value.set(
           preSideOrder,
           mapUserClassName.value.get(newSideOrder)
         );
-
+        console.log(mapClassNameUser);
         mapClassNameUser.value.set(
           newSideOrder,
           mapUserClassName.value.get(preSideOrder)
         );
+        console.log(mapClassNameUser);
 
+        console.log(mapUserClassName);
         mapUserClassName.value.set(
           mapClassNameUser.value.get(preSideOrder),
           preSideOrder
         );
-
+        console.log(mapUserClassName);
         mapUserClassName.value.set(
           mapClassNameUser.value.get(newSideOrder),
           newSideOrder
         );
+        console.log(mapUserClassName);
       }
     });
 

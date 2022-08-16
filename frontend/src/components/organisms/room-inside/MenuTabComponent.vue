@@ -77,7 +77,7 @@ export default defineComponent({
           let publisher = this.OV?.initPublisher("shareImg", {
             videoSource: "screen",
           });
-
+          console.log("PUBLISHER INITPUBLISHER", publisher);
           publisher.once("accessAllowed", (error: any) => {
             publisher.stream
               .getMediaStream()
@@ -93,6 +93,7 @@ export default defineComponent({
           });
         })
         .catch((error: any) => {
+          console.log(error);
           console.warn(
             "There was an error connecting to the session:",
             error.code,
