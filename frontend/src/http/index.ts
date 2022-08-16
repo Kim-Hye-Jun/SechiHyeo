@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const http = axios.create({
-  baseURL: "https://i7a508.p.ssafy.io/",
+  baseURL: "https://i7a508.p.ssafy.io/api/",
   headers: { "content-type": "multipart/form-data" },
 });
 
