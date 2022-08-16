@@ -33,7 +33,7 @@ public interface RoomService {
     void uploadThumbnail(String roomId, MultipartFile thumbnail);
 
     //자료 파일 업로드
-    String uploadProof(String roomId, MultipartFile proof);
+    String uploadProof(MultipartFile proof);
 
     //방 접속
     RoomJoinRes joinRoom_random(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
