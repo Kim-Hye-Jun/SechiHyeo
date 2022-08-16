@@ -1,6 +1,5 @@
 <template>
-  <div class="contents">
-    <background></background>
+  <!-- <div class="contents">
     <div class="form-wrapper form-wrapper-sm">
       <form @submit.prevent class="form">
         <div>
@@ -24,14 +23,14 @@
         <button type="button" class="btn" @click="login">로그인</button>
       </form>
       <div class="container text-center">
-        <!-- <router-link :to="{ name: 'userid' }" class="find"
+        <router-link :to="{ name: 'userid' }" class="find"
           >아이디 찾기</router-link
         >
         /
         <router-link :to="{ name: 'usercheck' }" class="find"
           >비밀번호 재설정</router-link
         >
-        <br /> -->
+        <br />
         <h6 class="text-center find mt-5">아직 회원이 아니신가요?</h6>
         <button
           class="w-100 btn btn-lg btn-outline-secondary signup-btn"
@@ -40,6 +39,63 @@
         >
           회원가입
         </button>
+      </div>
+    </div>
+  </div> -->
+  <background></background>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="card login-content shadow-lg border-0">
+          <div class="card-body">
+            <div class="text-center">
+              <!-- <img
+                class="logo"
+                src="https://cdn3.iconfinder.com/data/icons/galaxy-open-line-gradient-i/200/account-256.png"
+              /> -->
+              <img class="logo" src="@/assets/logo.png" alt="세치혀 로고" />
+            </div>
+            <h3 class="text-logo">Sign In</h3>
+            <br />
+            <form class="text-center" @submit.prevent>
+              <input
+                id="userID"
+                class="form-control border-0"
+                type="text"
+                v-model="member.loginId"
+                placeholder="아이디를 입력하세요."
+              />
+              <br />
+              <input
+                class="form-control border-0"
+                id="userPW"
+                type="password"
+                v-model="member.loginPassword"
+                placeholder="비밀번호를 입력하세요."
+              />
+              <br />
+              <button
+                class="btn btn-primary btn-sm border-0"
+                type="button"
+                @click="login"
+              >
+                로그인
+              </button>
+            </form>
+          </div>
+          <div class="nomember">
+            <p class="text-center">
+              회원이 아니신가요?
+              <button
+                class="btn btn-primary signup-btn"
+                type="button"
+                @click="moveToSignin"
+              >
+                회원가입
+              </button>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -95,7 +151,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.form-login {
+/* .form-login {
   width: 50%;
   margin: auto;
 }
@@ -117,5 +173,87 @@ export default defineComponent({
 a {
   color: black;
   text-decoration: none;
+} */
+body {
+  background-color: #0278ae;
+  font-family: "Lato", sans-serif;
+}
+
+.login-content {
+  max-width: 450px;
+  width: 100%;
+  height: 550px;
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -200px;
+  margin-top: -286px;
+  border-radius: 8px;
+}
+
+.logo {
+  width: 128px;
+  height: 128px;
+  margin: 5px;
+}
+
+.text-logo {
+  text-align: center;
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.form-control {
+  width: 18rem;
+  height: 3rem;
+  left: 65px;
+  position: relative;
+  border-radius: 5px;
+  background-color: #ccffee;
+}
+
+.btn {
+  font-size: 22px;
+  background-color: #0278ae;
+  border: none;
+  width: 18rem;
+  height: 3rem;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: blue;
+}
+
+.nomember {
+  background-color: #e4dede;
+  padding: 10px;
+  padding-top: 20px;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.nomember a {
+  text-decoration: none;
+}
+
+.copyright {
+  color: white;
+  padding: 15px;
+}
+
+/*support google chrome*/
+.form-control::-webkit-input-placeholder {
+  color: #00000036;
+}
+
+/*support mozilla*/
+.form-control:-moz-input-placeholder {
+  color: red;
+}
+
+/*support internet explorer*/
+.form-control:-ms-input-placeholder {
+  color: red;
 }
 </style>

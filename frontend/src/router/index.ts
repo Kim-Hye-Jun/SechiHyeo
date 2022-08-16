@@ -89,13 +89,13 @@ const routes: Array<RouteRecordRaw> = [
     path: "/boards",
     name: "debateBoards",
     component: () => import("@/views/BoardsPage.vue"),
-    //meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
+    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
   },
   {
     path: "/userpage",
     name: "userPage",
     component: () => import("@/views/MyPage.vue"),
-    //meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
+    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
   },
 ];
 

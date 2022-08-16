@@ -1,11 +1,12 @@
 <template>
   <div class="userpage-user">
-    <div class="userpage-user-image">{{ member.profileUrl }}</div>
+    <img class="userpage-user-image" :src="profileName()" />
+    <div>{{ memberinfo.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
-    <div class="userpage-user-nickname">토론킹 {{ member.nickname }}</div>
-    <div class="userpage-user-level">level.{{ member.level }}</div>
-    <div class="userpage-user-exp">exp {{ member.exp }}%</div>
+    <div class="userpage-user-nickname">토론킹 {{ memberinfo.nickname }}</div>
+    <div class="userpage-user-level">level.{{ memberinfo.level }}</div>
+    <div class="userpage-user-exp">exp {{ memberinfo.exp }}%</div>
     <div class="userpage-user-bar">
       <div class="userpage-user-bar-exp"></div>
       <div class="userpage-user-bar-bar"></div>
@@ -15,35 +16,40 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
+import { BASE_FILE_DIR } from "@/config/index";
 export default defineComponent({
   data() {
     return {
-      member: {
-        profileUrl: "",
-        level: "",
-        nickname: "",
-        exp: "",
-      },
+      baseUrl: BASE_FILE_DIR,
     };
+  },
+  computed: {
+    ...mapState(["memberinfo"]),
   },
   created() {
     this.memberProfile();
-    this.memberExp();
+    // this.memberExp();
+  },
+  mounted() {
+    this.profileName();
   },
   methods: {
-    ...mapActions(["MEMBERPROFILE", "MEMBEREXP"]),
+    ...mapActions(["MEMBERPROFILE"]),
     memberProfile() {
       this.MEMBERPROFILE();
     },
-    memberExp() {
-      this.MEMBEREXP();
+    // memberExp() {
+    //   this.MEMBEREXP();
+    // },
+    profileName() {
+      return this.memberinfo.profileUrl;
     },
   },
 });
 </script>
 
-<style>
+<style scoped>
 .userpage-user {
   position: absolute;
   width: 1000px;
@@ -57,7 +63,7 @@ export default defineComponent({
   top: -50px;
   width: 180px;
   height: 180px;
-  background-color: #1b2431;
+  /* background-color: #1b2431; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -202,7 +208,7 @@ export default defineComponent({
 .userpage-user-bar-bar {
   position: absolute;
   left: 0%;
-  right: 38%;
+  /* right: 38%; */
   top: 0%;
   bottom: 0%;
   background-image: linear-gradient(

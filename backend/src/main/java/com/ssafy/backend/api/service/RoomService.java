@@ -6,6 +6,7 @@ import com.ssafy.backend.dto.Room;
 import com.ssafy.backend.dto.request.RoomCreateReq;
 import com.ssafy.backend.dto.request.RoomJoinReq;
 import com.ssafy.backend.dto.request.RoomSetReq;
+import com.ssafy.backend.dto.request.RoomUpdateUserSideOrderReq;
 import com.ssafy.backend.dto.response.RoomCreateRes;
 import com.ssafy.backend.dto.response.RoomJoinRes;
 import com.ssafy.backend.dto.response.RoomSearchRes;
@@ -32,16 +33,18 @@ public interface RoomService {
     void uploadThumbnail(String roomId, MultipartFile thumbnail);
 
     //방 접속
-    RoomJoinRes joinRoom(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
+    RoomJoinRes joinRoom_random(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
+
+    RoomJoinRes joinRoom_select(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
 
     //방 삭제
-    void deleteRoom(String OpenviduId);
+    void deleteRoom(String roomId);
 
 //    //방장 권한 이동
 //    void changeHost(Member prevMember, Member nextMember);
 
     // 접속자 방 퇴장
-    void disconnectParticipant(String OpenviduId, String loginId);
+    void disconnectParticipant(String roomId, String loginId);
 
     //토론 진영 및 순서 설정
     void setSideOrder(RoomSetReq roomSetReq);
@@ -49,7 +52,9 @@ public interface RoomService {
     //토론 규칙 저장 및 반환
     RoomSetRes setDebateFormat(RoomSetReq roomSetReq);
 
-    String[][] validSideOrder(String OpenviduId);
+    String[][] validSideOrder(String roomId);
 
-    void sendSignal(String OpenviduId);
+    void sendSignal(RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq);
+
+    void updateDebateInfo(String roomId);
 }

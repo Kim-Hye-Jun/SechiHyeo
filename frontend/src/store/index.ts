@@ -8,9 +8,38 @@ import {
   saveUserToCookie,
 } from "@/utils/cookies";
 import { loginUser } from "@/api/auth";
-import { getMemberInfo } from "@/api/member";
+import {
+  getMemberInfo,
+  getExpInfo,
+  getRecord,
+  putIntroduce,
+  putProfileImage,
+  postAuthPw,
+  putPassword,
+  deleteMember,
+} from "@/api/member";
+// import { putProfileImage } from "@/api/member3";
+import {
+  postApply,
+  putApply,
+  deleteApply,
+  getDebateApply,
+  getDebateRecruit,
+} from "@/api/debateApply";
+import {
+  getBoards,
+  getBoard,
+  postBoard,
+  putBoard,
+  deleteBoard,
+} from "@/api/board";
+import { postReply, putReply, deleteReply } from "@/api/reply";
 import axios from "axios";
 import router from "@/router";
+
+const API_BASE_URL = "https://i7a508.p.ssafy.io/api/";
+let form = new FormData();
+
 export default createStore({
   state: {
     // 로그인 관련
@@ -91,6 +120,19 @@ export default createStore({
     BOARDONE: (state, payload) => {
       state.board = payload.board;
     },
+    //USERPAGE Mutation
+    MEMBERPROFILE: (state, payload) => {
+      state.memberinfo = payload.memberinfo;
+    },
+    MEMBERRECORD: (state, payload) => {
+      state.memberinfo = payload.memberinfo;
+    },
+    DEBATERECRUIT: (state, payload) => {
+      state.memberinfo = payload.memberinfo;
+    },
+    DEBATEAPPLY: (state, payload) => {
+      state.memberinfo = payload.memberinfo;
+    },
   },
   actions: {
     async loginMember({ commit }, member) {
@@ -108,14 +150,14 @@ export default createStore({
     },
     // BOARD Action
     BOARDALL: (store) => {
-      axios.get("/debate-board").then((res) => {
+      getBoards().then((res: any) => {
         store.commit("BOARDALL", {
           boards: res.data,
         });
       });
     },
     BOARDONE: (store, num) => {
-      axios.get("/debate-board/" + num).then((res) => {
+      getBoard(num).then((res: any) => {
         store.commit("BOARDONE", {
           board: res.data,
         });
@@ -123,7 +165,7 @@ export default createStore({
     },
     BOARDWRITE: (store, board) => {
       axios
-        .post(`/debate-board/`, board)
+        .post(`${API_BASE_URL}/debate-board/`, board)
         .then((res) => {
           console.log(res.data);
         })
@@ -134,7 +176,7 @@ export default createStore({
     },
     BOARDUPDATE: (store, board) => {
       axios
-        .put(`/debate-board/`, board)
+        .put(`${API_BASE_URL}/debate-board/`, board)
         .then((res) => {
           console.log(res.data);
         })
@@ -147,7 +189,7 @@ export default createStore({
       let flag = confirm("정말로 삭제하시겠습니까??");
       if (flag) {
         axios
-          .delete(`/debate-board/${num}`)
+          .delete(`${API_BASE_URL}/debate-board/${num}`)
           .then((res) => {
             console.log(res.data);
           })
@@ -159,44 +201,87 @@ export default createStore({
     },
     //MyPage Action
     MEMBERPROFILE: (store) => {
-      axios.get("/member/profile").then((res) => {
+      getMemberInfo().then((res: any) => {
         store.commit("MEMBERPROFILE", {
-          member: res.data,
+          memberinfo: res.data,
         });
       });
     },
     MEMBEREXP: (store) => {
-      axios.get("/member/exp").then((res) => {
+      getExpInfo().then((res: any) => {
         store.commit("MEMBEREXP", {
-          member: res.data,
+          memberinfo: res.data,
         });
       });
     },
     MEMBERRECORD: (store) => {
-      axios.get("/member/record").then((res) => {
+      getRecord().then((res: any) => {
         store.commit("MEMBERRECORD", {
-          member: res.data,
+          memberinfo: res.data,
         });
       });
     },
     DEBATERECRUIT: (store) => {
-      axios.get("/debate-apply/recruiting").then((res) => {
+      getDebateRecruit().then((res: any) => {
         store.commit("DEBATERECRUIT", {
           debate_board: res.data,
         });
       });
     },
     DEBATEAPPLY: (store) => {
-      axios.get("/debate-apply/applying").then((res) => {
+      getDebateApply().then((res: any) => {
         store.commit("DEBATEAPPLY", {
           debate_board: res.data,
         });
       });
     },
-    PROFILEUPDATE: (store, member) => {
-      axios.put("/member/introduce", member).then(() => {
-        alert("수정이 완료되었습니다!!!");
+    PROFILEIMAGE: (store) => {
+      putProfileImage().then((res: any) => {
+        store.commit("PROFILEIMAGE", {
+          memberinfo: res.data,
+        });
       });
+    },
+    // PROFILEIMAGE: (store, board) => {
+    //   axios.put(`${API_BASE_URL}/profile-image/`).then((res) => {
+    //     console.log(res.data);
+    //   });
+    // },
+    PROFILEUPDATE: (store, num: string) => {
+      putIntroduce().then((res: any) => {
+        store.commit("PROFILEUPDATE", {
+          memberinfo: res.data,
+        });
+      });
+    },
+    PASSWORD: (store) => {
+      putPassword().then((res: any) => {
+        store.commit("PROFILEUPDATE", {
+          memberinfo: res.data,
+        });
+      });
+    },
+    AUTHPW: (store) => {
+      postAuthPw().then((res: any) => {
+        store.commit("AUTHPW", {
+          memberinfo: res.data,
+        });
+      });
+    },
+    PROFILEDELETE: (store) => {
+      let flag = confirm("정말로 탈퇴하시겠습니까??");
+      if (flag) {
+        deleteMember()
+          .then((res: { data: any }) => {
+            store.commit("PROFILEDELETE", {
+              memberinfo: res.data,
+            });
+          })
+          .then(() => {
+            alert("또 뵐 수 있는 날을 기다리고 있겠습니다!!");
+            router.push("/");
+          });
+      }
     },
   },
 });

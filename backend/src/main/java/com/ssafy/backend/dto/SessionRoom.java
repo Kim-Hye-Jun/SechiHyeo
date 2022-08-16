@@ -12,7 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SessionRoom {
-    private Session session;
+    private Session sessionCamera;
+    private Session sessionScreen;
     private Room room;
     private String Host;
 }

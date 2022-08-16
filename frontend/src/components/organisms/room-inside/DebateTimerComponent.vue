@@ -116,7 +116,7 @@ export default defineComponent({
       // inputMin: "",
       // inputSec: "",
       time: 5, // props로 받아야할듯? store나
-      breakTime: 3, //쉬는 시간 길이
+      breakTime: 20, //쉬는 시간 길이
       resetButton: false,
       edit: false,
     };

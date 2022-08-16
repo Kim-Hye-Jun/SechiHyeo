@@ -22,6 +22,8 @@ public interface MemberService {
 	void changeMemberInfo(Member editedMember, String loginId);
 	//프로필 업로드
 	void changeProfileImage(Member member, MultipartFile profileImage);
+	//경험치 갱신
+	void changeDebateInfo(String loginId);
 	//비밀번호 재설정
 	void changeLoginPassword(String loginId, String newLoginPassword) throws Exception;
 	//회원 탈퇴

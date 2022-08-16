@@ -10,6 +10,7 @@ import com.ssafy.backend.dto.SessionRoom;
 import com.ssafy.backend.dto.request.RoomCreateReq;
 import com.ssafy.backend.dto.request.RoomJoinReq;
 import com.ssafy.backend.dto.request.RoomSetReq;
+import com.ssafy.backend.dto.request.RoomUpdateUserSideOrderReq;
 import com.ssafy.backend.dto.response.RoomCreateRes;
 import com.ssafy.backend.dto.response.RoomJoinRes;
 import com.ssafy.backend.dto.response.RoomSearchRes;
@@ -63,31 +64,41 @@ public class RoomController {
         return ResponseEntity.ok(roomCreateRes);
     }
 
-    @PostMapping("/{roomId}/thumbnail")
-    public  ResponseEntity createRoomThumbnail(@PathVariable String roomId, @RequestPart MultipartFile thumbnail) {
-        roomService.uploadThumbnail(roomId, thumbnail);
+    @PostMapping("/{room_id}/thumbnail")
+    public  ResponseEntity createRoomThumbnail(@PathVariable String room_id, @RequestPart MultipartFile thumbnail) {
+        roomService.uploadThumbnail(room_id, thumbnail);
         return new ResponseEntity(HttpStatus.OK);
     }
 
 
-    // 4. 방 접속
-    @GetMapping("/{roomId}/connection")
-    public ResponseEntity<RoomJoinRes> joinRoom(@PathVariable String roomId, HttpServletRequest httpServletRequest){
-        RoomJoinReq roomJoinReq = new RoomJoinReq(roomId);
-        RoomJoinRes roomJoinRes = roomService.joinRoom(httpServletRequest, roomJoinReq);
+    // 4. 방 접속 - 랜덤
+    @PostMapping("/connection_random")
+    public ResponseEntity<RoomJoinRes> joinRoom_random (@RequestBody RoomJoinReq roomJoinReq, HttpServletRequest httpServletRequest){
+//        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id, side, order);
+        RoomJoinRes roomJoinRes = roomService.joinRoom_random(httpServletRequest, roomJoinReq);
+        return ResponseEntity.ok(roomJoinRes);
+    }
+
+    // 4. 방 접속 - 선택
+    @PostMapping("/connection_select")
+    public ResponseEntity<RoomJoinRes> joinRoom_select (@RequestBody RoomJoinReq roomJoinReq, HttpServletRequest httpServletRequest){
+//        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id, side, order);
+        RoomJoinRes roomJoinRes = roomService.joinRoom_select(httpServletRequest, roomJoinReq);
         return ResponseEntity.ok(roomJoinRes);
     }
 
 
 
     //5. 방 퇴장
-    @GetMapping("/{openvidu_id}/disconnect")
-    public ResponseEntity disconnect(HttpServletRequest httpServletRequest, @PathVariable String openvidu_id) throws Exception {
+    @GetMapping("/{room_id}/disconnect")
+    public ResponseEntity disconnect(HttpServletRequest httpServletRequest, @PathVariable String room_id) throws Exception {
         //JWT 토큰에서 사용자 정보 받아오기
         String memberToken = httpServletRequest.getHeader("access-token");
         String loginId = jwtUtil.getInfo(memberToken).getLoginId();
 
-        Member member = memberService.getInfoByLoginId(loginId);
+//        Member member = memberService.getInfoByLoginId(loginId);
+
+        roomService.disconnectParticipant(room_id, loginId);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -103,12 +114,23 @@ public class RoomController {
 
 
     //7. 비어있는 진영, 순서 배열 반환
-    @GetMapping("/{openvidu_id}/empty")
-    public ResponseEntity<String[][]> emptySideOrder(@PathVariable String openvidu_id){
-        String[][] participants = roomService.validSideOrder(openvidu_id);
+    @GetMapping("/{room_id}/empty")
+    public ResponseEntity<String[][]> emptySideOrder(@PathVariable String room_id){
+        String[][] participants = roomService.validSideOrder(room_id);
         return ResponseEntity.ok(participants);
     }
 
 
+    @PutMapping("/sideOrder")
+    public ResponseEntity updateUserSideOrder(@RequestBody RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq) {
+        roomService.sendSignal(roomUpdateUserSideOrderReq);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("/{room_id}/end")
+    public ResponseEntity updateDebateInfo(@PathVariable String room_id) {
+        roomService.updateDebateInfo(room_id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 }

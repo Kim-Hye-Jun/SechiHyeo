@@ -9,6 +9,9 @@
     <div class="navigations">
       <!-- 1 -->
       <template v-if="isLogin">
+        <router-link to="/entrance">방 조회</router-link>
+        <router-link to="/boards">토론 모집 게시판</router-link>
+        <router-link to="/userPage">Mypage</router-link>
         <a href="javascript:;" @click="logoutUser" class="logout-button">
           Logout
         </a>
@@ -58,6 +61,11 @@ header {
   background-color: #927dfc;
   z-index: 2;
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  top: 0;
+  /* width: 100% */
+  left: 0;
+  right: 0;
 }
 a {
   color: #dedede;

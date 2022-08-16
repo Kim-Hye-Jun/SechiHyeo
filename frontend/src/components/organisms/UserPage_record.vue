@@ -1,44 +1,44 @@
 <template>
   <div class="userpage-content-record-time-box">
-    {{ member.debateNumber }} Fight Record
+    {{ memberinfo?.debateNumber }} Fight Record
   </div>
   <div class="userpage-content-record-inform-box">
-    <div class="userpage-content-record-inform">{{ member.recordWin }}</div>
-    <div class="userpage-content-record-inform">{{ member.recordLose }}</div>
-    <div class="userpage-content-record-inform">{{ member.recordDraw }}</div>
+    <div class="userpage-content-record-inform">
+      {{ memberinfo?.recordWin }}
+    </div>
+    <div class="userpage-content-record-inform">
+      {{ memberinfo?.recordLose }}
+    </div>
+    <div class="userpage-content-record-inform">
+      {{ memberinfo?.recordDraw }}
+    </div>
     <!-- <div class="userpage-content-record-pagination">1 2 3 4 5 6</div> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default defineComponent({
   data() {
-    return {
-      members: [],
-      member: {
-        debateNumber: "",
-        // debate_time: "",
-        recordWin: "",
-        recordLose: "",
-        recordDraw: "",
-      },
-    };
+    return {};
+  },
+  computed: {
+    ...mapState(["memberinfo"]),
   },
   created() {
     this.memberRecord();
   },
   methods: {
-    ...mapActions(["MEMBERRECORD"]),
+    ...mapActions(["MEMBERPROFILE"]),
     memberRecord() {
-      this.MEMBERRECORD();
+      this.MEMBERPROFILE();
     },
   },
 });
 </script>
 
-<style>
+<style scoped>
 .userpage-content-record {
   position: relative;
   width: 800px;
