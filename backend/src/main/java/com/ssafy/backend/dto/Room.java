@@ -4,6 +4,7 @@ import com.ssafy.backend.dto.response.RoomSearchRes;
 import lombok.*;
 
 import javax.persistence.Column;
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -43,6 +44,7 @@ public class Room {
                 .curNumOfPeople(room.getCurNumOfPeople())
                 .maxNumOfPeople(room.getMaxNumOfPeople())
                 .thumbnail(room.getThumbnail())
+//                .sideOrderList(new ArrayList<SideOrderInfo>())
                 .build();
     }
 }
