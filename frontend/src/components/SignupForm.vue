@@ -1,6 +1,6 @@
 <template>
-  <div class="contents">
-    <background></background>
+  <background></background>
+  <!-- <div class="contents">
     <div class="form-wrapper form-wrapper-sm">
       <form @submit.prevent="signUp" class="form">
         <h2><b>회원 가입</b></h2>
@@ -49,6 +49,163 @@
           회원 가입
         </button>
       </form>
+    </div>
+  </div> -->
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="card signUp-content shadow-lg border-0">
+          <div class="card-body">
+            <div class="text-center">
+              <!-- <img
+                class="logo"
+                src="https://cdn3.iconfinder.com/data/icons/galaxy-open-line-gradient-i/200/account-256.png"
+              /> -->
+              <img class="logo" src="@/assets/logo.png" alt="세치혀 로고" />
+            </div>
+            <h3 class="text-logo">회원 가입</h3>
+            <br />
+            <form class="text-center" @submit.prevent>
+              <div>
+                <label for="userId">아이디: </label>
+                <div class="input-group mb-3">
+                  <input
+                    id="userId"
+                    class="form-control border-0"
+                    type="text"
+                    v-model="member.loginId"
+                    placeholder="아이디를 입력하세요."
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    @click="idDuplicateCheck"
+                  >
+                    중복 체크
+                  </button>
+                </div>
+                <div
+                  :class="{
+                    inValid: !validId || this.idDuplicate,
+                    Valid: validId && !this.idDuplicate,
+                  }"
+                >
+                  {{ idMessage }}
+                </div>
+              </div>
+              <br />
+              <!-- <input
+                class="form-control border-0"
+                id="userPW"
+                type="text"
+                v-model="member.loginPassword"
+                placeholder="비밀번호를 입력하세요."
+              /> -->
+              <div>
+                <label for="password">비밀번호: </label>
+                <div class="input-group mb-3">
+                  <input
+                    id="password"
+                    type="text"
+                    class="form-control border-0"
+                    v-model="member.loginPassword"
+                    placeholder="비밀번호를 입력하세요."
+                  />
+                </div>
+              </div>
+              <br />
+              <div>
+                <label for="password">비밀번호 확인: </label>
+                <div class="input-group mb-3">
+                  <input
+                    id="password"
+                    type="text"
+                    class="form-control border-0"
+                    v-model="loginPassword2"
+                    placeholder="비밀번호를 확인해주세요."
+                  />
+                </div>
+                <div>{{ pwMessage }}</div>
+              </div>
+              <br />
+              <div>
+                <label for="nickname">닉네임: </label>
+                <div class="input-group mb-3">
+                  <input
+                    id="nickname"
+                    type="text"
+                    class="form-control border-0"
+                    v-model="member.nickname"
+                    placeholder="닉네임을 입력하세요"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    @click="nickNameDuplicateCheck"
+                  >
+                    닉네임 중복 체크
+                  </button>
+                </div>
+                <div>{{ nickNameMessage }}</div>
+              </div>
+              <br />
+              <div>
+                <label for="email">이메일: </label>
+                <div class="input-group mb-3">
+                  <input
+                    id="email"
+                    type="text"
+                    class="form-control border-0"
+                    v-model="member.email"
+                    placeholder="someone@example.com"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    @click="emailDuplicateCheck"
+                  >
+                    이메일 중복 체크
+                  </button>
+                </div>
+                <div>{{ emailMessage }}</div>
+              </div>
+              <br />
+              <div>
+                <label for="phoneNumber">전화번호: </label>
+                <div class="input-group mb-3">
+                  <input
+                    id="phoneNumber"
+                    type="text"
+                    class="form-control border-0"
+                    v-model="member.phoneNumber"
+                    placeholder="전화번호를 입력해주세요"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    @click="phoneDuplicateCheck"
+                  >
+                    전화번호 중복 체크
+                  </button>
+                </div>
+                <div>{{ phoneMessage }}</div>
+              </div>
+            </form>
+          </div>
+          <div class="nomember">
+            <p class="text-center">
+              <button
+                type="submit"
+                class="btn btn-success btn-lg"
+                :disabled="isDisabled"
+                @click="signUp"
+              >
+                회원 가입
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -224,4 +381,96 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped></style>
+<style scoped>
+body {
+  background-color: #0278ae;
+  font-family: "Lato", sans-serif;
+}
+
+.signUp-content {
+  max-width: 800px;
+  width: 100%;
+  height: 1200px;
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  margin-left: -200px;
+  margin-top: -286px;
+  border-radius: 8px;
+}
+
+.logo {
+  width: 128px;
+  height: 128px;
+  margin: 5px;
+}
+
+.text-logo {
+  text-align: center;
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.form-control {
+  width: 12rem;
+  height: 3rem;
+  /* left: 65px; */
+
+  position: relative;
+  border-radius: 5px;
+  background-color: #ccffee;
+}
+
+/* .btn {
+  font-size: 22px;
+  background-color: #0278ae;
+  border: none;
+  width: 18rem;
+  height: 3rem;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: blue;
+} */
+
+.nomember {
+  background-color: #e4dede;
+  padding: 10px;
+  padding-top: 20px;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.nomember a {
+  text-decoration: none;
+}
+
+.copyright {
+  color: white;
+  padding: 15px;
+}
+
+/*support google chrome*/
+.form-control::-webkit-input-placeholder {
+  color: #00000036;
+}
+
+/*support mozilla*/
+.form-control:-moz-input-placeholder {
+  color: red;
+}
+
+/*support internet explorer*/
+.form-control:-ms-input-placeholder {
+  color: red;
+}
+
+.inValid {
+  color: red;
+}
+
+.Valid {
+  color: green;
+}
+</style>
