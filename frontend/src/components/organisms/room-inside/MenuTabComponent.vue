@@ -43,11 +43,6 @@ import { useStore } from "vuex";
 import http from "@/http";
 
 export default defineComponent({
-  props: {
-    // OVScreen: Object,
-    session: Object,
-    // tokenScreen: String,
-  },
   components: {
     MenuTabMicIconComponent,
     MenuTabDocIconComponent,
@@ -68,7 +63,9 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.session?.on("signal:image-share", (event: any) => {
+    console.log("session mounted menutab :", this.store.state.session);
+
+    this.store.state.session?.on("signal:image-share", (event: any) => {
       console.log("?");
       (document.getElementById("shareImg") as HTMLImageElement).src =
         event.data;
@@ -102,7 +99,8 @@ export default defineComponent({
             console.log(res);
             // 시그널
             console.log("singal");
-            this.session?.signal({
+            console.log(this.store.state.session);
+            this.store.state.session?.signal({
               data: res.data,
               to: [],
               type: "image-share",
