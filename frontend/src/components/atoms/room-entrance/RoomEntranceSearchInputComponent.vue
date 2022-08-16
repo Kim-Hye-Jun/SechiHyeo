@@ -72,7 +72,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
   text-align: center;
   color: #2c3e50;

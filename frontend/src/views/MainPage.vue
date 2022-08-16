@@ -1,30 +1,71 @@
 <template>
-  <div>
-    <div class="main list-container contents">
-      <h1 class="page-header">세치혀 입니다.</h1>
-      <img class="page-header" src="../assets/logo.png" />
-      <div class="form-wrapper form-wrapper-sm">
-        <form @submit.prevent class="form">
-          <div>
-            <label for="sessionName">세션 이름:</label>
-            <input
-              id="sessionName"
-              type="text"
-              v-model="mySessionId"
-              placeholder="세션 이름을 입력하세요."
-            />
-            <label for="NickName">닉네임:</label>
-            <input
-              id="NickName"
-              type="text"
-              v-model="nickName"
-              placeholder="닉네임을 입력하세요."
-            />
-          </div>
-          <button type="button" class="btn" @click="joinSession()">
-            세션 참가하기
-          </button>
-        </form>
+  <div id="contents">
+    <div id="section1">
+      <div class="container">
+        <h2>Scroll Down Button #1</h2>
+        <a href="#section2" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section2">
+      <div class="container">
+        <h2>Scroll Down Button #2</h2>
+        <a href="#section3" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section3">
+      <div class="container">
+        <h2>Scroll Down Button #3</h2>
+        <a href="#section4" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section4">
+      <div class="container">
+        <h2>Scroll Down Button #4</h2>
+        <a href="#section5" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section5">
+      <div class="container">
+        <h2>Scroll Down Button #5</h2>
+        <a href="#section6" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section6">
+      <div class="container">
+        <h2>Scroll Down Button #6</h2>
+        <a href="#section7" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section7">
+      <div class="container">
+        <h2>Scroll Down Button #7</h2>
+        <a href="#section8" class="scroll"
+          >scroll<span></span><span></span><span></span
+        ></a>
+      </div>
+    </div>
+    <div id="section8">
+      <div class="container">
+        <h2>Scroll Down Button #8</h2>
+        <a href="#section9" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section9">
+      <div class="container">
+        <h2>Scroll Down Button #9</h2>
+        <a href="#section10" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section10">
+      <div class="container">
+        <h2>Scroll Down Button #10</h2>
+        <a href="#section11" class="scroll">scroll<span></span></a>
+      </div>
+    </div>
+    <div id="section11">
+      <div class="container">
+        <h2>Scroll Down Button #11</h2>
+        <a href="#section1" class="scroll">scroll<span></span></a>
       </div>
     </div>
   </div>
@@ -42,8 +83,58 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    // document.addEventListener("DOMContentLoaded", function () {
+    //   const a = document.getElementsByClassName("a[href*=#]");
+    //   for (let i = 0; i < a.length; i++) {
+    //     a[i].addEventListener("click", function (e) {
+    //       e.preventDefault();
+    //       document
+    //         .getElementsByTagName("html")[0]
+    //         .animate(
+    //           { scrollTop: $($(this).attr("href")).offset().top },
+    //           500,
+    //           "linear"
+    //         );
+    //     });
+    //   }
+    // });
+
+    // (function () {
+    //   "use strict";
+
+    //   var btnScrollDown = document.querySelector("a[href*=#]");
+
+    //   function scrollDown() {
+    //     var windowCoords = document.documentElement.clientHeight;
+    //     (function scroll() {
+    //       if (window.pageYOffset < windowCoords) {
+    //         window.scrollBy(0, 10);
+    //         setTimeout(scroll, 0);
+    //       }
+    //       if (window.pageYOffset > windowCoords) {
+    //         window.scrollTo(0, windowCoords);
+    //       }
+    //     })();
+    //   }
+    //   if (btnScrollDown) {
+    //     btnScrollDown.addEventListener("click", scrollDown);
+    //   }
+    // })();
+
     return { store };
   },
+  // mounted() {
+  //   $(function () {
+  //     $("a[href*=#]").on("click", function (e: any) {
+  //       e.preventDefault();
+  //       $("html, body").animate(
+  //         { scrollTop: $($(this).attr("href")).offset().top },
+  //         500,
+  //         "linear"
+  //       );
+  //     });
+  //   });
+  // },
   data() {
     return {
       mySessionId: "SessionA",
@@ -51,178 +142,623 @@ export default defineComponent({
     };
   },
   computed: {},
-  methods: {
-    joinSession() {
-      // --- Get an OpenVidu object ---
-      this.store.state.OV = new OpenVidu();
-
-      // console.log(this.store.state.OV);
-
-      this.store.state.session = this.store.state.OV.initSession();
-
-      // console.log(this.store.state.session);
-
-      this.store.state.myNickName = this.nickName;
-
-      // --- Specify the actions when events take place in the session ---
-
-      // On every new Stream received...
-      this.store.state.session.on("streamCreated", ({ stream }: any) => {
-        const subscriber = this.store.state.session.subscribe(stream);
-        this.store.state.subscribers.push(subscriber);
-      });
-
-      // On every Stream destroyed...
-      this.store.state.session.on("streamDestroyed", ({ stream }: any) => {
-        const index = this.store.state.subscribers.indexOf(
-          stream.streamManager,
-          0
-        );
-        if (index >= 0) {
-          this.store.state.subscribers.splice(index, 1);
-        }
-      });
-
-      // On every asynchronous exception...
-      this.store.state.session.on("exception", ({ exception }: any) => {
-        console.warn(exception);
-      });
-
-      this.store.state.session.on("signal:countdown", (event: any) => {
-        console.log(event);
-      });
-
-      // --- Connect to the session with a valid user token ---
-
-      // 'getToken' method is simulating what your server-side should do.
-      // 'token' parameter should be retrieved and returned by your own backend
-      this.getToken(this.mySessionId).then((token) => {
-        this.store.state.session
-          .connect(token, { clientData: this.store.state.myNickName })
-          .then(() => {
-            // --- Get your own camera stream with the desired properties ---
-
-            let publisher = this.store.state.OV.initPublisher(undefined, {
-              audioSource: undefined, // The source of audio. If undefined default microphone
-              videoSource: undefined, // The source of video. If undefined default webcam
-              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-              publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: "640x480", // The resolution of your video
-              frameRate: 30, // The frame rate of your video
-              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-              mirror: false, // Whether to mirror your local video or not
-            });
-
-            this.store.state.mainStreamManager = publisher;
-            this.store.state.publisher = publisher;
-
-            // --- Publish your stream ---
-
-            this.store.state.session.publish(this.store.state.publisher);
-          })
-          .catch((error: any) => {
-            console.log(
-              "There was an error connecting to the session:",
-              error.code,
-              error.message
-            );
-          });
-      });
-
-      window.addEventListener("beforeunload", this.leaveSession);
-
-      this.$router.push({
-        name: "Room",
-        params: { joinCode: this.mySessionId },
-      });
-    },
-
-    leaveSession() {
-      // --- Leave the session by calling 'disconnect' method over the Session object ---
-      if (this.store.state.session) this.store.state.session.disconnect();
-
-      this.store.state.session = undefined;
-      this.store.state.mainStreamManager = undefined;
-      this.store.state.publisher = undefined;
-      this.store.state.subscribers = [];
-      this.store.state.OV = undefined;
-
-      window.removeEventListener("beforeunload", this.leaveSession);
-    },
-
-    //세션 이름 넣으면 토큰을 주는 함수
-    getToken(mySessionId: string) {
-      return this.createSession(mySessionId).then((sessionId) =>
-        this.createToken(sessionId)
-      );
-    },
-    // 세션 생성 함수(우리가 정한 방 이름으로 세션 아이디 생성)
-    // 생성된 아이디 리턴
-    createSession(sessionId: string) {
-      return new Promise((resolve, reject) => {
-        console.log(sessionId);
-
-        axios
-          .post(
-            `${OPENVIDU_SERVER_URL}/openvidu/api/sessions`,
-            JSON.stringify({
-              customSessionId: sessionId,
-            }),
-            {
-              auth: {
-                username: "OPENVIDUAPP",
-                password: OPENVIDU_SERVER_SECRET,
-              },
-            }
-          )
-          .then((response) => response.data)
-          .then((data) => resolve(data.id))
-          .catch((error) => {
-            if (error.response.status === 409) {
-              resolve(sessionId);
-            } else {
-              console.warn(
-                `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`
-              );
-              if (
-                window.confirm(
-                  `No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`
-                )
-              ) {
-                location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
-              }
-              reject(error.response);
-            }
-          });
-      });
-    },
-
-    // 토큰 생성 함수(서버에서 생성한 세션 ID로 생성) 원래 서버단에서 구현해야함
-    // See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
-    createToken(sessionId: any) {
-      return new Promise((resolve, reject) => {
-        axios
-          .post(
-            `${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`,
-            {},
-            {
-              auth: {
-                username: "OPENVIDUAPP",
-                password: OPENVIDU_SERVER_SECRET,
-              },
-            }
-          )
-          .then((response) => response.data)
-          .then((data) => resolve(data.token))
-          .catch((error) => reject(error.response));
-      });
-    },
-  },
+  methods: {},
 });
 </script>
 <style scoped>
-img {
+/* reset */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lato";
+}
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  font-family: "Abel";
+}
+
+/* nav */
+#nav {
+  position: fixed;
+  left: 0;
+  top: 0px;
+  width: 100%;
+  height: 61px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+#nav.on {
+  position: fixed;
+  top: -61px;
+}
+#nav h1 {
+  float: left;
+  color: #fff;
+  font-size: 40px;
+  padding: 5px 5px 5px 15px;
+  font-family: "Abel";
+}
+
+/* contents */
+#contents {
+  text-align: center;
+  color: #fff;
+}
+#contents > div {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#contents > div h2 {
+  font-size: 70px;
+  font-weight: 200;
+  text-transform: uppercase;
+}
+#contents > div h2 strong {
+  font-weight: 700;
+  font-style: italic;
   display: block;
-  margin: 0px auto;
+}
+
+/* section */
+#section1 {
+  background: radial-gradient(
+    ellipse farthest-corner at center top,
+    #a3a1ff,
+    #3a3897
+  );
+}
+#section2 {
+  background: radial-gradient(
+    ellipse farthest-corner at center bottom,
+    #3aa17e,
+    #00537e
+  );
+}
+#section3 {
+  background: radial-gradient(
+    ellipse farthest-corner at center top,
+    #fbb03b,
+    #d4145a
+  );
+}
+#section4 {
+  background: radial-gradient(
+    ellipse farthest-corner at center top,
+    #29abe2,
+    #4f00bc
+  );
+}
+#section5 {
+  background: radial-gradient(
+    ellipse farthest-corner at center top,
+    #ff5300,
+    #45145a
+  );
+}
+#section6 {
+  background: radial-gradient(
+    ellipse farthest-corner at center bottom,
+    #852d91,
+    #312a6c
+  );
+}
+#section7 {
+  background: radial-gradient(
+    ellipse farthest-corner at center top,
+    #a3a1ff,
+    #3a3897
+  );
+}
+#section8 {
+  background: radial-gradient(
+    ellipse farthest-corner at center bottom,
+    #3aa17e,
+    #00537e
+  );
+}
+#section9 {
+  background: radial-gradient(
+    ellipse farthest-corner at center top,
+    #fbb03b,
+    #d4145a
+  );
+}
+#section10 {
+  background-image: linear-gradient(-45deg, #ffc796 0%, #ff6b95 100%);
+}
+#section11 {
+  background-image: linear-gradient(to top, #88d3ce 0%, #6e45e2 100%);
+}
+
+/* #section1 {
+  background: url(https://picsum.photos/1200/800?image=575) center center /
+    cover no-repeat;
+}
+#section2 {
+  background: url(https://picsum.photos/1200/800?image=1016) center center /
+    cover no-repeat;
+}
+#section3 {
+  background: url(https://picsum.photos/1200/800?image=869) center center /
+    cover no-repeat;
+}
+#section4 {
+  background: url(https://picsum.photos/1200/800?image=506) center center /
+    cover no-repeat;
+}
+#section5 {
+  background: url(https://picsum.photos/1200/800?image=1037) center center /
+    cover no-repeat;
+}
+#section6 {
+  background: url(https://picsum.photos/1200/800?image=901) center center /
+    cover no-repeat;
+}
+#section7 {
+  background: url(https://picsum.photos/1200/800?image=675) center center /
+    cover no-repeat;
+}
+#section8 {
+  background: url(https://picsum.photos/1200/800?image=1050) center center /
+    cover no-repeat;
+}
+#section9 {
+  background: url(https://picsum.photos/1200/800?image=902) center center /
+    cover no-repeat;
+}
+#section10 {
+  background: url(https://picsum.photos/1200/800?image=516) center center /
+    cover no-repeat;
+} */
+/* container */
+.container {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+/* scroll */
+.scroll {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translatex(-50%);
+  z-index: 2;
+  display: inline-block;
+  color: #fff;
+  transition: opacity 0.3s;
+}
+.scroll:hover {
+  opacity: 0.5;
+}
+
+#section1 a {
+  padding-top: 60px;
+}
+#section1 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  transform: rotate(-45deg);
+  box-sizing: border-box;
+}
+
+#section2 a {
+  padding-top: 60px;
+}
+#section2 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin-left: -23px;
+  border: 1px solid #fff;
+  border-radius: 100%;
+  box-sizing: border-box;
+}
+#section2 a span::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: "";
+  width: 16px;
+  height: 16px;
+  margin: -12px 0 0 -8px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  transform: rotate(-45deg);
+  box-sizing: border-box;
+}
+
+#section3 a {
+  padding-top: 60px;
+}
+#section3 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin-left: -23px;
+  border: 1px solid #fff;
+  border-radius: 100%;
+  box-sizing: border-box;
+}
+#section3 a span::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: "";
+  width: 16px;
+  height: 16px;
+  margin: -12px 0 0 -8px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  box-sizing: border-box;
+}
+#section3 a span::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  content: "";
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1);
+  border-radius: 100%;
+  opacity: 0;
+  animation: sdb03 3s infinite;
+  box-sizing: border-box;
+}
+@keyframes sdb03 {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    box-shadow: 0 0 0 60px rgba(255, 255, 255, 0.1);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#section4 a {
+  padding-top: 60px;
+}
+#section4 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  transform: rotate(-45deg);
+  animation: sdb04 2s infinite;
+  box-sizing: border-box;
+}
+@keyframes sdb04 {
+  0% {
+    transform: rotate(-45deg) translate(0, 0);
+  }
+  20% {
+    transform: rotate(-45deg) translate(-10px, 10px);
+  }
+  40% {
+    transform: rotate(-45deg) translate(0, 0);
+  }
+}
+
+#section5 a {
+  padding-top: 70px;
+}
+#section5 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  transform: rotate(-45deg);
+  animation: sdb05 1.5s infinite;
+  box-sizing: border-box;
+}
+
+@keyframes sdb05 {
+  0% {
+    transform: rotate(-45deg) translate(0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-45deg) translate(-20px, 20px);
+    opacity: 0;
+  }
+}
+
+#section6 a {
+  padding-top: 70px;
+}
+#section6 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  transform: rotateZ(-45deg);
+  animation: sdb06 1.5s infinite;
+  box-sizing: border-box;
+}
+@keyframes sdb06 {
+  0% {
+    transform: rotateY(0) rotateZ(-45deg) translate(0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(720deg) rotateZ(-45deg) translate(-20px, 20px);
+    opacity: 0;
+  }
+}
+
+#section7 a {
+  padding-top: 80px;
+}
+#section7 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  transform: rotate(-45deg);
+  animation: sdb07 2s infinite;
+  opacity: 0;
+  box-sizing: border-box;
+}
+#section7 a span:nth-of-type(1) {
+  animation-delay: 0s;
+}
+#section7 a span:nth-of-type(2) {
+  top: 16px;
+  animation-delay: 0.15s;
+}
+#section7 a span:nth-of-type(3) {
+  top: 32px;
+  animation-delay: 0.3s;
+}
+
+@keyframes sdb07 {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#section8 a {
+  padding-top: 60px;
+}
+#section8 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 30px;
+  height: 50px;
+  margin-left: -15px;
+  border: 2px solid #fff;
+  border-radius: 50px;
+  box-sizing: border-box;
+}
+#section8 a span::before {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  background-color: #fff;
+  border-radius: 100%;
+  box-sizing: border-box;
+}
+
+#section9 a {
+  padding-top: 60px;
+}
+#section9 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 30px;
+  height: 50px;
+  margin-left: -15px;
+  border: 2px solid #fff;
+  border-radius: 50px;
+  box-sizing: border-box;
+}
+#section9 a span::before {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  background-color: #fff;
+  border-radius: 100%;
+  animation: sdb9 2s infinite;
+  box-sizing: border-box;
+}
+@keyframes sdb9 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    transform: translate(0, 20px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#section10 a span {
+  width: 35px;
+  height: 50px;
+  border: 3px solid #fff;
+  border-top-left-radius: 40%;
+  border-bottom-left-radius: 60%;
+  border-top-right-radius: 40%;
+  border-bottom-right-radius: 60%;
+  position: absolute;
+  top: -64px;
+  left: -14%;
+}
+
+#section10 a span::before {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 20px;
+  background: #fff;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: bottom;
+  animation: for-before 3s infinite;
+  transition: all 0.3s ease;
+}
+
+@keyframes for-before {
+  0% {
+    height: 0px;
+  }
+  60% {
+    height: 20px;
+  }
+  60% {
+    transform: scaleY(1) translateX(-50%);
+  }
+  100% {
+    transform: scaleY(0) translateX(-50%);
+  }
+}
+
+#section11 a span {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  bottom: 5px;
+  height: 40px;
+  top: -50px;
+  left: 50%;
+  overflow: hidden;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 4px;
+}
+
+#section11 a span::before {
+  animation: pill 3.5s linear infinite;
+  background-image: linear-gradient(to top, #fff 30%, #88d3ce 70%);
+  border-radius: 2px;
+  content: "";
+  display: block;
+  height: 40px;
+  left: 0;
+  position: absolute;
+  width: 4px;
+}
+
+@keyframes line {
+  0% {
+    height: 0;
+    top: 16px;
+  }
+  50% {
+    height: 0;
+    top: 16px;
+  }
+  55% {
+    height: 5px;
+    top: 16px;
+  }
+  100% {
+    height: 30px;
+    top: 66px;
+  }
+}
+
+@keyframes circle {
+  0% {
+    height: 0;
+    top: 0;
+    width: 0;
+  }
+  50% {
+    height: 16px;
+    top: 0;
+    width: 16px;
+  }
+  55% {
+    height: 16px;
+    top: 0;
+    width: 16px;
+  }
+  100% {
+    height: 0;
+    top: 66px;
+    width: 0;
+  }
+}
+
+@keyframes pill {
+  0% {
+    top: -40px;
+  }
+  50% {
+    top: 0;
+  }
+  100% {
+    top: 50px;
+  }
 }
 </style>
