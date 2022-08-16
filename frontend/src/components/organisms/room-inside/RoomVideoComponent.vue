@@ -38,7 +38,7 @@
     <button
       v-for="(item, index) in store.state.uploadImageArr"
       v-bind:key="item"
-      @click="updateImg(item)"
+      @click="updateImg(item, index)"
     >
       {{ index + 1 }}
     </button>
@@ -81,8 +81,10 @@ export default defineComponent({
     // Background,
   },
   methods: {
-    updateImg(src: string): void {
+    updateImg(src: string, idx: number): void {
       this.imgSrc = src;
+      this.store.state.selectedFileIndex = idx;
+      console.log("selectedFileIndex : ", idx);
     },
     test(a: string, b: string): void {
       console.log(a, b);

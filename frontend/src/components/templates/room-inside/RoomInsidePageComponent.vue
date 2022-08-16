@@ -20,9 +20,7 @@
     </suspense>
     <menu-tab-component
       class="room__inside__class3"
-      :sessionScreen="sessionScreen"
-      :OVScreen="OVScreen"
-      :tokenScreen="tokenScreen"
+      :session="sessionCamera"
     ></menu-tab-component>
   </div>
 </template>
@@ -56,8 +54,8 @@ export default defineComponent({
     let OVCamera: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
     let sessionCamera: openVidu.Session | undefined = OVCamera.initSession();
 
-    let OVScreen: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
-    let sessionScreen: openVidu.Session | undefined = OVScreen.initSession();
+    // let OVScreen: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
+    // let sessionScreen: openVidu.Session | undefined = OVScreen.initSession();
 
     const subscribers = ref([]);
     // let subscribers: openVidu.Subscriber[] = [];
@@ -162,20 +160,20 @@ export default defineComponent({
       }
     });
 
-    sessionScreen.on("streamCreated", (event) => {
-      if (event.stream.typeOfVideo == "SCREEN") {
-        // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
-        var subscriberScreen = sessionScreen?.subscribe(
-          event.stream,
-          "shareImg"
-        );
-        // When the HTML video has been appended to DOM...
-        subscriberScreen?.on("videoElementCreated", (event) => {
-          // Add a new <p> element for the user's nickname just below its video
-          // appendUserData(event.element, subscriberScreen?.stream.connection);
-        });
-      }
-    });
+    // sessionScreen.on("streamCreated", (event) => {
+    //   if (event.stream.typeOfVideo == "SCREEN") {
+    //     // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+    //     var subscriberScreen = sessionScreen?.subscribe(
+    //       event.stream,
+    //       "shareImg"
+    //     );
+    //     // When the HTML video has been appended to DOM...
+    //     subscriberScreen?.on("videoElementCreated", (event) => {
+    //       // Add a new <p> element for the user's nickname just below its video
+    //       // appendUserData(event.element, subscriberScreen?.stream.connection);
+    //     });
+    //   }
+    // });
 
     sessionCamera.on("streamDestroyed", ({ stream }) => {
       // Remove the stream from 'subscribers' array
@@ -266,7 +264,7 @@ export default defineComponent({
     if (testReturnData === undefined) return;
     console.log("no return");
     const tokenCamera = testReturnData["tokenCamera"];
-    const tokenScreen = testReturnData["tokenScreen"];
+    // const tokenScreen = testReturnData["tokenScreen"];
 
     await sessionCamera
       .connect(tokenCamera, testReturnData)
@@ -341,9 +339,9 @@ export default defineComponent({
     //   )["userSideOrder"];
     //   const index = emptyVideoArr.value.indexOf((sideOrder as string));
     // }
-    console.log("pre OV : ", OVScreen);
-    console.log("pre SESSION : ", sessionScreen);
-    console.log("pre token : ", tokenScreen);
+    // console.log("pre OV : ", OVScreen);
+    // console.log("pre SESSION : ", sessionScreen);
+    // console.log("pre token : ", tokenScreen);
     return {
       store,
       publisher,
@@ -353,11 +351,11 @@ export default defineComponent({
       mapClassNameUser,
       emptyVideoArr,
       sessionCamera,
-      sessionScreen,
+      // sessionScreen,
       OVCamera,
-      OVScreen,
+      // OVScreen,
       tokenCamera,
-      tokenScreen,
+      // tokenScreen,
     };
   },
 });
