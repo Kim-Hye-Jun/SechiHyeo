@@ -240,7 +240,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String uploadProof(String roomId, MultipartFile proof) {
+    public String uploadProof(MultipartFile proof) {
         //자료 파일 업로드 폴더명
         String proofDir = "proof";
 
