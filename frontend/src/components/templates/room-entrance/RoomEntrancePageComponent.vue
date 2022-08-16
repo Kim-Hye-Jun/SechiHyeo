@@ -54,10 +54,15 @@
                 :labelName="sideBLabelName"
               ></modal-input-box-component>
             </div>
+            <!--방 이미지 업로드 -->
             <div>
-              <input type="file" @change="onFileChange" />
+              <input type="file" ref="selectFile" @change="previewFile" />
               <div id="preview">
-                <img v-if="url" :src="url" />
+                <img
+                  v-if="previewImgUrl"
+                  :src="previewImgUrl"
+                  style="width: 150px; height: 150px"
+                />
               </div>
             </div>
             <div class="flex__ul">
@@ -124,6 +129,7 @@ import ModalInputBoxComponent from "@/components/molecules/room-entrance/ModalIn
 import ModalRadioButtonComponent from "@/components/atoms/common/ModalRadioButtonComponent.vue";
 import RoomMakeModalComponent from "@/components/organisms/room-entrance/RoomMakeModalComponent.vue";
 import { RoomCreateRequestInfo, RoomCreateResponseInfo } from "@type/types";
+import { useStore } from "vuex";
 
 import http from "@/http";
 import { hasChanged } from "@vue/shared";
@@ -144,14 +150,18 @@ export default defineComponent({
       isRoomMakeModalView: false,
     });
 
+    const store = useStore();
+
     return {
       state,
+      store,
     };
   },
   data() {
     return {
       modal: false,
-      url: null as any,
+      previewImgUrl: null as any,
+      selectFile: null,
       roomTitleLabelName: "RoomTitle" as string,
       debateTopicLabelName: "DebateTopic" as string,
       sideALabelName: "Side 1" as string,
@@ -164,10 +174,10 @@ export default defineComponent({
     updateRooms(searchValue: string) {
       //(#구현해야할것) searchValue로 방검색 axios 요청 보낸 후 room-entrance-board-component 갱신
     },
-    onFileChange(e: any) {
-      const file = e.target.files[0];
-      this.url = URL.createObjectURL(file);
-    },
+    // onFileChange(e: any) {
+    //   const file = e.target.files[0];
+    //   this.url = URL.createObjectURL(file);
+    // },
     myFunc(): void {
       if (
         document.querySelector(
@@ -223,12 +233,63 @@ export default defineComponent({
           if (res.status === 200) {
             const roomId = res.data.roomId;
             console.log(roomId);
-            this.goRoomInsidePage(roomId);
+            if (this.selectFile) {
+              let thumbnail = new FormData();
+              thumbnail.append("thumbnail", this.selectFile);
+              http
+                .post(
+                  "https://i7a508.p.ssafy.io/api/sessions/" +
+                    roomId +
+                    "/thumbnail",
+                  thumbnail,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                      "access-token": this.store.state.token,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log(res);
+                  console.log("썸네일 업로드 완료");
+                  // this.goRoomInsidePage(roomId);
+                });
+            }
           }
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    previewFile() {
+      if (
+        0 < ((this.$refs["selectFile"] as any)["files"]["length"] as number)
+      ) {
+        this.selectFile = (this.$refs["selectFile"] as any)["files"][0] as null;
+        let fileExt = ((this.selectFile as any)["name"] as string).substring(
+          ((this.selectFile as any)["name"] as string).lastIndexOf(".") + 1
+        );
+        fileExt = fileExt.toLowerCase();
+        if (
+          ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
+          this.selectFile != null &&
+          this.selectFile["size"] <= 1048576
+        ) {
+          var reader = new FileReader();
+          reader.onload = (e: any) => {
+            this.previewImgUrl = e.target.result;
+          };
+          reader.readAsDataURL(this.selectFile);
+        } else {
+          alert("파일을 다시 선택해 주세요.");
+          this.selectFile = null;
+          this.previewImgUrl = null;
+        }
+      } else {
+        this.selectFile = null;
+        this.previewImgUrl = null;
+      }
+      // console.log(this.selectFile);
     },
     goRoomInsidePage(roomId: string): void {
       // this.modalOut();
