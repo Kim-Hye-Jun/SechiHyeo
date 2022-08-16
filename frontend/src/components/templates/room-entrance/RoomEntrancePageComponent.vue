@@ -252,7 +252,7 @@ export default defineComponent({
                 .then((res) => {
                   console.log(res);
                   console.log("썸네일 업로드 완료");
-                  // this.goRoomInsidePage(roomId);
+                  this.goRoomInsidePage(roomId);
                 });
             }
           }
