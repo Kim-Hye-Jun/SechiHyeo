@@ -169,7 +169,7 @@ export default createStore({
       // });
     },
     BOARDONE: (store, num) => {
-      axios
+      return axios
         .get(`${API_BASE_URL}debate-board/${num}`, {
           headers: {
             "access-token": store.state.token,

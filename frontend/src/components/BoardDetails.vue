@@ -141,14 +141,14 @@ export default defineComponent({
   computed: {
     ...mapState(["boards", "debate_board", "memberinfo"]),
   },
-  created() {
-    let board_no = this.$route.params.board_no;
-    // this.board_no = this.$route.params.board_no;
-    this.boardOne(board_no as any as number);
+  // created() {
+  //   let board_no = this.$route.params.board_no;
+  //   // this.board_no = this.$route.params.board_no;
+  //   this.boardOne(board_no as any as number);
 
-    // this.boardOne(this.debate_board);
-    // this.replyAll();
-  },
+  //   // this.boardOne(this.debate_board);
+  //   // this.replyAll();
+  // },
   methods: {
     ...mapActions(["BOARDONE"]),
     // modalOut() {

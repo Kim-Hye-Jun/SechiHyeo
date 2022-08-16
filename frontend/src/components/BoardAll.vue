@@ -187,7 +187,7 @@ export default defineComponent({
     this.boardAll();
   },
   methods: {
-    ...mapActions(["BOARDALL", "BOARDWRITE"]),
+    ...mapActions(["BOARDALL", "BOARDWRITE", "BOARDONE"]),
     boardAll() {
       this.BOARDALL();
     },
@@ -199,7 +199,9 @@ export default defineComponent({
     },
     moveToDetail(board_no: number) {
       let no = board_no + 1;
-      this.$router.push("/debate-board/" + no);
+      this.BOARDONE(no).then(() => {
+        this.$router.push("/debate-board/" + no);
+      });
     },
     modalIn() {
       this.modal = true;
