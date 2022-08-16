@@ -240,6 +240,33 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public String uploadProof(String roomId, MultipartFile proof) {
+        //자료 파일 업로드 폴더명
+        String proofDir = "proof";
+
+        //파일 업로드 경로 및 파일명
+        String fileName = proof.getOriginalFilename(); // 원본 파일 이름
+        String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
+
+        String proofUrl = "";
+
+        try {
+            //파일객체 생성 및 업로드
+            File file = new File(fileUploadPath + proofDir, saveName);
+            if (!new File(fileUploadPath + proofDir).exists())
+                new File(fileUploadPath + proofDir).mkdirs();
+            proof.transferTo(file);
+
+            proofUrl = fileUrl + proofDir + "/" + saveName;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return proofUrl;
+    }
+
+    @Override
     public RoomJoinRes joinRoom_random(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq) {
         //session_id를 파라미터로 받아와서 roomJoinReq 만들기
 
@@ -275,8 +302,6 @@ public class RoomServiceImpl implements RoomService {
             jsonObject.put("userId", member.getLoginId());
             jsonObject.put("nickname", member.getNickname());
             jsonObject.put("profileUrl", member.getProfileUrl());
-//            jsonObject.put("profileName", member.getProfileName());
-//            jsonObject.put("profileUrl", member.getProfileUrl());
 
             //접속자용 커넥션 생성
             OpenViduRole role = OpenViduRole.PUBLISHER;
