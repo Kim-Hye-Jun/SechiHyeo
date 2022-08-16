@@ -1,9 +1,6 @@
 <template>
   <div class="userpage-user">
-    <img
-      class="userpage-user-image"
-      src="@/../../../fileDir/profile/5316b3b2-7632-46e7-bbe0-49e5e4658b00_IMG_0249-removebg-preview.png"
-    />
+    <img class="userpage-user-image" :src="profileName()" />
     <div>{{ memberinfo.profileUrl }}</div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
@@ -46,7 +43,7 @@ export default defineComponent({
     //   this.MEMBEREXP();
     // },
     profileName() {
-      return this.memberinfo.profileUrl;
+      return require(this.memberinfo.profileUrl);
     },
   },
 });
