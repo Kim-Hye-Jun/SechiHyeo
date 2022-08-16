@@ -429,13 +429,13 @@ body {
 }
 
 .signUp-content {
-  max-width: 800px;
+  max-width: 600px;
   width: 100%;
   height: 1100px;
   z-index: 1;
   position: absolute;
   top: 38%;
-  left: 40%;
+  left: 47%;
   margin-left: -200px;
   margin-top: -286px;
   border-radius: 8px;
