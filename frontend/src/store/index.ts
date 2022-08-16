@@ -38,7 +38,6 @@ import axios from "axios";
 import router from "@/router";
 
 const API_BASE_URL = "https://i7a508.p.ssafy.io/api/";
-let form = new FormData();
 
 export default createStore({
   state: {
@@ -76,7 +75,11 @@ export default createStore({
 
     // 게시판 관련
     boards: [],
-    board: {},
+    debate_board: {
+      board_no: 0,
+      board_title: "",
+      max_applicant: 0,
+    },
   },
   getters: {
     isLogin(state) {
@@ -87,6 +90,9 @@ export default createStore({
     },
     getBoards(state) {
       return state.boards;
+    },
+    getBoard(state) {
+      return state.debate_board;
     },
   },
   mutations: {
@@ -113,7 +119,7 @@ export default createStore({
       state.boards = payload.boards;
     },
     BOARDONE: (state, payload) => {
-      state.board = payload.board;
+      state.debate_board = payload.debate_board;
     },
     //USERPAGE Mutation
     MEMBERPROFILE: (state, payload) => {
@@ -145,22 +151,48 @@ export default createStore({
     },
     // BOARD Action
     BOARDALL: (store) => {
-      getBoards().then((res: any) => {
-        store.commit("BOARDALL", {
-          boards: res.data,
+      axios
+        .get(`${API_BASE_URL}debate-board`, {
+          headers: {
+            "access-token": store.state.token,
+          },
+        })
+        .then((res) => {
+          store.commit("BOARDALL", {
+            boards: res.data,
+          });
         });
-      });
+      // getBoards().then((res: any) => {
+      //   store.commit("BOARDALL", {
+      //     boards: res.data,
+      //   });
+      // });
     },
     BOARDONE: (store, num) => {
-      getBoard(num).then((res: any) => {
-        store.commit("BOARDONE", {
-          board: res.data,
+      axios
+        .get(`${API_BASE_URL}debate-board/${num}`, {
+          headers: {
+            "access-token": store.state.token,
+          },
+        })
+        .then((res) => {
+          store.commit("BOARDONE", {
+            board: res.data,
+          });
         });
-      });
+      // getBoard(num).then((res: any) => {
+      //   store.commit("BOARDONE", {
+      //     board: res.data,
+      //   });
+      // });
     },
     BOARDWRITE: (store, board) => {
       axios
-        .post(`${API_BASE_URL}/debate-board/`, board)
+        .post(`${API_BASE_URL}/debate-board/`, board, {
+          headers: {
+            "access-token": store.state.token,
+          },
+        })
         .then((res) => {
           console.log(res.data);
         })
@@ -171,7 +203,11 @@ export default createStore({
     },
     BOARDUPDATE: (store, board) => {
       axios
-        .put(`${API_BASE_URL}/debate-board/`, board)
+        .put(`${API_BASE_URL}/debate-board/`, board, {
+          headers: {
+            "access-token": store.state.token,
+          },
+        })
         .then((res) => {
           console.log(res.data);
         })
@@ -184,7 +220,11 @@ export default createStore({
       let flag = confirm("정말로 삭제하시겠습니까??");
       if (flag) {
         axios
-          .delete(`${API_BASE_URL}/debate-board/${num}`)
+          .delete(`${API_BASE_URL}/debate-board/${num}`, {
+            headers: {
+              "access-token": store.state.token,
+            },
+          })
           .then((res) => {
             console.log(res.data);
           })
@@ -242,7 +282,7 @@ export default createStore({
     //     console.log(res.data);
     //   });
     // },
-    PROFILEUPDATE: (store, num: string) => {
+    PROFILEUPDATE: (store) => {
       putIntroduce().then((res: any) => {
         store.commit("PROFILEUPDATE", {
           memberinfo: res.data,

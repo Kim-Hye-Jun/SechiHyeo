@@ -32,24 +32,21 @@
       >
         <div
           class="boards-content-write-box2"
-          @click="modalIn"
-          v-for="board in boards"
-          :key="board"
-          :filter="`academy`"
-          :filter-function="typeAcademy(room, '`academy`')"
+          @click="moveToDetail(board_no)"
+          v-for="(debate_board, board_no) in boards"
+          :key="board_no"
         >
-          <div class="boards-content-write-no">{{ board["board_no"] }}</div>
+          <div class="boards-content-write-no">
+            {{ debate_board.board_no }}
+          </div>
           <div class="boards-content-write-title">
-            {{ board["board_title"] }}
+            {{ debate_board.board_title }}
           </div>
           <div class="boards-content-write-count">
-            {{ board["current_applicant"] }}/{{ board["max_applicant"] }}
+            {{ debate_board["current_applicant"] }}/{{
+              debate_board.max_applicant
+            }}
           </div>
-        </div>
-        <div class="boards-content-write-box1" @click="modalIn">
-          <div class="boards-content-write-no">10787</div>
-          <div class="boards-content-write-title">제목제목제목제목</div>
-          <div class="boards-content-write-count">6/6</div>
         </div>
       </div>
       <div
@@ -58,61 +55,139 @@
       >
         <div
           class="boards-content-write-box1"
-          @click="modalIn"
-          v-for="board in boards"
+          v-for="(debate_board, board) in boards"
           :key="board"
           :filter="`free`"
           :filter-function="typeFree(room, '`free`')"
         >
-          <div class="boards-content-write-no">{{ board["board_no"] }}</div>
+          <div class="boards-content-write-no">
+            {{ debate_board["board_no"] }}
+          </div>
           <div class="boards-content-write-title">
-            {{ board["board_title"] }}
+            {{ debate_board["board_title"] }}
           </div>
           <div class="boards-content-write-count">
-            {{ board["current_applicant"] }}/{{ board["max_applicant"] }}
+            {{ debate_board["current_applicant"] }}/{{
+              debate_board["max_applicant"]
+            }}
           </div>
-        </div>
-        <div class="boards-content-write-box2" @click="modalIn">
-          <div class="boards-content-write-no">10788</div>
-          <div class="boards-content-write-title">제목제목제목제목</div>
-          <div class="boards-content-write-count">6/6</div>
         </div>
       </div>
     </div>
-    <div class="modalZero" :class="[modal === false ? 'hidden' : '']">
-      <board-detail @modalOut="modalOut"></board-detail>
+    <div class="modalZero" :class="[modal === true ? 'hidden' : '']">
+      <div @modalOut="modalOut">
+        <div>
+          <span class="span-modal" style="left: -350px"></span>
+          <span class="span-modal" style="top: -350px"></span>
+          <span class="span-modal" style="left: 350px"></span>
+          <span class="span-modal" style="top: 350px"></span>
+          <div class="modal-container">
+            <header class="modal-container-header">
+              <input
+                id="topic"
+                v-model="debate_board.debate_topic"
+                type="text"
+                placeholder="토론 주제 입력"
+                class="modal-container-title"
+              />
+              <input
+                id="subject"
+                v-model="debate_board.board_title"
+                type="text"
+                placeholder="게시글 제목 입력"
+              />
+            </header>
+            <div class="modal-container-body article">
+              <input
+                id="day"
+                v-model="debate_board.debate_time"
+                type="datetime-local"
+                placeholder="토론 일시 입력"
+                class="board-day"
+              />
+              <input
+                id="max"
+                v-model="debate_board.max_applicant"
+                type="number"
+                placeholder="정원 입력"
+                class="board-count"
+              />
+              <div class="board-summary-content">
+                <input
+                  id="a"
+                  v-model="debate_board.a_opinion"
+                  type="text"
+                  placeholder="A 진영 주장 입력"
+                  class="board-a"
+                />
+                <input
+                  id="b"
+                  v-model="debate_board.b_opinion"
+                  type="text"
+                  placeholder="B 진영 주장 입력"
+                  class="board-b"
+                />
+                <input
+                  id="content"
+                  v-model="debate_board.board_content"
+                  type="text"
+                  placeholder="내용 입력"
+                  class="board-summary-in"
+                />
+              </div>
+              <button @click="boardWrite()">등록</button>
+              <button class="button decline modalOut" @click="modalOut">
+                뒤로가기
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Background from "@/components/common/Background.vue";
-import BoardDetail from "./BoardDetail.vue";
+// import BoardDetail from "./BoardDetail.vue";
 import { mapActions, mapState } from "vuex";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: { Background, BoardDetail },
+  components: { Background },
   data() {
     return {
       academy: true,
       free: false,
       modal: false,
-      boards: [],
-      board: {},
+      // boards: [],
+      // board: {
+      //   board_no: 0,
+      //   board_title: "",
+      //   max_applicant: 0,
+      // },
       room: {
         debate_type: "",
+      },
+      board: {
+        board_title: "",
+        board_content: "",
+        debate_topic: "",
+        debate_time: Date,
+        a_opinion: "",
+        b_opinion: "",
+        max_applicant: 0,
       },
     };
   },
   computed: {
-    ...mapState(["boards, board"]),
+    ...mapState(["boards", "debate_board"]),
   },
   created() {
     this.boardAll();
   },
   methods: {
-    ...mapActions(["BOARDALL"]),
+    ...mapActions(["BOARDALL", "BOARDWRITE"]),
     boardAll() {
       this.BOARDALL();
     },
@@ -122,13 +197,17 @@ export default defineComponent({
     freeClick() {
       (this.academy = false), (this.free = true);
     },
-    // 수정
-    modalIn(num: any) {
+    moveToDetail(board_no: number) {
+      let no = board_no + 1;
+      this.$router.push("/debate-board/" + no);
+    },
+    modalIn() {
       this.modal = true;
-      num.modalNo;
+      console.log(this.modal);
     },
     modalOut() {
       this.modal = false;
+      console.log(this.modal);
     },
     typeAcademy(room: { debate_type: string }, filter: string) {
       if (room.debate_type === filter) {
@@ -141,6 +220,17 @@ export default defineComponent({
         return true;
       }
       return false;
+    },
+    boardWrite() {
+      this.BOARDWRITE({
+        board_title: this.debate_board.board_title,
+        board_content: this.debate_board.board_content,
+        debate_topic: this.debate_board.debate_topic,
+        debate_time: this.debate_board.debate_time,
+        a_opinion: this.debate_board.a_opinion,
+        b_opinion: this.debate_board.b_opinion,
+        max_applicant: this.debate_board.max_applicant,
+      });
     },
   },
 });
@@ -417,5 +507,247 @@ div .span-board:nth-child(4) {
   box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
     0 0 200px #03e9f4;
   -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+a {
+  color: inherit;
+}
+* {
+  scrollbar-width: 0;
+}
+*::-webkit-scrollbar {
+  background-color: transparent;
+  width: 12px;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 99px;
+  background-color: #ddd;
+  border: 2px solid #fff;
+}
+.modalZero {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(#000, 0.25);
+}
+.modal-container {
+  margin-left: auto;
+  margin-right: auto;
+  background: #757f9a;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 30px 0 rgba(#000, 0.25);
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+.modal-container-header {
+  padding: 16px 32px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-container-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 700;
+  font-size: 1.125;
+  color: #000000;
+}
+.modal-container-body {
+  padding: 24px 32px 51px;
+  font-family: serif;
+  overflow-y: auto;
+  color: #000000;
+}
+.modalZero {
+  position: absolute;
+  margin-top: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  height: 640px;
+  background: #111845a6;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgb(23, 32, 90);
+  border: 2px solid #2a3cad;
+  padding: 20px;
+}
+.modalZero:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: 0.5s;
+  pointer-events: none;
+}
+.modalZero:hover:before {
+  left: -50%;
+  transform: skewX(-5deg);
+}
+.modalZero .modal-container {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 1px solid #f0a591;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(9, 0, 0, 0.5);
+}
+.modalZero .span-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+.modalZero .span-modal:nth-child(1) {
+  transform: rotate(0deg);
+}
+.modalZero .span-modal:nth-child(2) {
+  transform: rotate(90deg);
+}
+.modalZero .span-modal:nth-child(3) {
+  transform: rotate(180deg);
+}
+.modalZero .span-modal:nth-child(4) {
+  transform: rotate(270deg);
+}
+.modalZero .span-modal:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #50dfdb;
+  animation: animate 4s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.1% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+.board-day {
+  position: relative;
+  display: inline-block;
+  top: -20px;
+  width: 270px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: left;
+  line-height: 34px;
+  color: #000000;
+  border-bottom: 1px solid #ddd;
+}
+.board-count {
+  position: relative;
+  display: inline-block;
+  top: -20px;
+  right: -50px;
+  width: 100px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: left;
+  line-height: 34px;
+  color: #000000;
+  border-bottom: 1px solid #ddd;
+}
+.board-summary {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 240px;
+  top: -60px;
+  left: -34px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 20px;
+  color: #000000;
+  border-right: 3px solid #ddd;
+}
+.board-summary-content {
+  position: relative;
+  display: inline-block;
+  width: 450px;
+  height: 400px;
+}
+.board-a {
+  position: relative;
+  display: inline-block;
+  width: 400px;
+  padding-left: 20px;
+  left: -50px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: left;
+  line-height: 34px;
+  color: #000000;
+}
+.board-b {
+  position: relative;
+  display: inline-block;
+  width: 400px;
+  padding-left: 20px;
+  left: -50px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: left;
+  line-height: 34px;
+  color: #000000;
+  border-bottom: 3px solid #ddd;
+}
+.board-summary-in {
+  position: relative;
+  display: inline-block;
+  width: 400px;
+  height: 180px;
+  top: 10px;
+  left: -40px;
+  text-align: left;
 }
 </style>

@@ -5,17 +5,23 @@
   <span class="span-modal" style="top: 350px"></span>
   <div class="modal-container">
     <header class="modal-container-header">
-      <h1 class="modal-container-title">토론 주제 : {{ board.title }}</h1>
+      <h1 class="modal-container-title">
+        토론 주제 : {{ debate_board.debate_topic }}
+      </h1>
     </header>
     <div class="modal-container-body article">
-      <h3 class="board-master">작성자 : {{ board.nickname }}</h3>
-      <h3 class="board-day">토론 일시 : {{ board.debate_time }}</h3>
-      <h3 class="board-count">인원 : {{ board.max_applicant }}</h3>
+      <h3 class="board-master">작성자 : {{ debate_board.nickname }}</h3>
+      <h3 class="board-day">토론 일시 : {{ debate_board.debate_time }}</h3>
+      <h3 class="board-count">
+        인원 : {{ debate_board.current_applicant }}/{{
+          debate_board.max_applicant
+        }}
+      </h3>
       <h2 class="board-summary">개요</h2>
       <div class="board-summary-content">
-        <li class="board-a">A 진영 : {{ board.a_opinion }}</li>
-        <li class="board-b">B 진영 : {{ board.b_opinion }}</li>
-        <p class="board-summary-in">CONTENT {{ board.board_content }}</p>
+        <li class="board-a">A 진영 : {{ debate_board.a_opinion }}</li>
+        <li class="board-b">B 진영 : {{ debate_board.b_opinion }}</li>
+        <p class="board-summary-in">CONTENT {{ debate_board.board_content }}</p>
       </div>
       <div class="board-reply-box">
         <h3 class="board-reply">댓글</h3>
@@ -85,7 +91,24 @@
       </button>
       <!-- 참가신청 버튼 메소드 미작성 -->
       <!-- <button class="button accept" @click="apply">참가신청</button> -->
-      <button class="button accept">참가신청</button>
+      <button
+        class="button accept"
+        v-if="debate_board.userid !== memberinfo.user_id"
+      >
+        참가신청
+      </button>
+      <button
+        class="button accept"
+        v-if="debate_board.userid === memberinfo.user_id"
+      >
+        수정
+      </button>
+      <button
+        class="button accept"
+        v-if="debate_board.userid === memberinfo.user_id"
+      >
+        삭제
+      </button>
     </footer>
   </div>
 </template>
@@ -116,22 +139,22 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(["boards", "board", "memberinfo"]),
+    ...mapState(["boards", "debate_board", "memberinfo"]),
   },
   created() {
     // 이 방법이 맞나 BE 검수 필요
-    this.boardOne(this.board.board_no);
+    // this.boardOne(this.board.board_no);
     // this.replyAll();
   },
   methods: {
-    ...mapActions(["BOARDONE"]),
+    // ...mapActions(["BOARDONE"]),
     modalOut() {
       this.modal = false;
       this.$emit("modalOut");
     },
-    boardOne(no: number) {
-      this.BOARDONE(no);
-    },
+    // boardOne() {
+    //   this.BOARDONE(this.debate_board.board_no);
+    // },
     // 자식 대댓글만을 걸러내기 위한 부모 댓글 필터
     reReply(reply: any, filter: number) {
       if (reply.parent_no === filter) {
@@ -148,20 +171,21 @@ export default defineComponent({
     //       this.replies = res.data;
     //     });
     // },
-    replyInsert() {
-      axios
-        .post(
-          "https://i7a508.p.ssafy.io/api/debate-reply/" + this.board.board_no,
-          {
-            parent_no: this.reply.parent_no,
-            context: this.reply.context,
-            depth: this.reply.depth,
-          }
-        )
-        .then(() => {
-          this.BOARDONE();
-        });
-    },
+    // replyInsert() {
+    //   axios
+    //     .post(
+    //       "https://i7a508.p.ssafy.io/api/debate-reply/" +
+    //         this.debate_board.board_no,
+    //       {
+    //         parent_no: this.reply.parent_no,
+    //         context: this.reply.context,
+    //         depth: this.reply.depth,
+    //       }
+    //     )
+    //     .then(() => {
+    //       this.BOARDONE();
+    //     });
+    // },
     replyUpdate(reply_no: number) {
       axios
         .put(`https://i7a508.p.ssafy.io/api/debate-reply/`, reply_no)
@@ -169,16 +193,16 @@ export default defineComponent({
           console.log(res.data);
         });
     },
-    replyDelete(reply_no: number) {
-      let flag = confirm("정말로 삭제하시겠습니까??");
-      if (flag) {
-        axios
-          .delete("https://i7a508.p.ssafy.io/api/debate-reply/" + reply_no)
-          .then(() => {
-            this.BOARDONE();
-          });
-      }
-    },
+    // replyDelete(reply_no: number) {
+    //   let flag = confirm("정말로 삭제하시겠습니까??");
+    //   if (flag) {
+    //     axios
+    //       .delete("https://i7a508.p.ssafy.io/api/debate-reply/" + reply_no)
+    //       .then(() => {
+    //         this.BOARDONE();
+    //       });
+    //   }
+    // },
   },
 });
 </script>
