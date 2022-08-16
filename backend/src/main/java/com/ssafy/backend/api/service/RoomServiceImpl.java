@@ -33,8 +33,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class RoomServiceImpl implements RoomService {
-    @Value("${thumbnail.path}")
-    private String thumbnailPath;
+
+    //서버(백엔드) 파일 업로드 경로
+    @Value("${server.file.path}")
+    private String fileUploadPath;
+    //클라이언트(프론트 엔드) 파일 접근 경로
+    @Value("${client.file.path}")
+    private String fileUrl;
 
     //오픈비두 객체
     private OpenVidu openVidu;
@@ -174,7 +179,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void uploadThumbnail(String roomId, MultipartFile thumbnail) {
-        //썸네일 업로드
+        //썸네일 업로드 폴더명
+        String thumbnail1Dir = "thumbnail";
+
         //파일 업로드 경로 및 파일명
         String fileName = thumbnail.getOriginalFilename(); // 원본 파일 이름
         String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
@@ -183,32 +190,13 @@ public class RoomServiceImpl implements RoomService {
 //        String thumbnailPath = System.getProperty("user.dir") + "/src/main/resources/static/thumbnail";
         try {
             //파일객체 생성 및 업로드
-            File file = new File(thumbnailPath, saveName);
-            if (!new File(thumbnailPath).exists())
-                new File(thumbnailPath).mkdirs();
+            File file = new File(fileUploadPath + thumbnail1Dir, saveName);
+            if (!new File(fileUploadPath + thumbnail1Dir).exists())
+                new File(fileUploadPath + thumbnail1Dir).mkdirs();
             thumbnail.transferTo(file);
 
-            //기존 프로필 삭제(있으면)
-//            if(member.getProfileName() != null) {
-//                File deleteFile = new File(profilePath, member.getProfileName());
-//                System.out.println(member.getProfileName());
-//                if (deleteFile.exists()) deleteFile.delete();
-//            }
-
-//            //db에 프로필 이미지 정보 및 경로 저장
-//            member.setProfileName(saveName);
-//            member.setProfileUrl(profilePath + saveName);
-//            memberRepository.save(member);
-
-            //만들어진 방 객체를 찾아 thumbnail을 수정
-            //roomWithSession, roomList
-            roomWithSession.get(roomId).getRoom().setThumbnail(thumbnailPath + saveName);
-            for (int i = 0; i < roomList.size(); i++) {
-                if (roomList.get(i).getRoomId().equals(roomId)) {
-                    roomList.get(i).setThumbnail(thumbnailPath + saveName);
-                    break;
-                }
-            }
+            //만들어진 방 객체를 찾아 thumbnail을 수정 (roomWithSession, roomList에서 같은 Room 객체 사용하므로, 하나만 수정)
+            roomWithSession.get(roomId).getRoom().setThumbnail(fileUrl + thumbnail1Dir + "/" + saveName);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
