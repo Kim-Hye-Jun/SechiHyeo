@@ -45,7 +45,12 @@ export default createStore({
     // 로그인 관련
     userid: getUserFromCookie() || "",
     token: getAuthFromCookie() || "",
+
+    // 룸 내부 정보
     uploadImageArr: [],
+    roomId: "",
+    isRoomHost: false,
+    mySideOrder: "",
 
     //memberinfo 저장되는 정보
     // memberNo:-1

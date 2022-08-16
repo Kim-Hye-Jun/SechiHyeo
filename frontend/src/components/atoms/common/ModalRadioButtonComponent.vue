@@ -6,6 +6,7 @@
       :id="labelId"
       :value="labelValue"
       :name="selector"
+      :disabled="disabled"
       v-model="picked"
       @change="radioChange"
     />
@@ -22,6 +23,7 @@ export default defineComponent({
     labelId: String,
     labelValue: String,
     selector: String,
+    disabled: Boolean,
   },
   data() {
     return {
@@ -99,6 +101,17 @@ export default defineComponent({
   margin: auto;
   transition: background 0.25s linear;
   -webkit-transition: background 0.25s linear;
+}
+.list__input[type="radio"]:disabled ~ .check {
+  border: 4px solid red;
+}
+
+.list__input[type="radio"]:disabled ~ .check::before {
+  background: red;
+}
+
+.list__input[type="radio"]:disabled ~ .list__label {
+  color: red;
 }
 
 .list__input[type="radio"]:checked ~ .check {

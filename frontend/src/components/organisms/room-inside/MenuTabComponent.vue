@@ -8,6 +8,7 @@
     ></menu-tab-cam-icon-component>
     <menu-tab-doc-icon-component
       class="svg border"
+      @click="screenShare"
     ></menu-tab-doc-icon-component>
     <menu-tab-chat-icon-component
       class="svg border"
@@ -41,6 +42,11 @@ import MenuTabShareIconComponent from "@/components/molecules/room-inside/icon/M
 import { useStore } from "vuex";
 
 export default defineComponent({
+  props: {
+    // OVScreen: Object,
+    // sessionScreen: Object,
+    // tokenScreen: String,
+  },
   components: {
     MenuTabMicIconComponent,
     MenuTabDocIconComponent,
@@ -60,6 +66,45 @@ export default defineComponent({
     };
   },
   methods: {
+    screenShare() {
+      console.log("화면 공유");
+
+      // console.log("next session : ", this.sessionScreen);
+      // console.log("next oV : ", this.OVScreen);
+      // console.log("next token : ", this.tokenScreen);
+      // this.sessionScreen
+      //   ?.connect(this.tokenScreen)
+      //   .then(() => {
+      //     let publisher = this.OVScreen?.initPublisher(
+      //       document.getElementById("shareImg"),
+      //       {
+      //         videoSource: "screen",
+      //       }
+      //     );
+      //     console.log("PUBLISHER INITPUBLISHER", publisher);
+      //     publisher.once("accessAllowed", (error: any) => {
+      //       publisher.stream
+      //         .getMediaStream()
+      //         .getVideoTracks()[0]
+      //         .addEventListener("ended", () => {
+      //           console.log('User pressed the "Stop sharing" button');
+      //         });
+      //       this.sessionScreen?.publish(publisher);
+      //     });
+
+      //     publisher.once("accessDenied", (error: any) => {
+      //       console.warn("ScreenShare: Access Denied");
+      //     });
+      //   })
+      //   .catch((error: any) => {
+      //     console.log(error);
+      //     console.warn(
+      //       "There was an error connecting to the session:",
+      //       error.code,
+      //       error.message
+      //     );
+      //   });
+    },
     clickButton() {
       console.log("click", document.getElementById("file"));
       document.getElementById("file")?.click();
