@@ -119,4 +119,10 @@ public class RoomController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @PutMapping("/{room_id}/end")
+    public ResponseEntity updateDebateInfo(@PathVariable String room_id) {
+        roomService.updateDebateInfo(room_id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 }

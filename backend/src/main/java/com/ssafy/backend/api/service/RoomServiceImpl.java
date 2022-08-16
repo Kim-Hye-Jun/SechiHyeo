@@ -86,7 +86,8 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
-    Map<String, Room> rooms = new ConcurrentHashMap<>();
+    //사용되지 않고 있는 map
+//    Map<String, Room> rooms = new ConcurrentHashMap<>();
     List<Room> roomList = new ArrayList<Room>();
 
     @Override
@@ -137,7 +138,7 @@ public class RoomServiceImpl implements RoomService {
                 .sideB(roomCreateReq.getSideB())
                 .build();
 
-        System.out.println(room);
+        System.out.println("만들었을 때 방 인원수 : " + room.getCurNumOfPeople());
 
         try {
 //            SessionProperties properties = new SessionProperties.Builder().build();
@@ -364,6 +365,11 @@ public class RoomServiceImpl implements RoomService {
     //접속자가 방을 퇴장했을 때 back에서 관리하는 방 관련 Map에서 접속자를 삭제하기 위함
     @Override
     public void disconnectParticipant(String roomId, String loginId) {
+        //방 객체를 찾아서 curNumOfPeople -1 해서 저장하기
+        //roomWithSession
+        Room room = roomWithSession.get(roomId).getRoom();
+        room.setCurNumOfPeople(room.getCurNumOfPeople() - 1);
+
         //roomWithParticipant에서 세션 찾기
         String[][] participants = roomWithParticipant.get(roomId);
 
@@ -574,6 +580,20 @@ public class RoomServiceImpl implements RoomService {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateDebateInfo(String roomId) {
+        //roomId로 roomWithParticipant에서 접속자 배열 찾기
+        String[][] participants = roomWithParticipant.get(roomId);
+
+        //빈 문자열이 아니라 사용자 loginId가 들어있다면 memberService 호출
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < participants[0].length; j++) {
+                if(!participants[i][j].equals(""))
+                    memberService.changeDebateInfo(participants[i][j]);
+            }
         }
     }
 

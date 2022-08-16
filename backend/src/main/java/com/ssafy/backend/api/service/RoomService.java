@@ -36,13 +36,13 @@ public interface RoomService {
     RoomJoinRes joinRoom(HttpServletRequest httpServletRequest, RoomJoinReq roomJoinReq);
 
     //방 삭제
-    void deleteRoom(String OpenviduId);
+    void deleteRoom(String roomId);
 
 //    //방장 권한 이동
 //    void changeHost(Member prevMember, Member nextMember);
 
     // 접속자 방 퇴장
-    void disconnectParticipant(String OpenviduId, String loginId);
+    void disconnectParticipant(String roomId, String loginId);
 
     //토론 진영 및 순서 설정
     void setSideOrder(RoomSetReq roomSetReq);
@@ -50,7 +50,9 @@ public interface RoomService {
     //토론 규칙 저장 및 반환
     RoomSetRes setDebateFormat(RoomSetReq roomSetReq);
 
-    String[][] validSideOrder(String OpenviduId);
+    String[][] validSideOrder(String roomId);
 
     void sendSignal(RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq);
+
+    void updateDebateInfo(String roomId);
 }
