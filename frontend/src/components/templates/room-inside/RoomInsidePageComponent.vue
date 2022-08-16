@@ -4,7 +4,10 @@
     <debate-title-tab-component
       class="room__inside__class1"
     ></debate-title-tab-component>
-    <debate-timer-component :session="session"></debate-timer-component>
+    <debate-timer-component
+      :session="sessionCamera"
+      :roomAndUserData="testReturnData"
+    ></debate-timer-component>
     <suspense>
       <room-video-component
         class="room__inside__class2"
@@ -15,7 +18,12 @@
         :emptyVideoClasses="emptyVideoArr"
       ></room-video-component>
     </suspense>
-    <menu-tab-component class="room__inside__class3"></menu-tab-component>
+    <menu-tab-component
+      class="room__inside__class3"
+      :sessionScreen="sessionScreen"
+      :OVScreen="OVScreen"
+      :tokenScreen="tokenScreen"
+    ></menu-tab-component>
   </div>
 </template>
 
@@ -30,8 +38,9 @@ import DebateTimerComponent from "@components/organisms/room-inside/DebateTimerC
 
 import http from "@/http";
 import * as openVidu from "openvidu-browser";
-import { RoomJoinResponseInfo } from "@type/types";
+import { RoomJoinResponseInfo, RoomJoinRequestInfo } from "@type/types";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
@@ -42,9 +51,14 @@ export default defineComponent({
     DebateTimerComponent,
   },
   async setup(): Promise<any> {
+    const store = useStore();
     // 뭘 반응형으로 설정해야 할지...?
-    let OV: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
-    let session: openVidu.Session | undefined = OV.initSession();
+    let OVCamera: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
+    let sessionCamera: openVidu.Session | undefined = OVCamera.initSession();
+
+    let OVScreen: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
+    let sessionScreen: openVidu.Session | undefined = OVScreen.initSession();
+
     const subscribers = ref([]);
     // let subscribers: openVidu.Subscriber[] = [];
     let testReturnData: RoomJoinResponseInfo | undefined = undefined;
@@ -55,11 +69,32 @@ export default defineComponent({
     const apiCall = async () => {
       try {
         console.log("here", `${useRoute().params.roomId}`);
-        testReturnData = (
-          await member2.get(`/sessions/${useRoute().params.roomId}/connection`)
-        ).data;
-        console.log("testReturnData token : ", testReturnData?.token);
-        console.log("testReturnData : ", testReturnData);
+        if (useRoute().params.side && useRoute().params.side) {
+          const request: RoomJoinRequestInfo = {
+            roomId: useRoute().params.roomId as string,
+            side: useRoute().params.side as string,
+            order: useRoute().params.order as unknown as number,
+          };
+          console.log("방 만들기 -> 방에 참가 request : ", request);
+          testReturnData = (
+            await member2.post(`/sessions/connection_select`, request)
+          ).data;
+          console.log(
+            "testReturnData tokenCamera : ",
+            testReturnData?.tokenCamera
+          );
+          console.log("testReturnData : ", testReturnData);
+        } else {
+          const request: RoomJoinRequestInfo = {
+            roomId: useRoute().params.roomId as string,
+            side: useRoute().params.side as string,
+            order: useRoute().params.order as unknown as number,
+          };
+        }
+
+        store.state.roomId = testReturnData?.roomId;
+        store.state.isRoomHost = testReturnData?.roomHost;
+        store.state.mySideOrder = testReturnData?.userSideOrder;
       } catch (err) {
         console.log(err);
       }
@@ -75,61 +110,78 @@ export default defineComponent({
     let mainStreamManager: openVidu.Publisher | undefined = undefined;
     let publisher: openVidu.Publisher | undefined = undefined;
 
-    session.on("streamCreated", ({ stream }) => {
+    sessionCamera.on("streamCreated", ({ stream }) => {
       // 1. 서버에 추가 요청 => x
       // 완료
+      if (stream.typeOfVideo == "CAMERA") {
+        if (sessionCamera) {
+          const subscriber = sessionCamera.subscribe(
+            stream,
+            undefined as unknown as HTMLElement
+          );
 
-      if (session) {
-        const subscriber = session.subscribe(
-          stream,
-          undefined as unknown as HTMLElement
-        );
+          // (##구현) emptyArr에 sub의 class 제거
+          console.log("subscript create @@ ", subscriber);
+          console.log(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])
+          );
+          console.log(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[1])
+          );
+          // 2. map user class name 추가
+          mapUserClassName.value.set(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
+              "userId"
+            ],
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+              "userSideOrder"
+            ]
+          );
+          mapClassNameUser.value.set(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+              "userSideOrder"
+            ],
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
+              "userId"
+            ]
+          );
+          (subscribers.value as openVidu.Subscriber[]).push(subscriber);
 
-        // (##구현) emptyArr에 sub의 class 제거
-        console.log("subscript create @@ ", subscriber);
-        console.log(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])
-        );
-        console.log(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])
-        );
-        // 2. map user class name 추가
-        mapUserClassName.value.set(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
-            "userId"
-          ],
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
-            "userSideOrder"
-          ]
-        );
-        mapClassNameUser.value.set(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
-            "userSideOrder"
-          ],
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[1])[
-            "userId"
-          ]
-        );
-        (subscribers.value as openVidu.Subscriber[]).push(subscriber);
+          // 3. empty arr 삭제
 
-        // 3. empty arr 삭제
-
-        const index = (emptyVideoArr.value as string[]).indexOf(
-          JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
-            "userSideOrder"
-          ]
-        );
-        if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
-        console.log("MAP : ", mapUserClassName);
-        console.log("SUBSCRIBERS : ", subscribers);
-        console.log("EMPTY VIDEO ARR : ", emptyVideoArr);
+          const index = (emptyVideoArr.value as string[]).indexOf(
+            JSON.parse(subscriber.stream.connection.data.split("%/%")[0])[
+              "userSideOrder"
+            ]
+          );
+          if (index >= 0) (emptyVideoArr.value as string[]).splice(index, 1);
+          console.log("MAP : ", mapUserClassName);
+          console.log("SUBSCRIBERS : ", subscribers);
+          console.log("EMPTY VIDEO ARR : ", emptyVideoArr);
+        }
       }
     });
 
-    session.on("streamDestroyed", ({ stream }) => {
+    sessionScreen.on("streamCreated", (event) => {
+      if (event.stream.typeOfVideo == "SCREEN") {
+        // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+        var subscriberScreen = sessionScreen?.subscribe(
+          event.stream,
+          "shareImg"
+        );
+        // When the HTML video has been appended to DOM...
+        subscriberScreen?.on("videoElementCreated", (event) => {
+          // Add a new <p> element for the user's nickname just below its video
+          // appendUserData(event.element, subscriberScreen?.stream.connection);
+        });
+      }
+    });
+
+    sessionCamera.on("streamDestroyed", ({ stream }) => {
       // Remove the stream from 'subscribers' array
 
       // 1. 서버에 삭제 요청 *****
+      member2.get(`${store.state.roomId}/disconnect`);
 
       // 2. map user-class name 삭제
       const index = (subscribers.value as openVidu.Subscriber[]).indexOf(
@@ -163,69 +215,81 @@ export default defineComponent({
       }
     });
 
-    session.on("exception", (exception) => {
+    sessionCamera.on("exception", (exception) => {
       console.warn(exception);
     });
 
-    session.on("signal:UPDATE_SIDE_ORDER", (event) => {
-      // user(login_id)가 진영이 어디로 바뀌었는지 시그널 받음
-      // 1. map user classname 변경
-      // 2. empty로 갔으면 empty 삭제 or 추가
-      // 기존 side, order 을 받아야 될듯
-      // ***** 변경필요
+    // session.on("signal:UPDATE_SIDE_ORDER", (event) => {
+    //   // user(login_id)가 진영이 어디로 바뀌었는지 시그널 받음
+    //   // 1. map user classname 변경
+    //   // 2. empty로 갔으면 empty 삭제 or 추가
+    //   // 기존 side, order 을 받아야 될듯
+    //   // ***** 변경필요
+    //   console.log(event);
 
-      if (typeof event.data === "string") {
-        const data = JSON.parse(event.data);
-        // data["preSideOrder"] 와 data["newSideOrder"]의 교환
-        const preSideOrder = data["preSideOrder"];
-        const newSideOrder = data["newSideOrder"];
+    //   if (typeof event.data === "string") {
+    //     const data = JSON.parse(event.data);
+    //     // data["preSideOrder"] 와 data["newSideOrder"]의 교환
+    //     const preSideOrder = data["preSideOrder"];
+    //     const newSideOrder = data["newSideOrder"];
 
-        mapClassNameUser.value.set(
-          preSideOrder,
-          mapUserClassName.value.get(newSideOrder)
-        );
+    //     console.log("UPDATE_SIDE_ORDER", preSideOrder, newSideOrder);
 
-        mapClassNameUser.value.set(
-          newSideOrder,
-          mapUserClassName.value.get(preSideOrder)
-        );
+    //     console.log(mapClassNameUser);
+    //     mapClassNameUser.value.set(
+    //       preSideOrder,
+    //       mapUserClassName.value.get(newSideOrder)
+    //     );
+    //     console.log(mapClassNameUser);
+    //     mapClassNameUser.value.set(
+    //       newSideOrder,
+    //       mapUserClassName.value.get(preSideOrder)
+    //     );
+    //     console.log(mapClassNameUser);
 
-        mapUserClassName.value.set(
-          mapClassNameUser.value.get(preSideOrder),
-          preSideOrder
-        );
-
-        mapUserClassName.value.set(
-          mapClassNameUser.value.get(newSideOrder),
-          newSideOrder
-        );
-      }
-    });
+    //     console.log(mapUserClassName);
+    //     mapUserClassName.value.set(
+    //       mapClassNameUser.value.get(preSideOrder),
+    //       preSideOrder
+    //     );
+    //     console.log(mapUserClassName);
+    //     mapUserClassName.value.set(
+    //       mapClassNameUser.value.get(newSideOrder),
+    //       newSideOrder
+    //     );
+    //     console.log(mapUserClassName);
+    //   }
+    // });
 
     // // 2번째 매개변수에 userInfo넣기
     console.log(testReturnData);
     if (testReturnData === undefined) return;
     console.log("no return");
+    const tokenCamera = testReturnData["tokenCamera"];
+    const tokenScreen = testReturnData["tokenScreen"];
 
-    await session
-      .connect(testReturnData["token"], testReturnData)
+    await sessionCamera
+      .connect(tokenCamera, testReturnData)
       .then(() => {
         // --- Get your own camera stream with the desired properties ---
-        if (OV) {
-          publisher = OV.initPublisher(undefined as unknown as HTMLElement, {
-            audioSource: undefined, // The source of audio. If undefined default microphone
-            videoSource: undefined, // The source of video. If undefined default webcam
-            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-            publishVideo: true, // Whether you want to start publishing with your video enabled or not
-            resolution: "300x150", // The resolution of your video
-            frameRate: 30, // The frame rate of your video
-            insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-            mirror: false, // Whether to mirror your local video or not
-          });
+        if (OVCamera) {
+          publisher = OVCamera.initPublisher(
+            undefined as unknown as HTMLElement,
+            {
+              audioSource: undefined, // The source of audio. If undefined default microphone
+              videoSource: undefined, // The source of video. If undefined default webcam
+              publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+              publishVideo: true, // Whether you want to start publishing with your video enabled or not
+              resolution: "300x150", // The resolution of your video
+              frameRate: 30, // The frame rate of your video
+              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+              mirror: false, // Whether to mirror your local video or not
+            }
+          );
           console.log("pub create : ", publisher);
 
-          if (session) {
-            session.publish(publisher as openVidu.Publisher);
+          if (sessionCamera) {
+            sessionCamera.publish(publisher as openVidu.Publisher);
           }
 
           mainStreamManager = publisher;
@@ -241,25 +305,28 @@ export default defineComponent({
       });
 
     function leaveSession() {
-      if (session) session.disconnect();
-      session = undefined;
+      // 퇴실 서버에 request
+      member2.get("/${useRoute().params.roomId}/disconnect");
+
+      if (sessionCamera) sessionCamera.disconnect();
+      sessionCamera = undefined;
       mainStreamManager = undefined;
       publisher = undefined;
       subscribers.value = [];
-      OV = undefined;
+      OVCamera = undefined;
       mapUserClassName.value = new Map();
       mapClassNameUser.value = new Map();
 
       window.removeEventListener("beforeunload", leaveSession);
-      window.removeEventListener("beforeunload", removeUser);
+      // window.removeEventListener("beforeunload", removeUser);
     }
 
-    function removeUser() {
-      // 서버에서 session : token 제거
-    }
+    // function removeUser() {
+    //   // 서버에서 session : token 제거
+    // }
 
     window.addEventListener("beforeunload", leaveSession);
-    window.addEventListener("beforeunload", removeUser);
+    // window.addEventListener("beforeunload", removeUser);
     console.log("...?");
     console.log("pub : ", publisher);
     console.log("sub : ", subscribers);
@@ -274,15 +341,23 @@ export default defineComponent({
     //   )["userSideOrder"];
     //   const index = emptyVideoArr.value.indexOf((sideOrder as string));
     // }
-
+    console.log("pre OV : ", OVScreen);
+    console.log("pre SESSION : ", sessionScreen);
+    console.log("pre token : ", tokenScreen);
     return {
+      store,
       publisher,
       testReturnData,
       subscribers,
       mapUserClassName,
       mapClassNameUser,
       emptyVideoArr,
-      session,
+      sessionCamera,
+      sessionScreen,
+      OVCamera,
+      OVScreen,
+      tokenCamera,
+      tokenScreen,
     };
   },
 });

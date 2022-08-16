@@ -64,14 +64,22 @@ public class RoomController {
         return ResponseEntity.ok(roomCreateRes);
     }
 
+    // 4. 방 썸네일 파일 업로드
     @PostMapping("/{room_id}/thumbnail")
-    public  ResponseEntity createRoomThumbnail(@PathVariable String room_id, @RequestPart MultipartFile thumbnail) {
+    public ResponseEntity createRoomThumbnail(@PathVariable String room_id, @RequestPart MultipartFile thumbnail) {
         roomService.uploadThumbnail(room_id, thumbnail);
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 5. 자료 공유 관련 이미지 파일 주소 반환
+    @PostMapping("/{room_id}/uploadProof")
+    public String uploadProof (@PathVariable String room_id, @RequestPart MultipartFile proof) {
+        String proofUrl = roomService.uploadProof(room_id, proof);
+        return proofUrl;
+    }
 
-    // 4. 방 접속 - 랜덤
+
+    // 6. 방 접속 - 랜덤
     @PostMapping("/connection_random")
     public ResponseEntity<RoomJoinRes> joinRoom_random (@RequestBody RoomJoinReq roomJoinReq, HttpServletRequest httpServletRequest){
 //        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id, side, order);
@@ -79,7 +87,7 @@ public class RoomController {
         return ResponseEntity.ok(roomJoinRes);
     }
 
-    // 4. 방 접속 - 선택
+    // 7. 방 접속 - 선택
     @PostMapping("/connection_select")
     public ResponseEntity<RoomJoinRes> joinRoom_select (@RequestBody RoomJoinReq roomJoinReq, HttpServletRequest httpServletRequest){
 //        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id, side, order);
@@ -89,7 +97,7 @@ public class RoomController {
 
 
 
-    //5. 방 퇴장
+    // 8. 방 퇴장
     @GetMapping("/{room_id}/disconnect")
     public ResponseEntity disconnect(HttpServletRequest httpServletRequest, @PathVariable String room_id) throws Exception {
         //JWT 토큰에서 사용자 정보 받아오기
@@ -104,7 +112,7 @@ public class RoomController {
     }
 
 
-    //6. 진영, 순서 저장 및 토론규칙 반환
+    // 9. 진영, 순서 저장 및 토론규칙 반환
     @PostMapping("/settings")
     public ResponseEntity<RoomSetRes> setSideOrderRule(RoomSetReq roomSetReq){
         roomService.setSideOrder(roomSetReq);
@@ -113,7 +121,7 @@ public class RoomController {
     }
 
 
-    //7. 비어있는 진영, 순서 배열 반환
+    // 10. 비어있는 진영, 순서 배열 반환
     @GetMapping("/{room_id}/empty")
     public ResponseEntity<String[][]> emptySideOrder(@PathVariable String room_id){
         String[][] participants = roomService.validSideOrder(room_id);
@@ -121,12 +129,14 @@ public class RoomController {
     }
 
 
+    // 11.
     @PutMapping("/sideOrder")
     public ResponseEntity updateUserSideOrder(@RequestBody RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq) {
         roomService.sendSignal(roomUpdateUserSideOrderReq);
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 12.
     @PutMapping("/{room_id}/end")
     public ResponseEntity updateDebateInfo(@PathVariable String room_id) {
         roomService.updateDebateInfo(room_id);

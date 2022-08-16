@@ -4,6 +4,12 @@ export interface RoomThumbnailInfo {
   roomTitle: string;
   maxNumOfPeople: number;
   currentNumOfPeople: number;
+  sideOrderList: Array<SideOrderInfo>;
+}
+
+export interface SideOrderInfo {
+  sideOrder: string;
+  empty: boolean;
 }
 
 export interface RoomCreateRequestInfo {
@@ -21,11 +27,21 @@ export interface RoomCreateResponseInfo {
   roomId: string;
 }
 
+export interface RoomJoinRequestInfo {
+  roomId: string;
+  side: string;
+  order: number;
+}
+
 export interface RoomJoinResponseInfo {
-  token: string;
+  roomId: string;
+  tokenCamera: string;
+  tokenScreen: string;
+  roomHost: boolean;
   roomTitle: string;
   sideA: string;
   sideB: string;
+  currentNumOfPeople: number;
   maxNumOfPeople: number;
   userSideOrder: string;
   emptySideOrderList: Array<string>;

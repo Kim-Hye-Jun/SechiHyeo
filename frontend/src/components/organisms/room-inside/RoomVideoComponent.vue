@@ -4,6 +4,8 @@
     <user-video-component-vue
       :stream-manager="publisher"
       :class="roomAndUserData?.userSideOrder"
+      :xx="roomAndUserData?.userSideOrder"
+      :isRoomAdmin="isRoomAdmin()"
       :draggable="isRoomAdmin()"
     ></user-video-component-vue>
     <user-video-component-vue
@@ -15,8 +17,12 @@
           JSON.parse(sub.stream.connection.data.split('%/%')[1])['userId']
         )
       "
-      :draggable="isRoomAdmin()"
-      @click="testC"
+      :xx="
+        userSideOrderMap?.get(
+          JSON.parse(sub.stream.connection.data.split('%/%')[1])['userId']
+        )
+      "
+      :isRoomAdmin="isRoomAdmin()"
     ></user-video-component-vue>
     <user-video-component-vue
       v-for="empty in emptyVideoClasses"
@@ -25,7 +31,7 @@
     >
     </user-video-component-vue>
     <div class="c">
-      <img :src="imgSrc" style="width: 500px; height: 500px" />
+      <img :src="imgSrc" id="shareImg" style="width: 500px; height: 500px" />
     </div>
   </div>
   <div style="margin-left: 26%">
@@ -45,10 +51,6 @@ import http from "@/http";
 import * as openVidu from "openvidu-browser";
 import { RoomUpdateUserSideOrderRequestInfo } from "@type/types";
 import UserVideoComponentVue from "@/components/atoms/room-inside/UserVideoComponent.vue";
-// import Background from "@/components/common/Background.vue";
-import DebateImage1 from "../../molecules/DebateImage1.vue";
-import DebateImage2 from "../../molecules/DebateImage2.vue";
-import DebateImage3 from "../../molecules/DebateImage3.vue";
 import { member2 } from "@/api/index";
 
 import { useStore } from "vuex";
@@ -67,11 +69,11 @@ export default defineComponent({
   },
   data() {
     return {
-      startElement: null as EventTarget | null,
       data1: true,
       data2: false,
       data3: false,
       imgSrc: "",
+      startElement: null as EventTarget | null,
     };
   },
   components: {
@@ -85,10 +87,10 @@ export default defineComponent({
     test(a: string, b: string): void {
       console.log(a, b);
     },
-    testC(e: Event): void {
-      console.log("CLICK e : ", e);
+    testC(): void {
+      // console.log("CLICK e : ", e);
       console.log("CLIECK this : ", this);
-      this.startElement = e.target;
+      // this.startElement = e.target;
     },
     isRoomAdmin(): boolean {
       // console.log("HOST : ", this.roomAndUserData?.host);
@@ -115,16 +117,29 @@ export default defineComponent({
       const startVideoClassName = (this.startElement as HTMLDivElement)
         .className;
 
+      console.log(
+        "START // ",
+        startVideoClassName,
+        "DROP //",
+        dropVideoClassName
+      );
+
       // (this.startElement as HTMLDivElement).className = dropVideoClassName;
       // (e.target as HTMLDivElement).className = startVideoClassName;
-      // console.log("START //  DROP", startVideoClassName, dropVideoClassName);
+
+      console.log("e.target : ", e.target);
+      console.log("this.startElemtnt : ", this.startElement);
 
       // 클래스 이름 변경 하고 서버에 요청보내주기
-      member2.put("/sessions/sideOrder", {
-        roomId: this.roomAndUserData?.roomId,
-        preSideOrder: dropVideoClassName,
-        newSideOrder: startVideoClassName,
-      } as RoomUpdateUserSideOrderRequestInfo);
+      member2
+        .put("/sessions/sideOrder", {
+          roomId: this.roomAndUserData?.roomId,
+          preSideOrder: dropVideoClassName,
+          newSideOrder: startVideoClassName,
+        } as RoomUpdateUserSideOrderRequestInfo)
+        .then((res: any) => {
+          console.log(res);
+        });
     },
     dragStart(e: Event): void {
       this.startElement = e.target;
@@ -136,30 +151,6 @@ export default defineComponent({
       // console.log("START", this.startElement);
       // console.log((e.target as HTMLDivElement).className);
       // console.log((this.startElement as HTMLDivElement).className);
-    },
-    data1Click() {
-      this.data1 = true;
-      this.data2 = false;
-      this.data3 = false;
-      console.log(this.data1);
-      console.log(this.data2);
-      console.log(this.data3);
-    },
-    data2Click() {
-      this.data1 = false;
-      this.data2 = true;
-      this.data3 = false;
-      console.log(this.data1);
-      console.log(this.data2);
-      console.log(this.data3);
-    },
-    data3Click() {
-      this.data1 = false;
-      this.data2 = false;
-      this.data3 = true;
-      console.log(this.data1);
-      console.log(this.data2);
-      console.log(this.data3);
     },
   },
   mounted() {

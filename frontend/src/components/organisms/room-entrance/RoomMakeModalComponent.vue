@@ -152,6 +152,8 @@ export default defineComponent({
         name: "RoomInsidePage",
         params: {
           roomId: roomId,
+          side: "a",
+          order: 1,
         },
       });
     },

@@ -1,29 +1,39 @@
 <template>
-  <div class="flex">
-    <video autoplay id="video"></video>
+  <video autoplay :class="xx"></video>
+  <!-- <div class="flex">
+    <video autoplay :id="xx" :draggable="isRoomAdmin"></video>
     <debate-memo-modal-component></debate-memo-modal-component>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import DebateMemoModalComponent from "@components/molecules/room-inside/DebateMemoModalComponent.vue";
+// import DebateMemoModalComponent from "@components/molecules/room-inside/DebateMemoModalComponent.vue";
 
 export default defineComponent({
   components: {
-    DebateMemoModalComponent,
+    // DebateMemoModalComponent,
   },
   props: {
     streamManager: Object,
+    xx: String,
+    // isRoomAdmin: Boolean,
   },
   mounted() {
     console.log("추가", this.streamManager);
-    this.streamManager?.addVideoElement(document.getElementById("video"));
+    console.log("EL : ", this.$el);
+    console.log("selector : ", document.querySelector("video"));
+    // this.streamManager?.addVideoElement(
+    //   document.getElementById(this.xx as string)
+    // );
+    console.log(document.getElementsByClassName(this.$props.xx as string)[0]);
+
+    this.streamManager?.addVideoElement(
+      document.getElementsByClassName(this.$props.xx as string)[0]
+    );
   },
   data() {
-    return {
-      example: "",
-    };
+    return {};
   },
   methods: {},
 });
@@ -38,9 +48,9 @@ video {
   background-clip: content-box;
 }
 
-.flex {
+/* .flex {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
+} */
 </style>

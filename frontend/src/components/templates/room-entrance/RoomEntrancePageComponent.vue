@@ -171,6 +171,9 @@ export default defineComponent({
     };
   },
   methods: {
+    openModal() {
+      document.location.href = "#open-modal";
+    },
     updateRooms(searchValue: string) {
       //(#구현해야할것) searchValue로 방검색 axios 요청 보낸 후 room-entrance-board-component 갱신
     },
