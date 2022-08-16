@@ -119,7 +119,7 @@ export default createStore({
       state.boards = payload.boards;
     },
     BOARDONE: (state, payload) => {
-      state.debate_board = payload.debate_board;
+      state.debate_board = payload.board;
     },
     //USERPAGE Mutation
     MEMBERPROFILE: (state, payload) => {
@@ -176,6 +176,7 @@ export default createStore({
           },
         })
         .then((res) => {
+          console.log(res);
           store.commit("BOARDONE", {
             board: res.data,
           });
@@ -188,7 +189,7 @@ export default createStore({
     },
     BOARDWRITE: (store, board) => {
       axios
-        .post(`${API_BASE_URL}/debate-board/`, board, {
+        .post(`${API_BASE_URL}debate-board/`, board, {
           headers: {
             "access-token": store.state.token,
           },
@@ -203,7 +204,7 @@ export default createStore({
     },
     BOARDUPDATE: (store, board) => {
       axios
-        .put(`${API_BASE_URL}/debate-board/`, board, {
+        .put(`${API_BASE_URL}debate-board/`, board, {
           headers: {
             "access-token": store.state.token,
           },
@@ -220,12 +221,14 @@ export default createStore({
       let flag = confirm("정말로 삭제하시겠습니까??");
       if (flag) {
         axios
-          .delete(`${API_BASE_URL}/debate-board/${num}`, {
+          .delete(`${API_BASE_URL}debate-board/${num}`, {
             headers: {
               "access-token": store.state.token,
             },
           })
           .then((res) => {
+            console.log("!1");
+            console.log(num);
             console.log(res.data);
           })
           .then(() => {

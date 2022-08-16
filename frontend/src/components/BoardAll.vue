@@ -12,7 +12,7 @@
         <span class="span-board"></span>
         <span class="span-board"></span>
         <span class="span-board"></span>
-        아카데미
+        게시판
       </div>
       <div
         class="boards-content-text"
@@ -20,7 +20,7 @@
         @click="freeClick"
         :class="[free === true ? 'free' : 'no']"
       >
-        자유
+        글쓰기
         <span class="span-board"></span>
         <span class="span-board"></span>
         <span class="span-board"></span>
@@ -31,7 +31,7 @@
         :class="[academy === true ? '' : 'hidden']"
       >
         <div
-          class="boards-content-write-box2"
+          class="boards-content-write-box1"
           @click="moveToDetail(board_no)"
           v-for="(debate_board, board_no) in boards"
           :key="board_no"
@@ -53,7 +53,7 @@
         class="boards-content-write"
         :class="[free === true ? '' : 'hidden']"
       >
-        <div
+        <!-- <div
           class="boards-content-write-box1"
           v-for="(debate_board, board) in boards"
           :key="board"
@@ -71,7 +71,7 @@
               debate_board["max_applicant"]
             }}
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="modalZero" :class="[modal === true ? 'hidden' : '']">
