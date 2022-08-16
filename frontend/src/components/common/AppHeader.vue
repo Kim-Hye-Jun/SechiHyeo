@@ -61,6 +61,11 @@ header {
   background-color: #927dfc;
   z-index: 2;
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  top: 0;
+  /* width: 100% */
+  left: 0;
+  right: 0;
 }
 a {
   color: #dedede;
