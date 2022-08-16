@@ -43,9 +43,9 @@ import { useStore } from "vuex";
 
 export default defineComponent({
   props: {
-    OV: Object,
-    session: Object,
-    token: String,
+    // OVScreen: Object,
+    // sessionScreen: Object,
+    // tokenScreen: String,
   },
   components: {
     MenuTabMicIconComponent,
@@ -68,38 +68,42 @@ export default defineComponent({
   methods: {
     screenShare() {
       console.log("화면 공유");
-      console.log("next session : ", this.session);
-      console.log("next oV : ", this.OV);
-      console.log("next token : ", this.token);
-      this.session
-        ?.connect(this.token)
-        .then(() => {
-          let publisher = this.OV?.initPublisher("shareImg", {
-            videoSource: "screen",
-          });
-          console.log("PUBLISHER INITPUBLISHER", publisher);
-          publisher.once("accessAllowed", (error: any) => {
-            publisher.stream
-              .getMediaStream()
-              .getVideoTracks()[0]
-              .addEventListener("ended", () => {
-                console.log('User pressed the "Stop sharing" button');
-              });
-            this.session?.publish(publisher);
-          });
 
-          publisher.once("accessDenied", (error: any) => {
-            console.warn("ScreenShare: Access Denied");
-          });
-        })
-        .catch((error: any) => {
-          console.log(error);
-          console.warn(
-            "There was an error connecting to the session:",
-            error.code,
-            error.message
-          );
-        });
+      // console.log("next session : ", this.sessionScreen);
+      // console.log("next oV : ", this.OVScreen);
+      // console.log("next token : ", this.tokenScreen);
+      // this.sessionScreen
+      //   ?.connect(this.tokenScreen)
+      //   .then(() => {
+      //     let publisher = this.OVScreen?.initPublisher(
+      //       document.getElementById("shareImg"),
+      //       {
+      //         videoSource: "screen",
+      //       }
+      //     );
+      //     console.log("PUBLISHER INITPUBLISHER", publisher);
+      //     publisher.once("accessAllowed", (error: any) => {
+      //       publisher.stream
+      //         .getMediaStream()
+      //         .getVideoTracks()[0]
+      //         .addEventListener("ended", () => {
+      //           console.log('User pressed the "Stop sharing" button');
+      //         });
+      //       this.sessionScreen?.publish(publisher);
+      //     });
+
+      //     publisher.once("accessDenied", (error: any) => {
+      //       console.warn("ScreenShare: Access Denied");
+      //     });
+      //   })
+      //   .catch((error: any) => {
+      //     console.log(error);
+      //     console.warn(
+      //       "There was an error connecting to the session:",
+      //       error.code,
+      //       error.message
+      //     );
+      //   });
     },
     clickButton() {
       console.log("click", document.getElementById("file"));
