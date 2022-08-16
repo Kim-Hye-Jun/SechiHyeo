@@ -1,6 +1,9 @@
 package com.ssafy.backend.dto.response;
 
+import com.ssafy.backend.dto.SideOrderInfo;
 import lombok.*;
+
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -15,4 +18,5 @@ public class RoomSearchRes {
     private int maxNumOfPeople;
     private String roomType;
     private String thumbnail;
+    private ArrayList<SideOrderInfo> sideOrderList;
 }
