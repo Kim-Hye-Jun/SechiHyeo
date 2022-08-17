@@ -67,22 +67,16 @@
 <!-- 자유 양식 -->
 
 ## 팀 소개
-### 기획 (와이어프레임, 기능명세서, ERD, API docs 등은 팀 전원 작성)
+***기획 (와이어프레임, 기능명세서, ERD, API docs 등은 팀 전원 작성)***
+```
+<역할>
 * 김영범: 팀장, FE, 마이페이지, 게시판, 협업 툴 관리
 * 김혜준: FE, WebRTC(Openvidu), 방기능, 자료공유 기능
 * 양희경: BE, WebRTC(Openvidu), 방기능, 자료공유 기능
 * 이종인: BE, 게시판, 인프라 담당, ec2 서버 관리 및 배포
 * 정다은: BE, 회원기능, JWT, Spring Boot 프로젝트 세팅
 * 홍성영: FE, 회원기능, JWT, 토론규칙 구현, 타이머 기능
-----------------------------------------------------
-* member 관련:
-  - 
-* room 관련:
-* board 관련: 
-* openvidu 관련:
----------------------------------------------
-* 각자적기!
-
+```
 
 <!-- 자유 양식 -->
 
@@ -95,8 +89,7 @@
 | ---- | ----------------------------------------------------- |
 | 443  | HTTPS                                                 |
 | 80   | HTTP - HTTPS로 리다이렉트 (프론트 페이지로 리다이렉트)  |
-| 3302 | MySQL                                                 |
-| 3000 | Vue, NginX Docker Container                           |
+| 3306 | MySQL                                                 |
 | 8080 | Spring boot Docker Container                          |
 | 8443 | Openvidu                                              |
 
@@ -121,35 +114,70 @@
 |기능|Method|URL|Response|
 |:--:|:--:|:--:|:--:|
 | 모집 게시글 전체 조회 | GET | /api/debate-board | 모집 게시글을 전체 조회해준다. |
-|비디오 선택|GET|/video/detail/{id}|id에 해당하는 비디오정보 및 평점, 좋아요 횟수를 보여준다.|
-|시청 기록|GET|/video/watched|회원의 시청기록을 보여준다.|
-|찜한 비디오|GET|/video/liked|찜한 동영상을 보여준다.|
-|좋아요 클릭|POST|/video/likes|좋아요 버튼 클릭시 찜 테이블에 저장된다.|
-|좋아요 취소|DELETE|/video/likes/{id}|좋아요 취소시 찜 테이블에서 삭제된다.|
-|부위 종류 반환|GET|/video/part|DB에 있는 비디오의 부위 정보를 조회횐다.|
-|추천 영상|GET|/video/recommended|회원별 추천 영상을 조회한다.|
-
+| 모집 게시글 작성 | POST | /api/debate-board | 모집 게시글을 작성한다. |
+| 모집 게시글 조회 | GET | /api/debate-board/{board_no} | 모집 게시글을 board_no에 맞춰서 조회해준다. |
+| 모집 게시글 수정 | PUT | /api/debate-board/{board_no} | 모집 게시글을 수정한다. |
+| 모집 게시글 삭제 | DELETE | /api/debate-board/{board_no} | 모집 게시글을 삭제해준다. |
 
 <br/>
 <br/>
 
-**리뷰**
+**댓글**
 |기능|Method|URL|Response|
 |:--:|:--:|:--:|:--:|
-|리뷰 등록|POST|/review/write|리뷰를 작성한다.|
-|리뷰 수정|PUT|/review/update/{id}|리뷰를 수정한다.|
-|리뷰 삭제|DELETE|/review/delete/{id}|리뷰를 삭제한다.|
-|비디오 전체 리뷰 조회|GET|/review/all/{id}|선택한 비디오의 전체 리뷰를 조회한다.|
-|비디오 회원 리뷰 조회|GET|/review/all/{vid}/{uid}|선택한 비디오에서의 해당 회원이 작성한 리뷰를 조회한다.|
-
+| 댓글 수정 | PUT | /api/debate-reply |
+| 댓글 등록 | POST | /api/debate-reply/{board_no} | 댓글을 parent_no,depth에 맞춰서 context를 등록한다. |
+| 댓글 삭제 | DELETE | /api/debate-reply/{reply_no} | 댓글을 삭제한다. |
 
 <br/>
 <br/>
 
+**회원 관리**
+| 기능 | Method | URL | Response |
+|:--:|:--:|:--:|:--:|
+| 회원 탈퇴 | DELETE | /api/member | 현재 생성되어 있는 방 전체 목록을 반환한다. |
+| 비밀번호 변경 자격 확인 | POST | /api/member/auth-pw | 헤더에 보내진 jwt 토큰과 비밀번호로, 멤버 정보를 대조하여 본인여부를 확인합니다. |
+| 회원 정보 수정 | POST | /api/member/introduce | 헤더에 보내진 jwt 토큰과 수정정보를 이용해, 멤버의 정보를 수정한다. |
+| 로그인 | POST | /sessions/{room_id}/thumbnail | 입력된 아이디와 비밀번호를 확인하여 로그인을 진행합니다. |
+| 비밀번호 변경 | PUT | /api/member/password | 헤더에 보내진 jwt 토큰과 수정정보를 이용해, 멤버의 정보를 수정합니다. 수정이 완료되면 로그아웃 합니다. |
+| 멤버 정보 조회 | GET | /api/member/profile | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송합니다. |
+| 프로필 이미지 수정(업로드) | PUT | 
+​/api​/member​/profile-image | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송합니다. |
 
+<br/>
+<br/>
+
+**멤버 등록**
+|기능|Method|URL|Response|
+|:--:|:--:|:--:|:--:|
+| 이메일 중복 체크 | GET | /api/register/email/{email} | 현재 회원가입하려고 하는 이메일({email})을 다른 사용자가 이용중인지 확인합니다 |
+| 닉네임 중복 체크 | GET | /api/register/nickname/{nickname}| 현재 회원가입하려고 하는 닉네임({nickname})를 다른 사용자가 이용중인지 확인합니다 |
+| 휴대폰 번호 중복 체크 | GET | /api/register/phone-number/{phone_number} | 현재 회원가입하려고 하는 번호({phone_number})를 다른 사용자가 이용중인지 확인합니다 |
+| 회원가입 | POST | /api/register/signup | 회원가입을 통해 멤버 정보를 등록합니다 |
+| 아이디 중복 체크 | GET | /api/register/user-id/{login_id} | 현재 회원가입하려고 하는 id({login_id})를 다른 사용자가 이용중인지 확인합니다 |
+
+<br/>
+<br/>
+
+**방**
+| 기능 | Method | URL | Response |
+|:--:|:--:|:--:|:--:|
+| 전체 방 조회 | GET | /sessions/{page_info} | 현재 생성되어 있는 방 전체 목록을 반환한다. |
+| 키워드로 방 검색 | GET | /sessions/{page_info}/keyword | 키워드로 방을 검색한다. |
+| 방 생성 | POST | /sessions/ | 토론 방 객체와 오픈비두 세션을 생성한다. |
+| 방 썸네일 파일 업로드 | POST | /sessions/{room_id}/thumbnail | 토론방의 썸네일 파일을 업로드한다. |
+| 자료 공유 관련 이미지 파일 주소 반환 | POST | /sessions/uploadProof | 토론 자료 공유를 위해 사용자가 자료 파일을 업로드한다. |
+| 방 접속 | POST | /sessions/connection_select | 사용자가 원하는 진영과 순서를 선택해 토론방에 접속한다. |
+| 방 퇴장 | GET | /sessions/{room_id}/disconnect | 사용자가 토론방에서 퇴장한다. |
+| 토론 진영, 순서 저장 및 토론 규칙 반환 | POST | /sessions/settings | 방장이 새로 설정한 토론 진영 및 순서를 저장하고 그에 따른 토론 규칙을 반환한다. |
+| 현재 비어있는 진영, 순서 반환 | GET | /sessions/{rood_id}/empty | 토론 방 내 현재 비어있는 진영 및 순서를 반환한다. |
+| 접속자 진영, 순서 배치 갱신 | PUT | /sessions/sideOrder/ | 새로 설정된 접속자들의 진영, 순서대로 화면을 배치하는 시그널을 보낸다. |
+| 토론 종료에 따른 사용자 정보 갱신 | PUT | /sessions/{room_id}/end | 토론 종료 후 토론방에 접속해 있는 사용자들의 경험치와 토론 전적을 갱신한다. |
+| 현재 생성된 방 개수 |
 
 ## Git Convention
 ### 1. Branch
+```
 - main
 - develop
 - feat/front/board_mypage_end/kyb
@@ -174,25 +202,118 @@
 - feat/front/timer-rule/hsy
 - feat/front/chagne-Room-entrance/hsy
 - feat/back/readme/jde
+```
 
 ### 2. Commit message
 
-**type** : {영어}
-**body** : 설명
-**footer** : 생략 가능
+> 1.  소스코드 작성 및 Git 작업을 시작하기 전에 JIRA 이슈 생성하기
+> 2.  서로 공유하는 commit 그래프는 함부로 변경하지 않기
+> 3.  꼭 코드리뷰 받고 merge하기
+> 4.  자신의 pull request는 스스로 merge하기
 
-<aside>
-💡 **Type 종류**
-**feat** : 새로운 기능 추가
-**fix** : 버그 수정
-**docs** : 문서 수정
-**style** : 코드 의미에 영향을 주지 않는 변경사항 (포맷팅, 세미콜론 누락, 공백 등)
-**refactor** : 성능 개선 or 리팩토링
-**test** : 테스트 추가, 테스트 코드 리팩토링, 개발 코드는 변경 X
-**chore** : 그 외 자잘한 작업, 빌드 업무, 패키지 매니저(ex config) 설정관리, 패키지 업데이트 등등
-***** 추후 합의에 따라 추가 가능!
-</aside>
+### 3. commit message 형식
 
-### 3. Merge Message
+```
+<type> : <subject>
 
-Merge {하위 Branch 이름} -> {상위 Branch 이름}
+<body>      // 생략가능
+
+<footer>    // 생략가능
+```
+
+### 4. type: 커밋 유형의 종류
+
+```
+feat : 새로운 기능 추가
+fix : 버그 수정
+docs : 문서 수정
+style : 코드 의미에 영향을 주지 않는 변경사항 (포맷팅, 세미콜론 누락, 공백 등)
+refactor : 성능 개선 or 리팩토링
+test : 테스트 추가, 테스트 코드 리팩토링, 개발 코드는 변경 X
+chore : 그 외 자잘한 작업, 빌드 업무, 패키지 매니저(ex config) 설정관리, 패키지 업데이트 등등
+```
+
+### 5. subject: 제목 컨벤션
+```
+- 너무 길지 않게 50자를 넘기지 않는다.
+- 마침표를 붙이지 않는다.
+- 개조식 구문을 영어로 작성 (ex. feat : Adding Log Output Features)
+```
+
+### 6. body: 본문 컨벤션
+
+- 생략가능
+- 제목과 본문은 한 줄 띄워 구분한다.
+- 부연설명이나, 커밋의 이유 작성할 경우 사용
+- 어떻게 보다는 `무엇 / 왜` 대해서 작성
+
+### 7. footer: 꼬리말 컨벤션
+```
+- 생략
+```
+
+### 8. commit message 예시
+
+```
+feat : Implementation of login functionality
+
+로그인페이지 관련 마크업을 진행했습니다
+로그인 유효성 검사에 관한 코드를 작성했습니다
+
+#S04P12A202-26
+```
+
+### 9. git-flow 전략
+```
+- master : 기준이 되는 브랜치로 배포할 수 있는 브랜치 입니다.
+- develop : 개발 브랜치로 개발자들이 이 브랜치를 기준으로 각자 작업한 기능들을 pull하고 개발 후 합(Merge)칩니다.
+- feature : 단위 기능을 개발하는 브랜치로 기능 개발이 완료되면 develop 브랜치에 합칩니다.
+- release : 배포를 위해 master 브랜치로 보내기 전에 먼저 QA(품질검사)를 하기위한 브랜치 입니다.
+- hotfix : master 브랜치로 배포를 했는데 버그가 생겼을 떄 긴급 수정하는 브랜치 입니다.
+```
+
+### 10. git branch 이름 정책
+
+- feat/{frontEnd or backEnd}/{ 기능 설명 (영어)} → 기능 수행 (front/ back)
+- merge는 자유롭게
+
+### 11. Merge Request
+
+```
+제목
+merge : <From Branch Name> -> <To Branch Name>
+
+내용
+# 이 PR 이 다루는 내용
+
+# 새로 사용한 기술 / 공유해야 할 내용    // 생략가능
+
+# Screenshot     // 생략가능
+
+# 질문     // 생략가능
+```
+
+예시
+
+```
+제목
+merge : develop -> main
+
+내용
+#수정사항 ( 이 PR 이 다루는 내용 )
+1. 회원가입 시 입력 폼 피드백 추가
+2. 프로그레스바 css 수정
+3. 아이콘 클릭되지 않는 문제 해결
+
+
+# 아이콘이 클릭되지 않는 문제 ( 새로 사용한 기술 / 공유해야 할 내용 )
+### 현상
+- Header.vue의 Icon (왼쪽, 오른쪽) 클릭되지 않았습니다.
+
+### 원인
+- Header 컴포넌트 내 H1 태그의 width가 100%로 Icon 위쪽으로 가로 가득하게 위치했기 때문
+
+### 해결 방법
+- 클릭 이벤트가 발생되어야 할 아이콘에 z-index를 10으로 설정하여
+  아이콘이 H1 태그보다 z축으로 위에 위치하도록 수정
+```
