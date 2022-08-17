@@ -21,6 +21,8 @@ export default defineComponent({
   width: 100%;
   height: 50px;
   background: radial-gradient(circle, #141834 0%, #13162f 100%);
-  color: #9b9ca7;
+  color: #ffffff;
+  text-align: center;
+  font-size: 40px;
 }
 </style>
