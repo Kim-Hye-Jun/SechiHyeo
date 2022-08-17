@@ -1,121 +1,157 @@
 <template>
+  <background></background>
   <div class="flex">
-    <room-entrance-search-input-component
+    <!-- <room-entrance-search-input-component
       @getSearchValue="updateRooms"
-    ></room-entrance-search-input-component>
+    ></room-entrance-search-input-component> -->
     <suspense>
-      <room-entrance-board-component></room-entrance-board-component>
+      <room-entrance-board-component
+        :pageNum="nowPage"
+      ></room-entrance-board-component>
     </suspense>
-    <button
-      type="button"
-      class="btn btn-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#create"
-      @click="modalIn"
+    <nav id="pagenation-bar" aria-label="Page navigation example">
+      <!-- <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li v-for="index in pageCount" :key="index" class="page-item">
+          <a class="page-link" href="#">{{ index }}</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul> -->
+      <div class="btn-cover">
+        <button :disabled="nowPage === 0" @click="prevPage" class="page-btn">
+          이전
+        </button>
+        <span class="page-count"
+          >{{ nowPage + 1 }} / {{ pageCount }} 페이지</span
+        >
+        <button
+          :disabled="nowPage >= pageCount - 1"
+          @click="nextPage"
+          class="page-btn"
+        >
+          다음
+        </button>
+      </div>
+    </nav>
+  </div>
+  <button
+    id="createButton"
+    type="button"
+    class="btn btn-primary btn-lg"
+    data-bs-toggle="modal"
+    data-bs-target="#create"
+    @click="modalIn"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="currentColor"
+      class="bi bi-plus-circle-fill"
+      viewBox="0 0 16 16"
     >
-      방 생성
-    </button>
-    <!-- <div class="modal" v-show="modal"> -->
-    <!-- <room-make-modal-component
-        class="modal-dialog modal-dialog-scrollable"
-        @modalOut="modalOut"
-      ></room-make-modal-component> -->
-    <!-- </div> -->
-    <!-- 모달창 -->
-    <div id="create" class="modal">
-      <div class="modal-dialog modal-dialog-scrollable modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="text">방 만들기</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
+      <path
+        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
+      />
+    </svg>
+    방 생성
+  </button>
 
-          <div class="modal-body">
+  <!-- 모달창 -->
+  <div id="create" class="modal">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="text">방 만들기</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <modal-input-box-component
+            ref="roomTitleInput"
+            :labelName="roomTitleLabelName"
+          ></modal-input-box-component>
+          <modal-input-box-component
+            ref="debateSubjectInput"
+            :labelName="debateTopicLabelName"
+          ></modal-input-box-component>
+          <div class="flex__modal__side">
             <modal-input-box-component
-              ref="roomTitleInput"
-              :labelName="roomTitleLabelName"
+              ref="sideAInput"
+              :labelName="sideALabelName"
             ></modal-input-box-component>
             <modal-input-box-component
-              ref="debateSubjectInput"
-              :labelName="debateTopicLabelName"
+              ref="sideBInput"
+              :labelName="sideBLabelName"
             ></modal-input-box-component>
-            <div class="flex__modal__side">
-              <modal-input-box-component
-                ref="sideAInput"
-                :labelName="sideALabelName"
-              ></modal-input-box-component>
-              <modal-input-box-component
-                ref="sideBInput"
-                :labelName="sideBLabelName"
-              ></modal-input-box-component>
-            </div>
-            <!--방 이미지 업로드 -->
-            <div>
-              <input type="file" ref="selectFile" @change="previewFile" />
-              <div id="preview">
-                <img
-                  v-if="previewImgUrl"
-                  :src="previewImgUrl"
-                  style="width: 150px; height: 150px"
-                />
-              </div>
-            </div>
-            <div class="flex__ul">
-              <modal-radio-button-component
-                labelId="private"
-                labelValue="private"
-                :selector="accessModifierRadioSelecter"
-              ></modal-radio-button-component>
-              <modal-radio-button-component
-                labelId="public"
-                labelValue="public"
-                :selector="accessModifierRadioSelecter"
-              ></modal-radio-button-component>
-            </div>
-            <div class="flex__ul">
-              <modal-radio-button-component
-                labelId="2"
-                labelValue="2"
-                :selector="numOfPeopleRadioSelecter"
-              ></modal-radio-button-component>
-              <modal-radio-button-component
-                labelId="4"
-                labelValue="4"
-                :selector="numOfPeopleRadioSelecter"
-              ></modal-radio-button-component>
-              <modal-radio-button-component
-                labelId="6"
-                labelValue="6"
-                :selector="numOfPeopleRadioSelecter"
-              ></modal-radio-button-component>
+          </div>
+          <!--방 이미지 업로드 -->
+          <div>
+            <input type="file" ref="selectFile" @change="previewFile" />
+            <div id="preview">
+              <img
+                v-if="previewImgUrl"
+                :src="previewImgUrl"
+                style="width: 150px; height: 150px"
+              />
             </div>
           </div>
-
-          <div class="modal-footer">
-            <button-component-vue
-              data-bs-dismiss="modal"
-              @click="myFunc()"
-            ></button-component-vue>
-            <button-component-back
-              data-bs-dismiss="modal"
-            ></button-component-back>
+          <div class="flex__ul">
+            <modal-radio-button-component
+              labelId="private"
+              labelValue="private"
+              :selector="accessModifierRadioSelecter"
+            ></modal-radio-button-component>
+            <modal-radio-button-component
+              labelId="public"
+              labelValue="public"
+              :selector="accessModifierRadioSelecter"
+            ></modal-radio-button-component>
+          </div>
+          <div class="flex__ul">
+            <modal-radio-button-component
+              labelId="2"
+              labelValue="2"
+              :selector="numOfPeopleRadioSelecter"
+            ></modal-radio-button-component>
+            <modal-radio-button-component
+              labelId="4"
+              labelValue="4"
+              :selector="numOfPeopleRadioSelecter"
+            ></modal-radio-button-component>
+            <modal-radio-button-component
+              labelId="6"
+              labelValue="6"
+              :selector="numOfPeopleRadioSelecter"
+            ></modal-radio-button-component>
           </div>
         </div>
+
+        <div class="modal-footer">
+          <button-component-vue
+            data-bs-dismiss="modal"
+            @click="myFunc()"
+          ></button-component-vue>
+          <button-component-back
+            data-bs-dismiss="modal"
+          ></button-component-back>
+        </div>
       </div>
-      <!-- <room-make-modal-component></room-make-modal-component> -->
     </div>
-    <!-- <button-component
-      buttonName="Create"
-      @click="state.isRoomMakeModalView = true"
-    ></button-component>
-    <room-make-modal-component
-      v-if="state.isRoomMakeModalView"
-    ></room-make-modal-component> -->
   </div>
 </template>
 <script lang="ts">
@@ -133,17 +169,19 @@ import { useStore } from "vuex";
 
 import http from "@/http";
 import { hasChanged } from "@vue/shared";
+import Background from "@/components/common/Background.vue";
 
 export default defineComponent({
   components: {
     RoomEntranceBoardComponent,
-    RoomEntranceSearchInputComponent,
+    // RoomEntranceSearchInputComponent,
     // ButtonComponent,
     // RoomMakeModalComponent,
     ButtonComponentVue,
     ButtonComponentBack,
     ModalInputBoxComponent,
     ModalRadioButtonComponent,
+    Background,
   },
   setup() {
     let state = reactive({
@@ -157,6 +195,14 @@ export default defineComponent({
       store,
     };
   },
+
+  created() {
+    http.get("sessions/pageNum").then((res) => {
+      this.roomCount = res.data;
+      this.pageCount = Math.floor(this.roomCount / 6) + 1;
+    });
+  },
+
   data() {
     return {
       modal: false,
@@ -168,14 +214,24 @@ export default defineComponent({
       sideBLabelName: "Side 2" as string,
       accessModifierRadioSelecter: "accessModifier" as string,
       numOfPeopleRadioSelecter: "numOfPeople" as string,
+      roomCount: 1 as number,
+      pageCount: 1 as number,
+      nowPage: 0 as number,
     };
   },
+
   methods: {
     openModal() {
       document.location.href = "#open-modal";
     },
     updateRooms(searchValue: string) {
       //(#구현해야할것) searchValue로 방검색 axios 요청 보낸 후 room-entrance-board-component 갱신
+    },
+    nextPage() {
+      this.nowPage += 1;
+    },
+    prevPage() {
+      this.nowPage -= 1;
     },
     // onFileChange(e: any) {
     //   const file = e.target.files[0];
@@ -274,7 +330,7 @@ export default defineComponent({
         );
         fileExt = fileExt.toLowerCase();
         if (
-          ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
+          ["jpeg", "png", "gif", "bmp", "jpg"].includes(fileExt) &&
           this.selectFile != null &&
           this.selectFile["size"] <= 1048576
         ) {
@@ -326,9 +382,10 @@ body {
 }
 
 .flex {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 4%;
+  margin-left: 2.5%;
+  width: 95%;
+  height: 80%;
 }
 
 .flex__ul {
@@ -342,5 +399,24 @@ body {
 }
 .text {
   color: white;
+}
+
+#createButton {
+  position: absolute;
+  z-index: 99;
+  top: 90%;
+  left: 90%;
+}
+
+#pagenation-bar {
+  position: absolute;
+  z-index: 99;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.page-count {
+  color: aliceblue;
 }
 </style>

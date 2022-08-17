@@ -2,7 +2,7 @@
   <!-- @click="joinRoom(roomInfo.roomId)" -->
   <div class="my-container grid">
     <room-entrance-component
-      v-for="(roomInfo, index) in roomInfoList"
+      v-for="(roomInfo, index) in roomInfoDataList"
       @click="openModal(roomInfo)"
       v-bind:roomInfo="roomInfo"
       v-bind:key="index"
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import RoomEntranceComponent from "@components/molecules/room-entrance/RoomEntranceComponent.vue";
 import { RoomThumbnailInfo, SideOrderInfo } from "@type/types";
 import ModalRadioButtonComponent from "@/components/atoms/common/ModalRadioButtonComponent.vue";
@@ -47,20 +47,38 @@ import ButtonComponent from "@/components/atoms/common/ButtonComponent.vue";
 import http from "@/http";
 // import ContainerComponent from "@components/atoms/common/ContainerComponent.vue";
 export default defineComponent({
+  props: {
+    pageNum: Number,
+  },
   components: {
     RoomEntranceComponent,
     ModalRadioButtonComponent,
     ButtonComponent,
   },
-  async setup(props) {
+  // created() {
+  //   // (#구현 해야할것)create시에 axios 요청으로 방 가져와서 방 썸네일에 넣어줌 (roomInfoData)
+  //   let roomInfoDataList = ref([]);
+  //   const response = await http.get("sessions/1").then((response) => {
+  //     roomInfoDataList = response.data;
+  //     console.log(roomInfoDataList);
+  //   });
+  //   return {
+  //     roomInfoDataList,
+  //   };
+  // },
+  created() {
     // (#구현 해야할것)create시에 axios 요청으로 방 가져와서 방 썸네일에 넣어줌 (roomInfoData)
-    let roomInfoDataList: Array<RoomThumbnailInfo>;
-    const response = await http.get("sessions/1");
-    roomInfoDataList = response.data;
-    console.log(roomInfoDataList);
-    return {
-      roomInfoList: roomInfoDataList,
-    };
+    // let roomInfoDataList = ref([]);
+    http.get("sessions/1").then((response) => {
+      this.roomInfoDataList = response.data;
+      // console.log(roomInfoDataList);
+    });
+  },
+  beforeUpdate() {
+    console.log("update " + "sessions/" + String((this.pageNum as number) + 1));
+    http.get("sessions/" + String((this.pageNum as number) + 1)).then((res) => {
+      this.roomInfoDataList = res.data;
+    });
   },
   data() {
     return {
@@ -70,8 +88,14 @@ export default defineComponent({
       sideOrderList: [] as Array<SideOrderInfo>,
       sideOrderSelector: "sideOrderSelector",
       roomId: "",
+      roomInfoDataList: [] as any,
     };
   },
+  // watch: {
+  //   pageNum: fuction(value, oldValue){
+
+  //   },
+  // },
   methods: {
     returnClass(s: string, idx: number): string {
       return "@@";
@@ -128,7 +152,7 @@ export default defineComponent({
 
 <style scoped>
 .grid {
-  background: black;
+  top: 10%;
   position: relative;
   z-index: 1;
   display: grid;
