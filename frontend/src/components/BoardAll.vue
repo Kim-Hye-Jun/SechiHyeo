@@ -17,7 +17,7 @@
       <div
         class="boards-content-text"
         style="filter: hue-rotate(270deg)"
-        @click="freeClick"
+        @click="freeClick(), modalIn()"
         :class="[free === true ? 'free' : 'no']"
       >
         글쓰기
@@ -26,10 +26,8 @@
         <span class="span-board"></span>
         <span class="span-board"></span>
       </div>
-      <div
-        class="boards-content-write"
-        :class="[academy === true ? '' : 'hidden']"
-      >
+      <div class="boards-content-write">
+        <!-- :class="[academy === true ? '' : 'hidden']" -->
         <div
           class="boards-content-write-box1"
           @click="moveToDetail(board_no)"
@@ -49,10 +47,8 @@
           </div>
         </div>
       </div>
-      <div
-        class="boards-content-write"
-        :class="[free === true ? '' : 'hidden']"
-      >
+      <div class="boards-content-write">
+        <!-- :class="[free === true ? '' : 'hidden']" -->
         <!-- <div
           class="boards-content-write-box1"
           v-for="(debate_board, board) in boards"
@@ -74,74 +70,75 @@
         </div> -->
       </div>
     </div>
-    <div class="modalZero" :class="[modal === true ? 'hidden' : '']">
-      <div @modalOut="modalOut">
-        <div>
-          <span class="span-modal" style="left: -350px"></span>
-          <span class="span-modal" style="top: -350px"></span>
-          <span class="span-modal" style="left: 350px"></span>
-          <span class="span-modal" style="top: 350px"></span>
-          <div class="modal-container">
-            <header class="modal-container-header">
-              <input
-                id="topic"
-                v-model="debate_board.debate_topic"
-                type="text"
-                placeholder="토론 주제 입력"
-                class="modal-container-title"
-              />
-              <input
-                id="subject"
-                v-model="debate_board.board_title"
-                type="text"
-                placeholder="게시글 제목 입력"
-              />
-            </header>
-            <div class="modal-container-body article">
-              <input
-                id="day"
-                v-model="debate_board.debate_time"
-                type="datetime-local"
-                placeholder="토론 일시 입력"
-                class="board-day"
-              />
-              <input
-                id="max"
-                v-model="debate_board.max_applicant"
-                type="number"
-                placeholder="정원 입력"
-                class="board-count"
-              />
-              <div class="board-summary-content">
-                <input
-                  id="a"
-                  v-model="debate_board.a_opinion"
-                  type="text"
-                  placeholder="A 진영 주장 입력"
-                  class="board-a"
-                />
-                <input
-                  id="b"
-                  v-model="debate_board.b_opinion"
-                  type="text"
-                  placeholder="B 진영 주장 입력"
-                  class="board-b"
-                />
-                <input
-                  id="content"
-                  v-model="debate_board.board_content"
-                  type="text"
-                  placeholder="내용 입력"
-                  class="board-summary-in"
-                />
-              </div>
-              <button @click="boardWrite()">등록</button>
-              <button class="button decline modalOut" @click="modalOut">
-                뒤로가기
-              </button>
+    <div class="modalZero" :class="[modal === false ? 'hidden' : '']">
+      <!-- <div @modalOut="modalOut"> -->
+      <div>
+        <span class="span-modal" style="left: -320px"></span>
+        <span class="span-modal" style="top: -320px"></span>
+        <span class="span-modal" style="left: 320px"></span>
+        <span class="span-modal" style="top: 320px"></span>
+        <div class="modal-container">
+          <header class="modal-container-header">
+            <input
+              id="subject"
+              v-model="debate_board.board_title"
+              type="text"
+              placeholder="게시글 제목 입력"
+              class="board-title"
+            />
+          </header>
+          <div class="modal-container-body">
+            <!-- <div class="board-summary-content"> -->
+            <input
+              id="topic"
+              v-model="debate_board.debate_topic"
+              type="text"
+              placeholder="토론 주제 입력"
+              class="board-topic"
+            />
+            <input
+              id="a"
+              v-model="debate_board.a_opinion"
+              type="text"
+              placeholder="A 진영 주장 입력"
+              class="board-a"
+            />
+            <input
+              id="day"
+              v-model="debate_board.debate_time"
+              type="datetime-local"
+              placeholder="토론 일시 입력"
+              class="board-day"
+            />
+            <input
+              id="b"
+              v-model="debate_board.b_opinion"
+              type="text"
+              placeholder="B 진영 주장 입력"
+              class="board-b"
+            />
+            <input
+              id="max"
+              v-model="debate_board.max_applicant"
+              type="number"
+              placeholder="정원 입력"
+              class="board-count"
+            />
+            <input
+              id="content"
+              v-model="debate_board.board_content"
+              type="text"
+              placeholder="내용 입력"
+              class="board-summary-in"
+            />
+            <!-- </div> -->
+            <div>
+              <button class="button modalOut" @click="modalOut">취소</button>
+              <button class="button append" @click="boardWrite()">등록</button>
             </div>
           </div>
         </div>
+        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -209,6 +206,7 @@ export default defineComponent({
     },
     modalOut() {
       this.modal = false;
+      (this.academy = true), (this.free = false);
       console.log(this.modal);
     },
     typeAcademy(room: { debate_type: string }, filter: string) {
@@ -536,7 +534,7 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
+  /* display: flex; */
   align-items: center;
   justify-content: center;
   background-color: rgba(#000, 0.25);
@@ -545,6 +543,7 @@ a {
   margin-left: auto;
   margin-right: auto;
   background: #757f9a;
+  /* background: #d7dde8; */
   border-radius: 10px;
   overflow: hidden;
   display: flex;
@@ -563,6 +562,8 @@ a {
 }
 .modal-container-title {
   display: flex;
+  background: #d7dde8;
+  border-radius: 10px solid black;
   align-items: center;
   gap: 8px;
   line-height: 1;
@@ -572,7 +573,7 @@ a {
   color: #000000;
 }
 .modal-container-body {
-  padding: 24px 32px 51px;
+  /* padding: 24px 32px 51px; */
   font-family: serif;
   overflow-y: auto;
   color: #000000;
@@ -670,8 +671,9 @@ a {
 .board-day {
   position: relative;
   display: inline-block;
-  top: -20px;
-  width: 270px;
+  margin-top: 5px;
+  margin-left: 10px;
+  width: 100px;
   font-family: "Inter";
   font-style: normal;
   font-weight: 600;
@@ -684,9 +686,10 @@ a {
 .board-count {
   position: relative;
   display: inline-block;
-  top: -20px;
-  right: -50px;
-  width: 100px;
+  width: 60px;
+  margin-top: 5px;
+  margin-left: 50px;
+  margin-bottom: 5px;
   font-family: "Inter";
   font-style: normal;
   font-weight: 600;
@@ -696,60 +699,102 @@ a {
   color: #000000;
   border-bottom: 1px solid #ddd;
 }
-.board-summary {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 240px;
-  top: -60px;
-  left: -34px;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 800;
-  font-size: 20px;
-  color: #000000;
-  border-right: 3px solid #ddd;
-}
-.board-summary-content {
-  position: relative;
-  display: inline-block;
-  width: 450px;
-  height: 400px;
-}
 .board-a {
   position: relative;
   display: inline-block;
+  margin-bottom: 5px;
   width: 400px;
-  padding-left: 20px;
-  left: -50px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 16px;
   text-align: left;
-  line-height: 34px;
+  line-height: 30px;
   color: #000000;
+  border-radius: 10px;
+}
+.board-a:focus {
+  color: white;
+  background: #000000;
+  border: white solid 1px;
 }
 .board-b {
   position: relative;
   display: inline-block;
   width: 400px;
-  padding-left: 20px;
-  left: -50px;
-  font-style: normal;
-  font-weight: 500;
+  /* font-style: normal; */
+  font-weight: bold;
   font-size: 16px;
   text-align: left;
-  line-height: 34px;
+  line-height: 30px;
   color: #000000;
-  border-bottom: 3px solid #ddd;
+  border-radius: 10px;
+  /* border-bottom: 3px solid #ddd; */
+}
+.board-b:focus {
+  color: white;
+  background: #000000;
+  border: white solid 1px;
 }
 .board-summary-in {
   position: relative;
   display: inline-block;
-  width: 400px;
-  height: 180px;
-  top: 10px;
-  left: -40px;
+  background: #d7dde8;
+  border-radius: 10px;
+  width: 500px;
+  height: 280px;
+  top: 5px;
+  left: 0px;
   text-align: left;
+}
+.board-summary-in:focus {
+  color: white;
+  background: #000000;
+  border: white solid 1px;
+}
+.board-title {
+  position: relative;
+  display: inline-block;
+  background: #d7dde8;
+  width: 540px;
+  height: 40px;
+  font-size: 16px;
+  text-align: left;
+  border-radius: 10px;
+}
+.board-title:focus {
+  color: white;
+  background: #000000;
+  border: white solid 1px;
+}
+.board-topic {
+  position: relative;
+  display: inline-block;
+  background: #d7dde8;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  width: 500px;
+  height: 36px;
+  text-align: left;
+  border-radius: 10px;
+}
+.board-topic:focus {
+  color: white;
+  background: #000000;
+  border: white solid 1px;
+}
+.button {
+  width: 80px;
+  height: 40px;
+  border-radius: 5px;
+  font-size: bold;
+  margin-top: 20px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.button:hover {
+  background-color: #050801;
+  color: white;
+  box-shadow: 0 0 0.5px #050801, 0 0 2.5px #050801, 0 0 5px #050801,
+    0 0 10px #050801;
 }
 </style>

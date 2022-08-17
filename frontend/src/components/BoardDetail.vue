@@ -148,10 +148,10 @@ export default defineComponent({
   },
   methods: {
     // ...mapActions(["BOARDONE"]),
-    modalOut() {
-      this.modal = false;
-      this.$emit("modalOut");
-    },
+    // modalOut() {
+    //   this.modal = false;
+    //   this.$emit("modalOut");
+    // },
     // boardOne() {
     //   this.BOARDONE(this.debate_board.board_no);
     // },

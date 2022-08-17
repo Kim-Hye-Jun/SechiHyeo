@@ -1,11 +1,13 @@
 <template>
   <div class="userpage-user">
-    <img class="userpage-user-image" :src="memberinfo.profileUrl" />
+    <div class="userpage-user-image">
+      <img style="width: 130px; height: 130px" :src="memberinfo.profileUrl" />
+    </div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
     <div class="userpage-user-nickname">토론킹 {{ memberinfo.nickname }}</div>
     <div class="userpage-user-level">level. {{ level() }}</div>
-    <div class="userpage-user-exp">exp {{ memberinfo.exp }}%</div>
+    <div class="userpage-user-exp">exp {{ memberinfo.exp }}</div>
     <div class="userpage-user-bar">
       <div class="userpage-user-bar-exp"></div>
       <div class="userpage-user-bar-bar"></div>
@@ -21,6 +23,7 @@ export default defineComponent({
   data() {
     return {
       baseUrl: BASE_FILE_DIR,
+      // exp: 100 - memberinfo.exp,
     };
   },
   computed: {
@@ -45,7 +48,7 @@ export default defineComponent({
       return BASE_FILE_DIR + this.memberinfo.profileUrl;
     },
     level() {
-      return this.memberinfo.exp / 5;
+      return this.memberinfo.exp / 100;
     },
   },
 });
@@ -65,7 +68,7 @@ export default defineComponent({
   top: -120px;
   width: 130px;
   height: 130px;
-  background-color: #1b2431;
+  /* background-color: #1b2431; */
   border-radius: 10px solid white;
   display: flex;
   align-items: center;

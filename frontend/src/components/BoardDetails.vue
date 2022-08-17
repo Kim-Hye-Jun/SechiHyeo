@@ -6,7 +6,7 @@
         토론 주제 : {{ debate_board.board.debate_topic }}
       </h1>
     </header>
-    <div class="modal-container-body article">
+    <div class="modal-container-body">
       <h3 class="board-master">작성자 : {{ debate_board.board.nickname }}</h3>
       <h3 class="board-day">
         토론 일시 : {{ debate_board.board.debate_time }}
@@ -16,7 +16,7 @@
           debate_board.board.max_applicant
         }}
       </h3>
-      <h2 class="board-summary">개요</h2>
+      <!-- <h2 class="board-summary">개요</h2> -->
       <div class="board-summary-content">
         <li class="board-a">A 진영 : {{ debate_board.board.a_opinion }}</li>
         <li class="board-b">B 진영 : {{ debate_board.board.b_opinion }}</li>
@@ -27,13 +27,13 @@
         <h5 class="board-reply-count">{{ 0 }} 개</h5>
         <!-- 댓글 개수 미구현 -->
       </div>
-      <textarea class="board-reply-create-input" placeholder="댓글"></textarea>
+      <input class="board-reply-create-input" placeholder="댓글" />
       <button class="board-reply-create-sign" @click="replyInsert()">
         등록
       </button>
       <!-- 댓글 반복 -->
       <div v-for="reply in replies" :key="reply['reply_no']">
-        <img class="board-reply-ex-profile" :src="reply['profile_url']" />
+        <!-- <img class="board-reply-ex-profile" :src="reply['profile_url']" /> -->
         <p class="board-reply-ex-user">User {{ reply["nickname"] }}</p>
         <p class="board-reply-ex-user-content">댓글 {{ reply["context"] }}</p>
         <button
@@ -49,16 +49,16 @@
           수정
         </button>
         <!-- 대댓글 토글 버튼 -->
-        <button class="board-reply-ex-reply">답글</button>
+        <!-- <button class="board-reply-ex-reply">답글</button>
         <textarea
           class="board-reply2-create-input"
           placeholder="대댓글"
         ></textarea>
         <button class="board-reply2-create-sign" @click="replyInsert()">
           등록
-        </button>
+        </button> -->
         <!-- 대댓글 반복 -->
-        <div
+        <!-- <div
           class="board-reply2-ex"
           v-for="reply in replies"
           :key="reply"
@@ -80,7 +80,7 @@
           >
             수정
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
     <footer class="modal-container-footer">
@@ -104,7 +104,7 @@
       <button
         class="button accept"
         v-if="debate_board.userid === memberinfo.user_id"
-        @click="boardDelete(debate_board.replies.board_no)"
+        @click="boardDelete(debate_board.board.board_no)"
       >
         삭제
       </button>
@@ -161,6 +161,7 @@ export default defineComponent({
     //   this.$emit("modalOut");
     // },
     async boardOne(board_no: number) {
+      console.log(board_no);
       // let no = board_no;
       this.BOARDONE(board_no);
       // let boardNum = this.debate_board.board_no;
@@ -263,7 +264,8 @@ a {
   height: 600px;
   width: 800px;
   margin-top: 100px;
-  margin-left: 400px;
+  margin-left: 50%;
+  transform: translate(-50%);
   background: #757f9a;
   border-radius: 10px;
   overflow: hidden;
@@ -275,8 +277,10 @@ a {
   }
 }
 .modal-container-header {
+  padding-top: 12px;
   padding: 16px 32px;
   border-bottom: 1px solid #ddd;
+  background: #d7dde8;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -287,12 +291,13 @@ a {
   gap: 8px;
   line-height: 1;
   font-family: "Times New Roman", Times, serif;
-  font-weight: 700;
-  font-size: 1.125;
+  font-weight: bold;
+  font-size: 1;
   color: #000000;
 }
 .modal-container-body {
-  padding: 24px 32px 51px;
+  margin-left: 40px;
+  padding: 24px 32px 48px;
   font-family: serif;
   overflow-y: auto;
   color: #000000;
@@ -425,12 +430,12 @@ a {
   position: relative;
   display: inline-block;
   top: -20px;
-  left: -50px;
-  width: 120px;
+  left: 0px;
+  width: 300px;
   font-family: "Inter";
   font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: bold;
+  font-size: 20px;
   text-align: left;
   line-height: 34px;
   color: #000000;
@@ -443,8 +448,8 @@ a {
   width: 270px;
   font-family: "Inter";
   font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 20px;
   text-align: left;
   line-height: 34px;
   color: #000000;
@@ -454,12 +459,12 @@ a {
   position: relative;
   display: inline-block;
   top: -20px;
-  right: -50px;
+  /* right: -50px; */
   width: 100px;
   font-family: "Inter";
   font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 20px;
   text-align: left;
   line-height: 34px;
   color: #000000;
@@ -470,8 +475,8 @@ a {
   display: inline-block;
   width: 60px;
   height: 240px;
-  top: -60px;
-  left: -34px;
+  top: 0px;
+  left: 0px;
   font-family: "Inter";
   font-style: normal;
   font-weight: 800;
@@ -490,7 +495,8 @@ a {
   display: inline-block;
   width: 400px;
   padding-left: 20px;
-  left: -50px;
+  top: -230px;
+  left: 0px;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -503,7 +509,8 @@ a {
   display: inline-block;
   width: 400px;
   padding-left: 20px;
-  left: -50px;
+  top: -230px;
+  left: 0px;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -517,16 +524,14 @@ a {
   display: inline-block;
   width: 400px;
   height: 180px;
-  top: 10px;
-  left: -40px;
+  top: -220px;
+  left: 0px;
   text-align: left;
 }
 .board-reply-box {
   position: relative;
   display: inline-block;
   width: 580px;
-  top: -40px;
-  left: -60px;
   border-bottom: 3px solid #ddd;
 }
 .board-reply {
@@ -558,7 +563,7 @@ a {
   display: inline-block;
   width: 460px;
   height: 40px;
-  top: -15px;
+  top: 15px;
   color: #000000;
   padding: 5px;
   background-color: #111845;
@@ -570,8 +575,8 @@ a {
   position: relative;
   width: 50px;
   height: 30px;
-  left: 230px;
-  bottom: 10px;
+  left: 10px;
+  top: 20px;
   font-family: "Inter";
   font-style: normal;
   font-weight: 400;
