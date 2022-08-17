@@ -141,8 +141,7 @@
 | 로그인 | POST | /sessions/{room_id}/thumbnail | 입력된 아이디와 비밀번호를 확인하여 로그인을 진행합니다. |
 | 비밀번호 변경 | PUT | /api/member/password | 헤더에 보내진 jwt 토큰과 수정정보를 이용해, 멤버의 정보를 수정합니다. 수정이 완료되면 로그아웃 합니다. |
 | 멤버 정보 조회 | GET | /api/member/profile | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송합니다. |
-| 프로필 이미지 수정(업로드) | PUT | 
-​/api​/member​/profile-image | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송합니다. |
+| 프로필 이미지 수정(업로드) | PUT | ​/api​/member​/profile-image | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송합니다. |
 
 <br/>
 <br/>
@@ -173,7 +172,8 @@
 | 현재 비어있는 진영, 순서 반환 | GET | /sessions/{rood_id}/empty | 토론 방 내 현재 비어있는 진영 및 순서를 반환한다. |
 | 접속자 진영, 순서 배치 갱신 | PUT | /sessions/sideOrder/ | 새로 설정된 접속자들의 진영, 순서대로 화면을 배치하는 시그널을 보낸다. |
 | 토론 종료에 따른 사용자 정보 갱신 | PUT | /sessions/{room_id}/end | 토론 종료 후 토론방에 접속해 있는 사용자들의 경험치와 토론 전적을 갱신한다. |
-| 현재 생성된 방 개수 |
+| 현재 생성된 방 개수 | GET | /sessions/pageNum | 현재 생성된 방 개수를 반환한다. |
+| 현재 생성된 방 정보 | GET | /sessions/roomInfo | 현재 생성된 모든 방에 대한 정보를 반환한다. |
 
 ## Git Convention
 ### 1. Branch
