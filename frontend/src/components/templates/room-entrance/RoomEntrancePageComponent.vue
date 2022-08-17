@@ -414,6 +414,7 @@ body {
 
 .modal-content {
   background: rgb(46, 37, 37);
+  margin-top: 10%;
 }
 
 .modal-footer {
