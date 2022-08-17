@@ -1,26 +1,30 @@
 <template>
-  <video autoplay :class="xx"></video>
-  <!-- <div class="flex">
-    <video autoplay :id="xx" :draggable="isRoomAdmin"></video>
+  <div>
+    <video autoplay :class="returnVideoClassName(xx)"></video>
     <debate-memo-modal-component></debate-memo-modal-component>
-  </div> -->
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-// import DebateMemoModalComponent from "@components/molecules/room-inside/DebateMemoModalComponent.vue";
+import DebateMemoModalComponent from "@components/molecules/room-inside/DebateMemoModalComponent.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
-    // DebateMemoModalComponent,
+    DebateMemoModalComponent,
+  },
+  setup() {
+    const store = useStore();
+    return { store };
   },
   props: {
-    streamManager: Object,
+    // streamManager: Object,
     xx: String,
     // isRoomAdmin: Boolean,
   },
   mounted() {
-    console.log("추가", this.streamManager);
+    console.log("추가", this.store.state.publisher);
     console.log("EL : ", this.$el);
     console.log("selector : ", document.querySelector("video"));
     // this.streamManager?.addVideoElement(
@@ -28,19 +32,28 @@ export default defineComponent({
     // );
     console.log(document.getElementsByClassName(this.$props.xx as string)[0]);
 
-    this.streamManager?.addVideoElement(
-      document.getElementsByClassName(this.$props.xx as string)[0]
+    if (this.xx === undefined) return;
+
+    this.store.state.publisher?.addVideoElement(
+      document.getElementsByClassName(
+        this.returnVideoClassName(this.$props.xx as string)
+      )[0]
     );
   },
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    returnVideoClassName(xx: string | undefined): string {
+      return xx + "__video";
+    },
+  },
 });
 </script>
 
 <style scoped>
 video {
+  width: 100%;
   background: black;
   border-radius: 10px;
   padding: 5px;
