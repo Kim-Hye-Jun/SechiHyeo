@@ -143,4 +143,9 @@ public class RoomController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @GetMapping("")
+    public ResponseEntity<Integer> getPages() {
+        return ResponseEntity.ok(roomService.getPageNumber());
+    }
+
 }
