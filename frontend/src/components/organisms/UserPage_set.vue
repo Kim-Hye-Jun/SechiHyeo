@@ -1,6 +1,9 @@
 <template>
   <div class="userpage-content-set-form-topic">회원정보 수정</div>
-  <image-upload></image-upload>
+  <div style="position: absolute">
+    <div style="margin-left: 80px; height: 150px">empty</div>
+    <image-upload></image-upload>
+  </div>
   <!-- <div class="userpage-content-set-form-image"></div> -->
   <!-- <button class="userpage-content-set-form-fix">사진 편집</button> -->
   <div class="userpage-content-set-form-personal">
@@ -47,7 +50,7 @@
     placeholder="한줄 소개"
     v-model="memberinfo.introduce"
   />
-  <div class="userpage-content-set-form-intro-word">글자 수</div>
+  <!-- <div class="userpage-content-set-form-intro-word">글자 수</div> -->
   <button class="userpage-content-set-form-button" @click="profileUpdate">
     수정 완료
   </button>
@@ -74,23 +77,14 @@ export default defineComponent({
   },
   // putProfileImage,
   methods: {
-    ...mapActions([
-      "PROFILEIMAGE",
-      "PROFILEUPDATE",
-      "PASSWORD",
-      "AUTHPW",
-      "PROFILEDELETE",
-    ]),
+    ...mapActions(["PROFILEUPDATE", "PASSWORD", "AUTHPW", "PROFILEDELETE"]),
     async profileUpdate() {
       if (await this.AUTHPW()) {
         this.PASSWORD();
         this.PROFILEUPDATE();
       } else {
-        // alert("새 비밀번호가 일치하지 않습니다!!!");
         alert("비밀번호가 틀렸습니다!!");
       }
-      // console.log(this.memberinfo.password);
-      // console.log(this.ps);
     },
     profileDelete() {
       if (this.memberinfo.loginPassword === this.ps) {
@@ -104,28 +98,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.userpage-content-set {
-  position: relative;
-  width: 800px;
-  height: 540px;
-  top: 460px;
-  left: 50%;
-  transform: translate(-50%);
-  background: #757f9a;
-  box-shadow: 0 0 1px 2px rgba(200, 230, 255, 0.5),
-    0 -1px 1px 3px rgba(200, 230, 255, 0.5) inset,
-    0 0 1px 5px rgba(135, 131, 171, 0.9),
-    0 0 1px 3.5px rgba(135, 131, 171, 0.9) inset,
-    0 0 6px 6.5px rgba(123, 108, 196, 0.9),
-    0 0 6px 5.5px rgba(123, 108, 196, 0.9) inset,
-    0 4px 15px 9px rgba(0, 0, 0, 0.8), 0 4px 12.5px 6px rgba(0, 0, 0, 0.7) inset;
-  border: 0px;
-}
 .userpage-content-set-form-intro {
-  position: relative;
-  width: 600px;
-  height: 120px;
-  left: 100px;
+  position: absolute;
+  width: 400px;
+  height: 115px;
+  left: 20px;
+  top: 245px;
   background: #acacac;
   border: #061161 solid 1px;
   border-radius: 15px;
@@ -154,78 +132,49 @@ export default defineComponent({
   line-height: 24px;
   color: #ffffff;
 }
-.userpage-content-set-form-fix {
-  width: 80px;
-  height: 30px;
-  left: 100px;
-  top: 190px;
-  background: #070707;
-  border-radius: 10px;
-  border: #ffffff solid 1px;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  color: #ffffff;
-}
-.userpage-content-set-form-fix:hover {
-  background: #ff0080;
-  box-shadow: 0 0 2px #ff0080, 0 0 10px #ff0080, 0 0 20px #ff0080,
-    0 0 40px #ff0080;
-}
-.userpage-content-set-form-image {
-  position: absolute;
-  width: 170px;
-  height: 170px;
-  top: 100px;
-  left: 120px;
-  background: black;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 50px;
-}
 .userpage-content-set-form-button {
   position: absolute;
-  width: 130px;
-  height: 50px;
-  left: 40%;
+  width: 100px;
+  height: 40px;
   transform: translate(-50%);
-  top: 470px;
+  top: 260px;
+  left: 500px;
   background: #070707;
   border: #ffffff solid 1px;
   border-radius: 5px;
   font-family: "Inter";
   font-style: normal;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 36px;
   color: #ffffff;
 }
 .userpage-content-set-form-button:hover {
   background: #ff0080;
-  box-shadow: 0 0 5px #ff0080, 0 0 25px #ff0080, 0 0 50px #ff0080,
-    0 0 100px #ff0080;
+  box-shadow: 0 0 1px #ff0080, 0 0 5px #ff0080, 0 0 10px #ff0080,
+    0 0 20px #ff0080;
 }
 .userpage-content-set-form-button2 {
   position: absolute;
-  width: 130px;
-  height: 50px;
-  left: 60%;
+  width: 100px;
+  height: 40px;
   transform: translate(-50%);
-  top: 470px;
+  top: 310px;
+  left: 500px;
   background: #070707;
   border: #ffffff solid 1px;
   border-radius: 5px;
   font-family: "Inter";
   font-style: normal;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 36px;
   color: #ffffff;
 }
 .userpage-content-set-form-button2:hover {
   background: #ff0080;
-  box-shadow: 0 0 5px #ff0080, 0 0 25px #ff0080, 0 0 50px #ff0080,
-    0 0 100px #ff0080;
+  box-shadow: 0 0 1px #ff0080, 0 0 5px #ff0080, 0 0 10px #ff0080,
+    0 0 20px #ff0080;
 }
 .userpage-content-set-form-button-text:hover {
   font-weight: bold;
@@ -233,36 +182,34 @@ export default defineComponent({
 }
 .userpage-content-set-form-topic {
   position: relative;
-  width: 300px;
-  left: 50%;
-  transform: translate(-50%);
-  top: 30px;
+  left: 34%;
+  top: 10px;
   font-family: "Inter";
   font-style: normal;
   font-weight: bold;
-  font-size: 40px;
+  font-size: 30px;
   color: #ffffff;
 }
-.userpage-content-set-form-topic:hover {
+/* .userpage-content-set-form-topic:hover {
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080,
     0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
-}
+} */
 .userpage-content-set-form-personal {
   position: relative;
-  left: -60px;
+  left: 0px;
   width: 400px;
   height: 280px;
 }
 .userpage-content-set-form-input-phone {
   box-sizing: border-box;
   position: absolute;
-  width: 250px;
-  height: 40px;
-  left: 500px;
-  top: 300px;
+  width: 240px;
+  height: 28px;
+  left: 340px;
+  top: 165px;
   background: #acacac;
   border: 1px solid #000000;
-  border-radius: 15px;
+  border-radius: 5px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
@@ -278,13 +225,13 @@ export default defineComponent({
 .userpage-content-set-form-input-email {
   box-sizing: border-box;
   position: absolute;
-  width: 250px;
-  height: 40px;
-  left: 500px;
-  top: 250px;
+  width: 240px;
+  height: 28px;
+  left: 340px;
+  top: 135px;
   background: #acacac;
   border: 1px solid #000000;
-  border-radius: 15px;
+  border-radius: 5px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
@@ -300,13 +247,13 @@ export default defineComponent({
 .userpage-content-set-form-input-pw {
   box-sizing: border-box;
   position: absolute;
-  width: 250px;
-  height: 40px;
-  left: 500px;
-  top: 100px;
+  width: 240px;
+  height: 28px;
+  left: 340px;
+  top: 45px;
   background: #acacac;
   border: 1px solid #000000;
-  border-radius: 15px;
+  border-radius: 5px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
@@ -322,13 +269,13 @@ export default defineComponent({
 .userpage-content-set-form-input-pw2 {
   box-sizing: border-box;
   position: absolute;
-  width: 250px;
-  height: 40px;
-  left: 500px;
-  top: 150px;
+  width: 240px;
+  height: 28px;
+  left: 340px;
+  top: 75px;
   background: #acacac;
   border: 1px solid #000000;
-  border-radius: 15px;
+  border-radius: 5px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
@@ -344,13 +291,13 @@ export default defineComponent({
 .userpage-content-set-form-input-pw3 {
   box-sizing: border-box;
   position: absolute;
-  width: 250px;
-  height: 40px;
-  left: 500px;
-  top: 200px;
+  width: 240px;
+  height: 28px;
+  left: 340px;
+  top: 105px;
   background: #acacac;
   border: 1px solid #000000;
-  border-radius: 15px;
+  border-radius: 5px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
@@ -366,13 +313,13 @@ export default defineComponent({
 .userpage-content-set-form-input-id {
   box-sizing: border-box;
   position: absolute;
-  width: 250px;
-  height: 40px;
-  left: 500px;
-  top: 50px;
+  width: 240px;
+  height: 28px;
+  left: 340px;
+  top: 15px;
   background: #acacac;
   border: 1px solid #000000;
-  border-radius: 15px;
+  border-radius: 5px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
@@ -389,66 +336,66 @@ export default defineComponent({
   position: absolute;
   width: 270px;
   height: 24px;
-  left: 400px;
-  top: 303px;
+  left: 250px;
+  top: 160px;
   font-family: "Inter";
   font-style: normal;
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 22px;
+  color: #000000;
 }
 .userpage-content-set-form-email {
   position: absolute;
   width: 270px;
   height: 24px;
-  left: 400px;
-  top: 253px;
+  left: 250px;
+  top: 130px;
   font-family: "Inter";
   font-style: normal;
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 22px;
+  color: #000000;
 }
 .userpage-content-set-form-pw {
   position: absolute;
   width: 300px;
   height: 24px;
-  left: 400px;
-  top: 103px;
+  left: 250px;
+  top: 40px;
   font-family: "Inter";
   font-style: normal;
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 22px;
+  color: #000000;
 }
 .userpage-content-set-form-pw2 {
   position: absolute;
   width: 300px;
   height: 24px;
-  left: 400px;
-  top: 153px;
+  left: 250px;
+  top: 70px;
   font-family: "Inter";
   font-style: normal;
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 22px;
+  color: #000000;
 }
 .userpage-content-set-form-pw3 {
   position: absolute;
   width: 300px;
   height: 24px;
-  left: 400px;
-  top: 203px;
+  left: 250px;
+  top: 100px;
   font-family: "Inter";
   font-style: normal;
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 22px;
+  color: #000000;
 }
 .userpage-content-set-form-id {
   position: absolute;
   width: 310px;
   height: 24px;
-  left: 400px;
-  top: 53px;
+  left: 250px;
+  top: 10px;
   font-family: "Inter";
   font-style: normal;
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 22px;
+  color: #000000;
 }
 </style>

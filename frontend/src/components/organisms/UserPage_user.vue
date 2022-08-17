@@ -1,12 +1,13 @@
 <template>
   <div class="userpage-user">
-    <img class="userpage-user-image" :src="profileName()" />
-    <div>{{ memberinfo.profileUrl }}</div>
+    <div class="userpage-user-image">
+      <img style="width: 130px; height: 130px" :src="memberinfo.profileUrl" />
+    </div>
     <!-- <div class="userpage-user-badge">{{ member.badge }}</div> -->
     <!-- badge는 db에 없다 -->
     <div class="userpage-user-nickname">토론킹 {{ memberinfo.nickname }}</div>
-    <div class="userpage-user-level">level.{{ memberinfo.level }}</div>
-    <div class="userpage-user-exp">exp {{ memberinfo.exp }}%</div>
+    <div class="userpage-user-level">level. {{ level() }}</div>
+    <div class="userpage-user-exp">exp {{ memberinfo.exp }}</div>
     <div class="userpage-user-bar">
       <div class="userpage-user-bar-exp"></div>
       <div class="userpage-user-bar-bar"></div>
@@ -22,6 +23,7 @@ export default defineComponent({
   data() {
     return {
       baseUrl: BASE_FILE_DIR,
+      // exp: 100 - memberinfo.exp,
     };
   },
   computed: {
@@ -45,6 +47,9 @@ export default defineComponent({
     profileName() {
       return this.memberinfo.profileUrl;
     },
+    level() {
+      return this.memberinfo.exp / 100;
+    },
   },
 });
 </script>
@@ -52,18 +57,19 @@ export default defineComponent({
 <style scoped>
 .userpage-user {
   position: absolute;
-  width: 1000px;
-  height: 400px;
+  width: 800px;
+  height: 160px;
   left: 50%;
   transform: translate(-50%);
   top: 200px;
 }
 .userpage-user-image {
-  left: 50px;
-  top: -50px;
-  width: 180px;
-  height: 180px;
+  left: 80px;
+  top: -120px;
+  width: 130px;
+  height: 130px;
   /* background-color: #1b2431; */
+  border-radius: 10px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,21 +148,21 @@ export default defineComponent({
 }
 .userpage-user-nickname {
   position: absolute;
-  left: 14%;
+  left: 18.5%;
   transform: translate(-50%);
   bottom: 50%;
   font-family: "Inter";
   font-style: normal;
   font-weight: 900;
-  font-size: 40px;
+  font-size: 28px;
   line-height: 77px;
   text-align: center;
   color: #ffffff;
 }
 .userpage-user-level {
   position: absolute;
-  left: 30%;
-  bottom: 52%;
+  left: 34%;
+  bottom: 58%;
   font-family: "Inter";
   font-style: normal;
   font-weight: 900;
@@ -177,21 +183,21 @@ export default defineComponent({
 .userpage-user-exp {
   position: absolute;
   right: 20px;
-  top: 40%;
+  top: 24%;
   font-family: "Inter";
   font-style: normal;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 29px;
   text-align: center;
   color: #ffffff;
 }
 .userpage-user-bar {
   position: absolute;
-  width: 1000px;
-  height: 30px;
+  width: 800px;
+  height: 23px;
   left: 0px;
-  top: 200px;
+  top: 70px;
 }
 .userpage-user-bar-exp {
   box-sizing: border-box;
@@ -208,7 +214,7 @@ export default defineComponent({
 .userpage-user-bar-bar {
   position: absolute;
   left: 0%;
-  /* right: 38%; */
+  right: 38%;
   top: 0%;
   bottom: 0%;
   background-image: linear-gradient(

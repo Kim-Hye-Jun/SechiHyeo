@@ -1,20 +1,23 @@
 <template>
   <div class="file-upload">
     <form @submit.prevent="formSubmit">
+      <div class="userpage-content-set-form-image">
+        <img
+          v-if="previewImgUrl"
+          :src="previewImgUrl"
+          style="width: 130px; height: 130px"
+        />
+      </div>
       <input
         type="file"
         ref="selectFile"
         @change="previewFile"
         class="userpage-content-set-form-fix"
+        style="margin-left: 30px"
       />
-      <div class="userpage-content-set-form-image">
-        <img
-          v-if="previewImgUrl"
-          :src="previewImgUrl"
-          style="width: 150px; height: 150px"
-        />
-      </div>
-      <button type="submit" :disabled="isUploading">Upload</button>
+      <button type="submit" :disabled="isUploading" style="margin-left: 10px">
+        Upload
+      </button>
     </form>
   </div>
 </template>
@@ -108,4 +111,34 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.userpage-content-set-form-image {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  top: 10px;
+  left: 40px;
+  background: #000000;
+  border: 3px solid rgba(0, 0, 0, 0.3);
+  padding-right: 8px;
+  padding-bottom: 20px;
+  border-radius: 10px;
+}
+.userpage-content-set-form-fix {
+  width: 80px;
+  height: 30px;
+  left: 100px;
+  top: 500px;
+  /* background: #070707;
+  border-radius: 10px;
+  border: #ffffff solid 1px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: none; */
+}
+.userpage-content-set-form-fix:hover {
+  background: #ff0080;
+}
+</style>
