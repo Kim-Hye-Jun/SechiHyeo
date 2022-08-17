@@ -74,11 +74,23 @@ export default defineComponent({
       // console.log(roomInfoDataList);
     });
   },
-  beforeUpdate() {
-    console.log("update " + "sessions/" + String((this.pageNum as number) + 1));
-    http.get("sessions/" + String((this.pageNum as number) + 1)).then((res) => {
-      this.roomInfoDataList = res.data;
-    });
+  // beforeUpdate() {
+  //   console.log("update " + "sessions/" + String((this.pageNum as number) + 1));
+  //   http.get("sessions/" + String((this.pageNum as number) + 1)).then((res) => {
+  //     this.roomInfoDataList = res.data;
+  //   });
+  // },
+  watch: {
+    pageNum: function (newVal, oldVal) {
+      console.log(newVal);
+      // if (newVal) {
+      http
+        .get("sessions/" + String((this.pageNum as number) + 1))
+        .then((res) => {
+          this.roomInfoDataList = res.data;
+        });
+      // }
+    },
   },
   data() {
     return {
