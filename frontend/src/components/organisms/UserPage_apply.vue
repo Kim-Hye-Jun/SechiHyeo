@@ -1,41 +1,42 @@
 <template>
   <div
     class="userpage-content-room"
-    v-for="board in boards"
-    :key="board"
-    :filter="(applicant_state['login_id'], applicant_state['board_no'])"
-    :filter-function="myApply"
+    v-for="applicant_apply in applicant_apply_array"
+    :key="applicant_apply"
   >
     <div class="userpage-content-count">
-      {{ board["current_applicant"] }}/{{ board["max_applicant"] }}
+      {{ applicant_apply["current_applicant"] }}/{{
+        applicant_apply["max_applicant"]
+      }}
     </div>
     <div class="userpage-content-topic">
-      {{ board["debate_topic"] }}토론의 시대
+      {{ applicant_apply["debate_topic"] }}
     </div>
     <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
     <div class="userpage-content-room-button">
       <a
         href="#"
         class="userpage-content-room-button-no"
-        v-if="applicant_state.accept === 0"
+        v-if="applicant_apply.accept === 0"
         >거절</a
       >
       <a
         href="#"
         class="userpage-content-room-button-start"
-        v-if="applicant_state.accept === 1"
+        v-if="applicant_apply.accept === 1"
+        @click="moveToRoom(applicant_apply.debate_topic)"
         >입장</a
       >
       <!-- @click="moveToRoom(board['board_no'])" -->
       <a
         href="#"
         class="userpage-content-room-button-wait"
-        v-if="applicant_state.accept === 2"
+        v-if="applicant_apply.accept === 2"
         >대기</a
       >
     </div>
   </div>
-  <div class="userpage-content-room">
+  <!-- <div class="userpage-content-room">
     <div class="userpage-content-count">6/6</div>
     <div class="userpage-content-topic">나는 아무도 아니야</div>
     <div class="userpage-content-room-button">
@@ -48,7 +49,7 @@
     <div class="userpage-content-room-button">
       <a href="#" class="userpage-content-room-button-start">입장</a>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -65,38 +66,44 @@ export default defineComponent({
       //   current_applicant: 0,
       //   board_finished: "",
       // },
-      applicant_state: {
-        login_id: "", // 추가 요청?
-        board_no: 0, // 추가 요청?
-        accept: 0,
-      },
+      // applicant_state: {
+      //   login_id: "", // 추가 요청?
+      //   board_no: 0, // 추가 요청?
+      //   accept: 0,
+      // },
     };
   },
   computed: {
-    ...mapState(["boards", "board"]),
+    ...mapState([
+      "boards",
+      "debate_board",
+      "applicant_apply",
+      "applicant_apply_array",
+      "memberinfo",
+    ]),
   },
   created() {
     this.debateApply();
   },
   methods: {
-    ...mapActions(["DEBATEAPPLY"]),
-    debateApply() {
-      this.DEBATEAPPLY();
+    ...mapActions(["DEBATEAPPLY", "MEMBERINFO"]),
+    async debateApply() {
+      await this.DEBATEAPPLY();
     },
-    moveToRoom(board: { boardNo: string }) {
-      this.$router.push("/room/" + board.boardNo);
+    moveToRoom(num: number) {
+      console.log();
+      this.$router.push("/room/" + num);
     },
-    myApply(
-      member: { loginId: string },
-      board: { board_no: number },
-      filter: any[]
-    ) {
-      if (member.loginId === filter[0]) {
-        if (board.board_no === filter[1]) return true;
+    myApply(filter: any[]) {
+      if (this.memberinfo.memberNo === filter[0]) {
+        if (this.debate_board.debate_topic === filter[1]) return true;
         return false;
       }
       return false;
     },
+    // consolelog(
+    //   console.log(memberinfo.nickname);
+    // )
   },
 });
 </script>

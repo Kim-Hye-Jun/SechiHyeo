@@ -24,6 +24,7 @@ export default defineComponent({
     return {
       baseUrl: BASE_FILE_DIR,
       // exp: 100 - memberinfo.exp,
+      // exp1: 100 - this.memberinfo.exp,
     };
   },
   computed: {
@@ -47,9 +48,21 @@ export default defineComponent({
     profileName() {
       return this.memberinfo.profileUrl;
     },
+    // expStyle() {
+    //   return {
+    //     right: this.memberinfo["exp"] + "px",
+    //   };
+    // },
     level() {
       return this.memberinfo.exp / 100;
+      // return Math.floor(lv);
     },
+    // exp() {
+    //   return this.memberinfo.exp % 87;
+    // },
+    // expBar() {
+    //   return 100 - (this.memberinfo.exp % 87);
+    // },
   },
 });
 </script>

@@ -196,16 +196,15 @@ export default defineComponent({
 } */
 .userpage-content-set-form-personal {
   position: relative;
-  left: 0px;
-  width: 400px;
-  height: 280px;
+  left: 300px;
+  /* margin-left: 340px; */
 }
 .userpage-content-set-form-input-phone {
   box-sizing: border-box;
   position: absolute;
   width: 240px;
   height: 28px;
-  left: 340px;
+  left: 40px;
   top: 165px;
   background: #acacac;
   border: 1px solid #000000;
@@ -227,7 +226,7 @@ export default defineComponent({
   position: absolute;
   width: 240px;
   height: 28px;
-  left: 340px;
+  left: 40px;
   top: 135px;
   background: #acacac;
   border: 1px solid #000000;
@@ -249,7 +248,7 @@ export default defineComponent({
   position: absolute;
   width: 240px;
   height: 28px;
-  left: 340px;
+  left: 40px;
   top: 45px;
   background: #acacac;
   border: 1px solid #000000;
@@ -271,7 +270,7 @@ export default defineComponent({
   position: absolute;
   width: 240px;
   height: 28px;
-  left: 340px;
+  left: 40px;
   top: 75px;
   background: #acacac;
   border: 1px solid #000000;
@@ -293,7 +292,7 @@ export default defineComponent({
   position: absolute;
   width: 240px;
   height: 28px;
-  left: 340px;
+  left: 40px;
   top: 105px;
   background: #acacac;
   border: 1px solid #000000;
@@ -315,7 +314,7 @@ export default defineComponent({
   position: absolute;
   width: 240px;
   height: 28px;
-  left: 340px;
+  left: 40px;
   top: 15px;
   background: #acacac;
   border: 1px solid #000000;
@@ -336,7 +335,7 @@ export default defineComponent({
   position: absolute;
   width: 270px;
   height: 24px;
-  left: 250px;
+  left: -50px;
   top: 160px;
   font-family: "Inter";
   font-style: normal;
@@ -347,7 +346,7 @@ export default defineComponent({
   position: absolute;
   width: 270px;
   height: 24px;
-  left: 250px;
+  left: -50px;
   top: 130px;
   font-family: "Inter";
   font-style: normal;
@@ -358,7 +357,7 @@ export default defineComponent({
   position: absolute;
   width: 300px;
   height: 24px;
-  left: 250px;
+  left: -50px;
   top: 40px;
   font-family: "Inter";
   font-style: normal;
@@ -369,7 +368,7 @@ export default defineComponent({
   position: absolute;
   width: 300px;
   height: 24px;
-  left: 250px;
+  left: -50px;
   top: 70px;
   font-family: "Inter";
   font-style: normal;
@@ -380,7 +379,7 @@ export default defineComponent({
   position: absolute;
   width: 300px;
   height: 24px;
-  left: 250px;
+  left: -50px;
   top: 100px;
   font-family: "Inter";
   font-style: normal;
@@ -391,7 +390,7 @@ export default defineComponent({
   position: absolute;
   width: 310px;
   height: 24px;
-  left: 250px;
+  left: -50px;
   top: 10px;
   font-family: "Inter";
   font-style: normal;

@@ -20,11 +20,49 @@
       <div class="board-summary-content">
         <li class="board-a">A 진영 : {{ debate_board.board.a_opinion }}</li>
         <li class="board-b">B 진영 : {{ debate_board.board.b_opinion }}</li>
-        <p class="board-summary-in">{{ debate_board.board.board_content }}</p>
+        <div class="board-summary-in">
+          {{ debate_board.board.board_content }}
+        </div>
+      </div>
+      <!-- <div class="wrapper">
+        <h4 style="display: inline-block">A</h4>
+        <input type="checkbox" id="switch" />
+        <label for="switch" class="switch_label">
+          <span class="onf_btn"></span>
+        </label>
+        <h4 style="display: inline-block; margin-left: 10px">B</h4>
+      </div> -->
+      <div style="margin-top: 10px">
+        <label style="margin-right: 20px"
+          ><input type="radio" v-model="applicant.side" value="0" /> A
+          진영</label
+        >
+        <label
+          ><input type="radio" v-model="applicant.side" value="1" /> B
+          진영</label
+        >
+      </div>
+      <div>
+        <label style="margin-right: 23px"
+          ><input type="radio" v-model="applicant.order" value="1" /> 순서
+          1</label
+        >
+        <label style="margin-right: 23px"
+          ><input type="radio" v-model="applicant.order" value="2" /> 순서
+          2</label
+        >
+        <label
+          ><input type="radio" v-model="applicant.order" value="3" /> 순서
+          3</label
+        >
+        <!-- <p>
+          <input type="submit" value="Submit" />
+          <input type="reset" value="Reset" />
+        </p> -->
       </div>
       <div class="board-reply-box">
         <h3 class="board-reply">댓글</h3>
-        <h5 class="board-reply-count">{{ 0 }} 개</h5>
+        <!-- <h5 class="board-reply-count">{{ 0 }} 개</h5> -->
         <!-- 댓글 개수 미구현 -->
       </div>
       <input class="board-reply-create-input" placeholder="댓글" />
@@ -33,7 +71,7 @@
       </button>
       <!-- 댓글 반복 -->
       <div v-for="reply in replies" :key="reply['reply_no']">
-        <!-- <img class="board-reply-ex-profile" :src="reply['profile_url']" /> -->
+        <img class="board-reply-ex-profile" :src="reply['profile_url']" />
         <p class="board-reply-ex-user">User {{ reply["nickname"] }}</p>
         <p class="board-reply-ex-user-content">댓글 {{ reply["context"] }}</p>
         <button
@@ -84,26 +122,25 @@
       </div>
     </div>
     <footer class="modal-container-footer">
-      <button class="button decline modalOut" @click="backPage">
-        뒤로가기
-      </button>
+      <button class="button" @click="backPage">뒤로가기</button>
       <!-- 참가신청 버튼 메소드 미작성 -->
       <!-- <button class="button accept" @click="apply">참가신청</button> -->
       <button
-        class="button accept"
-        v-if="debate_board.userid !== memberinfo.user_id"
+        class="button apply"
+        @click="postApply()"
+        v-if="debate_board.board.nickname !== memberinfo.nickname"
       >
         참가신청
       </button>
       <button
-        class="button accept"
-        v-if="debate_board.userid === memberinfo.user_id"
+        class="button rema"
+        v-if="debate_board.board.nickname === memberinfo.nickname"
       >
         수정
       </button>
       <button
-        class="button accept"
-        v-if="debate_board.userid === memberinfo.user_id"
+        class="button del"
+        v-if="debate_board.board.nickname === memberinfo.nickname"
         @click="boardDelete(debate_board.board.board_no)"
       >
         삭제
@@ -144,7 +181,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(["boards", "board", "debate_board", "memberinfo"]),
+    ...mapState(["boards", "board", "debate_board", "memberinfo", "applicant"]),
   },
   // created() {
   //   let board_no = this.$route.params.board_no;
@@ -155,7 +192,7 @@ export default defineComponent({
   //   // this.replyAll();
   // },
   methods: {
-    ...mapActions(["BOARDONE", "BOARDDELETE"]),
+    ...mapActions(["BOARDONE", "BOARDDELETE", "POSTAPPLY"]),
     // modalOut() {
     //   this.modal = false;
     //   this.$emit("modalOut");
@@ -182,6 +219,16 @@ export default defineComponent({
       console.log(num);
       // console.log(debate_board.board.board_no);
       this.BOARDDELETE(num);
+    },
+    postApply() {
+      this.POSTAPPLY({
+        board_no: this.debate_board.board.board_no,
+        order: this.applicant.order,
+        side: this.applicant.side,
+      });
+      console.log(this.debate_board.board.board_no);
+      console.log(this.applicant.order);
+      console.log(this.applicant.side);
     },
     // 자식 대댓글만을 걸러내기 위한 부모 댓글 필터
     reReply(reply: any, filter: number) {
@@ -261,7 +308,6 @@ a {
   border: 2px solid #fff;
 }
 .modal-container {
-  height: 600px;
   width: 800px;
   margin-top: 100px;
   margin-left: 50%;
@@ -296,7 +342,7 @@ a {
   color: #000000;
 }
 .modal-container-body {
-  margin-left: 40px;
+  margin-left: 30px;
   padding: 24px 32px 48px;
   font-family: serif;
   overflow-y: auto;
@@ -492,13 +538,13 @@ a {
 }
 .board-a {
   position: relative;
-  display: inline-block;
+  /* display: inline-block; */
   width: 400px;
   padding-left: 20px;
-  top: -230px;
+  top: -30px;
   left: 0px;
-  font-style: normal;
-  font-weight: 500;
+  font-style: initial;
+  font-weight: bold;
   font-size: 16px;
   text-align: left;
   line-height: 34px;
@@ -506,13 +552,13 @@ a {
 }
 .board-b {
   position: relative;
-  display: inline-block;
+  /* display: inline-block; */
   width: 400px;
   padding-left: 20px;
-  top: -230px;
+  top: -30px;
   left: 0px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 16px;
   text-align: left;
   line-height: 34px;
@@ -521,12 +567,14 @@ a {
 }
 .board-summary-in {
   position: relative;
-  display: inline-block;
+  /* display: inline-block; */
   width: 400px;
-  height: 180px;
-  top: -220px;
-  left: 0px;
+  height: 160px;
+  top: -20px;
+  left: 10px;
   text-align: left;
+  font-weight: bold;
+  font-size: larger;
 }
 .board-reply-box {
   position: relative;
@@ -566,17 +614,22 @@ a {
   top: 15px;
   color: #000000;
   padding: 5px;
-  background-color: #111845;
+  /* background-color: #111845; */
+  transition: 0.3s;
   border-radius: 5px;
   border: 0px;
   border-bottom: 1px solid #ffffff;
+}
+.board-reply-create-input:focus {
+  background-color: #111845;
+  color: white;
 }
 .board-reply-create-sign {
   position: relative;
   width: 50px;
   height: 30px;
   left: 10px;
-  top: 20px;
+  top: 18px;
   font-family: "Inter";
   font-style: normal;
   font-weight: 400;
@@ -592,8 +645,8 @@ a {
   background: #03e9f4;
   color: #000000;
   border: #03e9f4 1px solid;
-  box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
-    0 0 100px #03e9f4;
+  /* box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
+    0 0 100px #03e9f4; */
 }
 .board-reply-ex-profile {
   position: relative;
@@ -778,5 +831,61 @@ a {
   font-size: 12px;
   line-height: 30px;
   color: #000000;
+}
+.wrapper {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  margin-left: 600px;
+}
+#switch {
+  position: absolute;
+  /* hidden */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.switch_label {
+  position: absolute;
+  cursor: pointer;
+  display: inline-block;
+  width: 58px;
+  height: 28px;
+  background: #c44;
+  border: 2px solid #daa;
+  border-radius: 20px;
+  transition: 0.2s;
+}
+.switch_label:hover {
+  background: #efefef;
+}
+.onf_btn {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  background: #daa;
+  transition: 0.2s;
+}
+
+/* checking style */
+#switch:checked + .switch_label {
+  background: #c44;
+  border: 2px solid #c44;
+}
+
+#switch:checked + .switch_label:hover {
+  background: #e55;
+}
+
+/* move */
+#switch:checked + .switch_label .onf_btn {
+  left: 34px;
+  background: #fff;
+  box-shadow: 1px 2px 3px #00000020;
 }
 </style>
