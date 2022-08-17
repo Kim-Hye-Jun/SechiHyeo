@@ -779,6 +779,11 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
+    @Override
+    public int getPageNumber() {
+        return roomList.size();
+    }
+
     private String swap(String a, String b) {
         return b;
     }

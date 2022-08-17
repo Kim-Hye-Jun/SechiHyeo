@@ -2,7 +2,10 @@
   <div class="userpage-content-record-time-box">
     {{ memberinfo?.debateNumber }} Fight Record
   </div>
-  <div class="userpage-content-record-inform-box">
+  <div class="userpage-content-intro-text">
+    토론이 삶이다! {{ memberinfo?.introduce }}
+  </div>
+  <!-- <div class="userpage-content-record-inform-box">
     <div class="userpage-content-record-inform">
       {{ memberinfo?.recordWin }}
     </div>
@@ -12,8 +15,8 @@
     <div class="userpage-content-record-inform">
       {{ memberinfo?.recordDraw }}
     </div>
-    <!-- <div class="userpage-content-record-pagination">1 2 3 4 5 6</div> -->
-  </div>
+    <div class="userpage-content-record-pagination">1 2 3 4 5 6</div>
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -28,10 +31,14 @@ export default defineComponent({
   },
   created() {
     this.memberRecord();
+    this.memberProfile();
   },
   methods: {
-    ...mapActions(["MEMBERPROFILE"]),
+    ...mapActions(["MEMBERPROFILE", "MEMBERPROFILE"]),
     memberRecord() {
+      this.MEMBERPROFILE();
+    },
+    memberProfile() {
       this.MEMBERPROFILE();
     },
   },
@@ -39,27 +46,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.userpage-content-record {
-  position: relative;
-  width: 800px;
-  height: 540px;
-  top: 460px;
-  left: 50%;
-  transform: translate(-50%);
-  backdrop-filter: blur(4px);
-  background: #757f9a;
-  box-shadow: 0 0 1px 2px rgba(200, 230, 255, 0.5),
-    0 -1px 1px 3px rgba(200, 230, 255, 0.5) inset,
-    0 0 1px 5px rgba(135, 131, 171, 0.9),
-    0 0 1px 3.5px rgba(135, 131, 171, 0.9) inset,
-    0 0 6px 6.5px rgba(123, 108, 196, 0.9),
-    0 0 6px 5.5px rgba(123, 108, 196, 0.9) inset,
-    0 4px 15px 9px rgba(0, 0, 0, 0.8), 0 4px 12.5px 6px rgba(0, 0, 0, 0.7) inset;
-  border: 0px;
-}
 .userpage-content-record-time-box {
   position: relative;
-  width: 600px;
+  width: 580px;
   left: 50%;
   transform: translate(-50%);
   top: 20px;
@@ -67,14 +56,14 @@ export default defineComponent({
   font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: bold;
-  font-size: 40px;
+  font-size: 30px;
   text-align: center;
   color: #070707;
   background: #757f9a;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
   outline: 0;
   border-radius: 5px;
   text-align: center;
@@ -170,4 +159,17 @@ export default defineComponent({
   font-size: 30px;
   color: black;
 } */
+.userpage-content-intro-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: bolder;
+  font-size: 32px;
+  line-height: 44px;
+  text-align: center;
+  color: #ffffff;
+}
 </style>

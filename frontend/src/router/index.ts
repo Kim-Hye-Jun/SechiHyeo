@@ -86,9 +86,21 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/NotFoundPage.vue"),
   },
   {
-    path: "/boards",
+    path: "/debate-board/",
     name: "debateBoards",
     component: () => import("@/views/BoardsPage.vue"),
+    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
+  },
+  {
+    path: "/debate-board/:board_no",
+    name: "debateBoard",
+    component: () => import("@/views/BoardDetail.vue"),
+    meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
+  },
+  {
+    path: "/boardwrite",
+    name: "debateWrite",
+    component: () => import("@/views/BoardWrite.vue"),
     meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
   },
   {
