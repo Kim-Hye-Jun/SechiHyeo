@@ -3,7 +3,7 @@
     <!-- <div class="flex-container"> -->
     <room-entrance-thumbnail-component
       class="flex-item"
-      :thumbnailSrc="roomInfo.thumbnail"
+      :thumbnailSrc="thumbNailPath()"
     ></room-entrance-thumbnail-component>
     <room-entrance-name-component
       class="flex-item"
@@ -35,7 +35,16 @@ export default defineComponent({
       console.log("PROPS :: ", props.roomInfo);
     }
   },
-  methods: {},
+  methods: {
+    thumbNailPath() {
+      console.log(this.roomInfo.thumbnail);
+
+      if (this.roomInfo.thumbnail) {
+        return this.roomInfo.thumbnail;
+      }
+      return "@/assets/basic.jpg";
+    },
+  },
 });
 </script>
 
