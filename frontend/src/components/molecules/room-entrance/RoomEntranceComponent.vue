@@ -11,6 +11,7 @@
     ></room-entrance-name-component>
     <room-entrance-info-component
       class="flex-item"
+      :roomInfo="roomInfo"
     ></room-entrance-info-component>
   </div>
 </template>
@@ -61,8 +62,8 @@ export default defineComponent({
 
 .card {
   background: #191c29;
-  width: 12em;
-  height: 8em;
+  width: 15em;
+  height: 10em;
   margin: 3em;
   position: relative;
   border-radius: 6px;

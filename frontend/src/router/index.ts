@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/test",
     name: "test",
-    component: CommonModal,
+    component: MenuTabComponent,
   },
   {
     path: "/entrance",
