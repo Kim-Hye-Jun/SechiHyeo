@@ -3,7 +3,7 @@
     <!-- <div class="flex-container"> -->
     <room-entrance-thumbnail-component
       class="flex-item"
-      :thumbnailSrc="roomInfo.thumbnail"
+      :thumbnailSrc="thumbNailPath()"
     ></room-entrance-thumbnail-component>
     <room-entrance-name-component
       class="flex-item"
@@ -11,6 +11,7 @@
     ></room-entrance-name-component>
     <room-entrance-info-component
       class="flex-item"
+      :roomInfo="roomInfo"
     ></room-entrance-info-component>
   </div>
 </template>
@@ -34,7 +35,16 @@ export default defineComponent({
       console.log("PROPS :: ", props.roomInfo);
     }
   },
-  methods: {},
+  methods: {
+    thumbNailPath() {
+      console.log(this.roomInfo.thumbnail);
+
+      if (this.roomInfo.thumbnail) {
+        return this.roomInfo.thumbnail;
+      }
+      return "@/assets/basic.jpg";
+    },
+  },
 });
 </script>
 
@@ -61,8 +71,8 @@ export default defineComponent({
 
 .card {
   background: #191c29;
-  width: 12em;
-  height: 8em;
+  width: 15em;
+  height: 10em;
   margin: 3em;
   position: relative;
   border-radius: 6px;
