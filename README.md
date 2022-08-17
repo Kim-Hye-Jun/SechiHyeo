@@ -94,15 +94,7 @@
 | 8443 | Openvidu                                              |
 
 ### 2. 와이어프레임
-![마이페이지](/uploads/c749cc20c328fb4626b5da212a8e7727/마이페이지.PNG)
-
-![메인화면_및_화상회의](/uploads/a04733e0fcafa1273e6ef92d54b0ead7/메인화면_및_화상회의.PNG)
-
-![메인화면](/uploads/0f44f9702f5bcc3df81e2c27beb59532/메인화면.PNG)
-
-![소개화면](/uploads/ed2a7183c0fc0bb83314af74533ca7a2/소개화면.PNG)
-
-![회원가입](/uploads/f7fd9adbc89038869172ad868e5557d3/회원가입.PNG)
+![Image_Pasted_at_2022-8-17_23-12](/uploads/384559dcf91927696573e73e38663d6d/Image_Pasted_at_2022-8-17_23-12.png)
 
 ### 3. ERD
 <!-- 링크 삽입 예정 -->
