@@ -17,7 +17,7 @@ public class RoomJoinRes {
 //    private String debateTopic;
     private String sideA;
     private String sideB;
-    //    private String nickname;
+    private String nickname;
     private int currentNumOfPeople;
     private int maxNumOfPeople;
     private boolean isRoomHost;

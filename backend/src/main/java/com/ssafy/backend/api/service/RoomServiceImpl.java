@@ -371,6 +371,7 @@ public class RoomServiceImpl implements RoomService {
 //                    .tokenScreen(tokenScreen)
                     .sideA(room.getSideA())
                     .sideB(room.getSideB())
+                    .nickname(member.getNickname())
                     .userSideOrder(sideOrder)
                     .isRoomHost(checkHost)
                     .currentNumOfPeople((room.getCurNumOfPeople()))
@@ -466,20 +467,22 @@ public class RoomServiceImpl implements RoomService {
 
             String sideOrder = "";
             //participants에서 사용자가 요청한 진영순서 칸에 loginId가 있으면 에러, 없으면 사용자를 저장
-            //여기서 에러나면 아예 요청을 취소해야하나..? 접속자 수 +1 한 거 빼줘야하는디
             if(roomJoinReq.getSide().equals("a")){
                 if(participants[0][roomJoinReq.getOrder()-1].equals("")) {
                     participants[0][roomJoinReq.getOrder()-1] = member.getLoginId();
                     sideOrder+="a"+(roomJoinReq.getOrder());
                 } else {
-                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+//                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+                    return RoomJoinRes.builder().userSideOrder("error").build();
                 }
+
             } else if(roomJoinReq.getSide().equals("b")){
                 if(participants[1][roomJoinReq.getOrder()-1].equals("")) {
                     participants[1][roomJoinReq.getOrder()-1] = member.getLoginId();
                     sideOrder+="b"+(roomJoinReq.getOrder());
                 } else {
-                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+//                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+                    return RoomJoinRes.builder().userSideOrder("error").build();
                 }
             }
 
@@ -495,6 +498,7 @@ public class RoomServiceImpl implements RoomService {
 //                    .tokenScreen(tokenScreen)
                     .sideA(room.getSideA())
                     .sideB(room.getSideB())
+                    .nickname(member.getNickname())
                     .userSideOrder(sideOrder)
                     .isRoomHost(checkHost)
                     .currentNumOfPeople((room.getCurNumOfPeople()))
@@ -782,6 +786,11 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public int getPageNumber() {
         return roomList.size();
+    }
+
+    @Override
+    public List<Room> getAllRoomInfo() {
+        return roomList;
     }
 
     private String swap(String a, String b) {

@@ -62,4 +62,6 @@ public interface RoomService {
     void updateDebateInfo(String roomId);
 
     int getPageNumber();
+
+    List<Room> getAllRoomInfo();
 }

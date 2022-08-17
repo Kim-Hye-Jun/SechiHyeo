@@ -92,7 +92,10 @@ public class RoomController {
     public ResponseEntity<RoomJoinRes> joinRoom_select (@RequestBody RoomJoinReq roomJoinReq, HttpServletRequest httpServletRequest){
 //        RoomJoinReq roomJoinReq = new RoomJoinReq(room_id, side, order);
         RoomJoinRes roomJoinRes = roomService.joinRoom_select(httpServletRequest, roomJoinReq);
-        return ResponseEntity.ok(roomJoinRes);
+        if(roomJoinRes.getUserSideOrder().equals("error"))
+            return ResponseEntity.badRequest().body(roomJoinRes);
+        else
+            return ResponseEntity.ok(roomJoinRes);
     }
 
 
@@ -143,9 +146,13 @@ public class RoomController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/pageNum")
     public ResponseEntity<Integer> getPages() {
         return ResponseEntity.ok(roomService.getPageNumber());
     }
 
+    @GetMapping("/roomInfo")
+    public ResponseEntity<List<Room>> getAllRoomInfo() {
+        return ResponseEntity.ok(roomService.getAllRoomInfo());
+    }
 }
