@@ -101,27 +101,27 @@ export default defineComponent({
 }
 .a1 {
   grid-area: a1;
-  background: yellow;
+  background: #ff2222;
 }
 .a2 {
   grid-area: a2;
-  background: red;
+  background: #ff2222;
 }
 .a3 {
   grid-area: a3;
-  background: blue;
+  background: #ff2222;
 }
 .b1 {
   grid-area: b1;
-  background: green;
+  background: #5ba5ff;
 }
 .b2 {
   grid-area: b2;
-  background: pink;
+  background: #5ba5ff;
 }
 .b3 {
   grid-area: b3;
-  background: rgb(142, 133, 88);
+  background: #5ba5ff;
 }
 .c {
   width: 100%;
