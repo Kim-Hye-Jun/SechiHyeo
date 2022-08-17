@@ -40,7 +40,7 @@
   - Vue.js 3 (3.2.37)
   - Visual Studio Code (1.69)
   - TypeScript (5.4.0)
-  - Openvidu(2.22.0)
+  - Openvidu (2.22.0)
   - Spring Boot (2.7.2)
   - Spring Data Jpa (2.7.2)
   - JWT (0.9.1)
@@ -110,8 +110,8 @@
 | 토론 참여 신청 | POST | ​/api​/debate-apply | 토론 참여를 신청한다. | 
 | 토론 참여 수정 | PUT | /api/debate-apply/{apply_no} |토론 참여를 수정한다. |
 | 토론 참여 삭제 | DELETE | /api/debate-apply/{apply_no} | 토론 참여를 삭제한다. |
-| 토론 모집 조회 | GET | /api/debate-apply/applying | 내가 신청한 applicant_state 조회 |
-| 토론 모집 조회 | GET | /api/debate-apply/recruiting | 내가 모집한 applicant_state 조회 |
+| 토론 모집 조회 | GET | /api/debate-apply/applying | 내가 신청한 applicant_state 조회. |
+| 토론 모집 조회 | GET | /api/debate-apply/recruiting | 내가 모집한 applicant_state 조회. |
 
 <br/>
 <br/>
@@ -131,7 +131,7 @@
 **댓글**
 |기능|Method|URL|Response|
 |:--:|:--:|:--:|:--:|
-| 댓글 수정 | PUT | /api/debate-reply |
+| 댓글 수정 | PUT | /api/debate-reply | 댓글을 수정한다. |
 | 댓글 등록 | POST | /api/debate-reply/{board_no} | 댓글을 parent_no,depth에 맞춰서 context를 등록한다. |
 | 댓글 삭제 | DELETE | /api/debate-reply/{reply_no} | 댓글을 삭제한다. |
 
@@ -142,12 +142,12 @@
 | 기능 | Method | URL | Response |
 |:--:|:--:|:--:|:--:|
 | 회원 탈퇴 | DELETE | /api/member | 현재 생성되어 있는 방 전체 목록을 반환한다. |
-| 비밀번호 변경 자격 확인 | POST | /api/member/auth-pw | 헤더에 보내진 jwt 토큰과 비밀번호로, 멤버 정보를 대조하여 본인여부를 확인합니다. |
+| 비밀번호 변경 자격 확인 | POST | /api/member/auth-pw | 헤더에 보내진 jwt 토큰과 비밀번호로, 멤버 정보를 대조하여 본인여부를 확인한다. |
 | 회원 정보 수정 | POST | /api/member/introduce | 헤더에 보내진 jwt 토큰과 수정정보를 이용해, 멤버의 정보를 수정한다. |
-| 로그인 | POST | /sessions/{room_id}/thumbnail | 입력된 아이디와 비밀번호를 확인하여 로그인을 진행합니다. |
-| 비밀번호 변경 | PUT | /api/member/password | 헤더에 보내진 jwt 토큰과 수정정보를 이용해, 멤버의 정보를 수정합니다. 수정이 완료되면 로그아웃 합니다. |
-| 멤버 정보 조회 | GET | /api/member/profile | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송합니다. |
-| 프로필 이미지 수정(업로드) | PUT | ​/api​/member​/profile-image | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송합니다. |
+| 로그인 | POST | /sessions/{room_id}/thumbnail | 입력된 아이디와 비밀번호를 확인하여 로그인을 진행한다. |
+| 비밀번호 변경 | PUT | /api/member/password | 헤더에 보내진 jwt 토큰과 수정정보를 이용해, 멤버의 정보를 수정합니다. 수정이 완료되면 로그아웃 한다. |
+| 멤버 정보 조회 | GET | /api/member/profile | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송한다. |
+| 프로필 이미지 수정(업로드) | PUT | ​/api​/member​/profile-image | 헤더에 보내진 jwt 토큰을 복호화하여, 토큰에 담긴 멤버 정보를 전송한다. |
 
 <br/>
 <br/>
@@ -155,11 +155,11 @@
 **멤버 등록**
 |기능|Method|URL|Response|
 |:--:|:--:|:--:|:--:|
-| 이메일 중복 체크 | GET | /api/register/email/{email} | 현재 회원가입하려고 하는 이메일({email})을 다른 사용자가 이용중인지 확인합니다 |
-| 닉네임 중복 체크 | GET | /api/register/nickname/{nickname}| 현재 회원가입하려고 하는 닉네임({nickname})를 다른 사용자가 이용중인지 확인합니다 |
-| 휴대폰 번호 중복 체크 | GET | /api/register/phone-number/{phone_number} | 현재 회원가입하려고 하는 번호({phone_number})를 다른 사용자가 이용중인지 확인합니다 |
-| 회원가입 | POST | /api/register/signup | 회원가입을 통해 멤버 정보를 등록합니다 |
-| 아이디 중복 체크 | GET | /api/register/user-id/{login_id} | 현재 회원가입하려고 하는 id({login_id})를 다른 사용자가 이용중인지 확인합니다 |
+| 이메일 중복 체크 | GET | /api/register/email/{email} | 현재 회원가입하려고 하는 이메일({email})을 다른 사용자가 이용중인지 확인한다. |
+| 닉네임 중복 체크 | GET | /api/register/nickname/{nickname}| 현재 회원가입하려고 하는 닉네임({nickname})를 다른 사용자가 이용중인지 확인한다. |
+| 휴대폰 번호 중복 체크 | GET | /api/register/phone-number/{phone_number} | 현재 회원가입하려고 하는 번호({phone_number})를 다른 사용자가 이용중인지 확인한다. |
+| 회원가입 | POST | /api/register/signup | 회원가입을 통해 멤버 정보를 등록한다. |
+| 아이디 중복 체크 | GET | /api/register/user-id/{login_id} | 현재 회원가입하려고 하는 id({login_id})를 다른 사용자가 이용중인지 확인한다. |
 
 <br/>
 <br/>
