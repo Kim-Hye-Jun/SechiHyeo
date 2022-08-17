@@ -82,10 +82,11 @@
 
 ## 프로젝트 상세 설명
 <!-- 개발 환경, 기술 스택, 시스템 구성도, ERD, 기능 상세 설명 등 -->
-![ServiceArchitectureDraw.drawio](/uploads/954a6942b43b867957ddca8c73c9f71e/ServiceArchitectureDraw.drawio.png)
 
 ### 1. 아키텍쳐 구조도
 <!-- 링크 삽입 예정 & 포트번호 수정 예정 -->
+![ServiceArchitectureDraw.drawio](/uploads/954a6942b43b867957ddca8c73c9f71e/ServiceArchitectureDraw.drawio.png)
+
 | PORT | 이름                                                  |
 | ---- | ----------------------------------------------------- |
 | 443  | HTTPS                                                 |
