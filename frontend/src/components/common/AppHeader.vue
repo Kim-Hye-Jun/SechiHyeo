@@ -33,7 +33,7 @@ export default defineComponent({
   computed: {
     ...mapGetters(["isLogin", "isMemberInfo"]),
     headerLink(): string {
-      return this.isLogin ? "/main" : "/login";
+      return this.isLogin ? "/main" : "/main";
     },
   },
   methods: {
