@@ -5,7 +5,6 @@
       class="room__inside__class1"
     ></debate-title-tab-component>
     <debate-timer-component
-      :session="sessionCamera"
       :roomAndUserData="testReturnData"
     ></debate-timer-component>
     <suspense>
@@ -18,10 +17,7 @@
         :emptyVideoClasses="emptyVideoArr"
       ></room-video-component>
     </suspense>
-    <menu-tab-component
-      class="room__inside__class3"
-      :session="sessionCamera"
-    ></menu-tab-component>
+    <menu-tab-component class="room__inside__class3"></menu-tab-component>
   </div>
 </template>
 
@@ -52,7 +48,7 @@ export default defineComponent({
     const store = useStore();
     // 뭘 반응형으로 설정해야 할지...?
     let OVCamera: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
-    let sessionCamera: openVidu.Session | undefined = OVCamera.initSession();
+    store.state.session = OVCamera.initSession();
 
     // let OVScreen: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
     // let sessionScreen: openVidu.Session | undefined = OVScreen.initSession();
@@ -108,13 +104,13 @@ export default defineComponent({
     let mainStreamManager: openVidu.Publisher | undefined = undefined;
     let publisher: openVidu.Publisher | undefined = undefined;
 
-    sessionCamera.on("streamCreated", ({ stream }) => {
+    store.state.session.on("streamCreated", (event: any) => {
       // 1. 서버에 추가 요청 => x
       // 완료
-      if (stream.typeOfVideo == "CAMERA") {
-        if (sessionCamera) {
-          const subscriber = sessionCamera.subscribe(
-            stream,
+      if (event.stream.typeOfVideo == "CAMERA") {
+        if (store.state.session) {
+          const subscriber = store.state.session.subscribe(
+            event.stream,
             undefined as unknown as HTMLElement
           );
 
@@ -175,7 +171,7 @@ export default defineComponent({
     //   }
     // });
 
-    sessionCamera.on("streamDestroyed", ({ stream }) => {
+    store.state.session.on("streamDestroyed", (event: any) => {
       // Remove the stream from 'subscribers' array
 
       // 1. 서버에 삭제 요청 *****
@@ -183,7 +179,7 @@ export default defineComponent({
 
       // 2. map user-class name 삭제
       const index = (subscribers.value as openVidu.Subscriber[]).indexOf(
-        stream.streamManager as openVidu.Subscriber,
+        event.stream.streamManager as openVidu.Subscriber,
         0
       );
 
@@ -213,7 +209,7 @@ export default defineComponent({
       }
     });
 
-    sessionCamera.on("exception", (exception) => {
+    store.state.session.on("exception", (exception: any) => {
       console.warn(exception);
     });
 
@@ -266,7 +262,7 @@ export default defineComponent({
     const tokenCamera = testReturnData["tokenCamera"];
     // const tokenScreen = testReturnData["tokenScreen"];
 
-    await sessionCamera
+    await store.state.session
       .connect(tokenCamera, testReturnData)
       .then(() => {
         // --- Get your own camera stream with the desired properties ---
@@ -286,15 +282,15 @@ export default defineComponent({
           );
           console.log("pub create : ", publisher);
 
-          if (sessionCamera) {
-            sessionCamera.publish(publisher as openVidu.Publisher);
+          if (store.state.session) {
+            store.state.session.publish(publisher as openVidu.Publisher);
           }
 
           mainStreamManager = publisher;
           // --- Publish your stream ---
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(
           "There was an error connecting to the session:",
           error.code,
@@ -306,8 +302,8 @@ export default defineComponent({
       // 퇴실 서버에 request
       member2.get("/${useRoute().params.roomId}/disconnect");
 
-      if (sessionCamera) sessionCamera.disconnect();
-      sessionCamera = undefined;
+      if (store.state.session) store.state.session.disconnect();
+      store.state.session = undefined;
       mainStreamManager = undefined;
       publisher = undefined;
       subscribers.value = [];
@@ -350,7 +346,7 @@ export default defineComponent({
       mapUserClassName,
       mapClassNameUser,
       emptyVideoArr,
-      sessionCamera,
+      // sessionCamera,
       // sessionScreen,
       OVCamera,
       // OVScreen,

@@ -33,21 +33,26 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useStore } from "vuex";
 import ButtonComponent from "@components/atoms/common/ButtonComponent.vue";
 
 export default defineComponent({
   components: {
     ButtonComponent,
   },
+  setup() {
+    const store = useStore();
+    return { store };
+  },
   props: {
     roomAndUserData: Object,
-    session: Object,
   },
   mounted() {
-    this.session?.on("signal:countdown-start", (event: any) => {
+    console.log("session mounted timer :", this.store.state.session);
+    this.store.state.session?.on("signal:countdown-start", (event: any) => {
       this.startTimer();
     });
-    this.session?.on("signal:countdown-stop", (event: any) => {
+    this.store.state.session?.on("signal:countdown-stop", (event: any) => {
       this.stopTimer();
     });
     this.settings();
@@ -198,14 +203,14 @@ export default defineComponent({
       // this.breakTime = 20;
     },
     sendStartTimer() {
-      this.session?.signal({
+      this.store.state.session?.signal({
         data: "hello",
         to: [],
         type: "countdown-start",
       });
     },
     sendStopTimer() {
-      this.session?.signal({
+      this.store.state.session?.signal({
         data: "hello",
         to: [],
         type: "countdown-stop",
