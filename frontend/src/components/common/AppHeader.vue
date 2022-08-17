@@ -58,8 +58,8 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #927dfc;
-  z-index: 2;
+  background-color: radial-gradient(circle, #141834 0%, #13162f 100%);
+  z-index: 3;
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.05);
   position: fixed;
   top: 0;
@@ -94,5 +94,9 @@ a.logo {
 a.router-link-exact-active {
   color: white;
   font-weight: bold;
+}
+
+span {
+  color: white;
 }
 </style>
