@@ -19,7 +19,7 @@ export default defineComponent({
     return { store };
   },
   props: {
-    // streamManager: Object,
+    streamManager: Object,
     xx: String,
     // isRoomAdmin: Boolean,
   },
@@ -34,7 +34,7 @@ export default defineComponent({
 
     if (this.xx === undefined) return;
 
-    this.store.state.publisher?.addVideoElement(
+    this.streamManager?.addVideoElement(
       document.getElementsByClassName(
         this.returnVideoClassName(this.$props.xx as string)
       )[0]

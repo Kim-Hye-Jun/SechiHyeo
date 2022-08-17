@@ -4,11 +4,12 @@
     <user-video-component-vue
       :class="roomAndUserData?.userSideOrder"
       :xx="roomAndUserData?.userSideOrder"
+      :streamManager="store.state.publisher"
     ></user-video-component-vue>
     <user-video-component-vue
       v-for="sub in subscribers"
       v-bind:key="sub.stream.connection.connectionId"
-      :stream-manager="sub"
+      :streamManager="sub"
       :class="
         userSideOrderMap?.get(
           JSON.parse(sub.stream.connection.data.split('%/%')[1])['userId']
