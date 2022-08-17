@@ -330,7 +330,7 @@ export default defineComponent({
         );
         fileExt = fileExt.toLowerCase();
         if (
-          ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
+          ["jpeg", "png", "gif", "bmp", "jpg"].includes(fileExt) &&
           this.selectFile != null &&
           this.selectFile["size"] <= 1048576
         ) {
