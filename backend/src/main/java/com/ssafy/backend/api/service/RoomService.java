@@ -60,4 +60,6 @@ public interface RoomService {
     void sendSignal(RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq);
 
     void updateDebateInfo(String roomId);
+
+    int getPageNumber();
 }
