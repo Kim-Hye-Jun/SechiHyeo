@@ -496,6 +496,7 @@ public class RoomServiceImpl implements RoomService {
                     .roomId(roomJoinReq.getRoomId())
                     .tokenCamera(tokenCamera)
 //                    .tokenScreen(tokenScreen)
+                    .debateTopic(room.getDebateTopic())
                     .sideA(room.getSideA())
                     .sideB(room.getSideB())
                     .nickname(member.getNickname())

@@ -14,7 +14,7 @@ public class RoomJoinRes {
     private String roomId;
     private String tokenCamera;
 //    private String tokenScreen;
-//    private String debateTopic;
+    private String debateTopic;
     private String sideA;
     private String sideB;
     private String nickname;
