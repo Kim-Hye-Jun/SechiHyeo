@@ -5,9 +5,11 @@
     <div id="timerBtn">
       <button-component
         @click="sendStartTimer"
+        v-if="store.state.isRoomHost"
         buttonName="시작"
       ></button-component>
       <button-component
+        v-if="store.state.isRoomHost"
         @click="sendStopTimer"
         buttonName="정지"
       ></button-component>
@@ -55,7 +57,7 @@ export default defineComponent({
     this.store.state.session?.on("signal:countdown-stop", (event: any) => {
       this.stopTimer();
     });
-    this.settings();
+    // this.settings();
   },
   data() {
     return {
@@ -121,7 +123,7 @@ export default defineComponent({
       // inputMin: "",
       // inputSec: "",
       time: 5, // props로 받아야할듯? store나
-      breakTime: 20, //쉬는 시간 길이
+      breakTime: 3, //쉬는 시간 길이
       resetButton: false,
       edit: false,
     };
@@ -149,6 +151,7 @@ export default defineComponent({
               this.resetTimer();
               this.time = 0;
               // *** 토론 종료 서버에 요청
+              console.log("종료");
               return;
             }
             this.turnUser =

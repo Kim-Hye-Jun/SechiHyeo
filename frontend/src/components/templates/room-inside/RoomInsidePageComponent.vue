@@ -10,7 +10,6 @@
     <suspense>
       <room-video-component
         class="room__inside__class2"
-        :publisher="publisher"
         :subscribers="subscribers"
         :roomAndUserData="testReturnData"
         :userSideOrderMap="mapUserClassName"
@@ -102,7 +101,7 @@ export default defineComponent({
     }
 
     let mainStreamManager: openVidu.Publisher | undefined = undefined;
-    let publisher: openVidu.Publisher | undefined = undefined;
+    // let publisher: openVidu.Publisher | undefined = undefined;
 
     store.state.session.on("streamCreated", (event: any) => {
       // 1. 서버에 추가 요청 => x
@@ -175,7 +174,7 @@ export default defineComponent({
       // Remove the stream from 'subscribers' array
 
       // 1. 서버에 삭제 요청 *****
-      member2.get(`${store.state.roomId}/disconnect`);
+      // member2.get(`${store.state.roomId}/disconnect`);
 
       // 2. map user-class name 삭제
       const index = (subscribers.value as openVidu.Subscriber[]).indexOf(
@@ -267,7 +266,7 @@ export default defineComponent({
       .then(() => {
         // --- Get your own camera stream with the desired properties ---
         if (OVCamera) {
-          publisher = OVCamera.initPublisher(
+          store.state.publisher = OVCamera.initPublisher(
             undefined as unknown as HTMLElement,
             {
               audioSource: undefined, // The source of audio. If undefined default microphone
@@ -280,13 +279,15 @@ export default defineComponent({
               mirror: false, // Whether to mirror your local video or not
             }
           );
-          console.log("pub create : ", publisher);
+          console.log("pub create : ", store.state.publisher);
 
           if (store.state.session) {
-            store.state.session.publish(publisher as openVidu.Publisher);
+            store.state.session.publish(
+              store.state.publisher as openVidu.Publisher
+            );
           }
 
-          mainStreamManager = publisher;
+          mainStreamManager = store.state.publisher;
           // --- Publish your stream ---
         }
       })
@@ -300,12 +301,14 @@ export default defineComponent({
 
     function leaveSession() {
       // 퇴실 서버에 request
-      member2.get("/${useRoute().params.roomId}/disconnect");
+      console.log(store.state.roomId, "disconnect");
+      alert("LEAVE SESSION");
+      member2.get(`/${store.state.roomId}/disconnect`);
 
       if (store.state.session) store.state.session.disconnect();
       store.state.session = undefined;
       mainStreamManager = undefined;
-      publisher = undefined;
+      store.state.publisher = undefined;
       subscribers.value = [];
       OVCamera = undefined;
       mapUserClassName.value = new Map();
@@ -322,7 +325,7 @@ export default defineComponent({
     window.addEventListener("beforeunload", leaveSession);
     // window.addEventListener("beforeunload", removeUser);
     console.log("...?");
-    console.log("pub : ", publisher);
+    console.log("pub : ", store.state.publisher);
     console.log("sub : ", subscribers);
 
     console.log("empty Video Arr : ", emptyVideoArr);
@@ -340,7 +343,6 @@ export default defineComponent({
     // console.log("pre token : ", tokenScreen);
     return {
       store,
-      publisher,
       testReturnData,
       subscribers,
       mapUserClassName,
@@ -368,7 +370,9 @@ body {
   flex-direction: column;
   align-items: center;
   /* align-content: center; */
+  width: 100%;
   height: 100%;
+  background: radial-gradient(circle, #141834 0%, #13162f 100%);
 }
 .room__inside__class1 {
   box-sizing: border-box;
