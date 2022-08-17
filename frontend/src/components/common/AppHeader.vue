@@ -10,7 +10,7 @@
       <!-- 1 -->
       <template v-if="isLogin">
         <router-link to="/entrance">방 조회</router-link>
-        <router-link to="/boards">토론 모집 게시판</router-link>
+        <router-link to="/debate-board">토론 모집 게시판</router-link>
         <router-link to="/userPage">Mypage</router-link>
         <a href="javascript:;" @click="logoutUser" class="logout-button">
           Logout

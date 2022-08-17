@@ -5,25 +5,18 @@
       class="room__inside__class1"
     ></debate-title-tab-component>
     <debate-timer-component
-      :session="sessionCamera"
       :roomAndUserData="testReturnData"
     ></debate-timer-component>
     <suspense>
       <room-video-component
         class="room__inside__class2"
-        :publisher="publisher"
         :subscribers="subscribers"
         :roomAndUserData="testReturnData"
         :userSideOrderMap="mapUserClassName"
         :emptyVideoClasses="emptyVideoArr"
       ></room-video-component>
     </suspense>
-    <menu-tab-component
-      class="room__inside__class3"
-      :sessionScreen="sessionScreen"
-      :OVScreen="OVScreen"
-      :tokenScreen="tokenScreen"
-    ></menu-tab-component>
+    <menu-tab-component class="room__inside__class3"></menu-tab-component>
   </div>
 </template>
 
@@ -54,10 +47,10 @@ export default defineComponent({
     const store = useStore();
     // 뭘 반응형으로 설정해야 할지...?
     let OVCamera: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
-    let sessionCamera: openVidu.Session | undefined = OVCamera.initSession();
+    store.state.session = OVCamera.initSession();
 
-    let OVScreen: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
-    let sessionScreen: openVidu.Session | undefined = OVScreen.initSession();
+    // let OVScreen: openVidu.OpenVidu | undefined = new openVidu.OpenVidu();
+    // let sessionScreen: openVidu.Session | undefined = OVScreen.initSession();
 
     const subscribers = ref([]);
     // let subscribers: openVidu.Subscriber[] = [];
@@ -108,15 +101,15 @@ export default defineComponent({
     }
 
     let mainStreamManager: openVidu.Publisher | undefined = undefined;
-    let publisher: openVidu.Publisher | undefined = undefined;
+    // let publisher: openVidu.Publisher | undefined = undefined;
 
-    sessionCamera.on("streamCreated", ({ stream }) => {
+    store.state.session.on("streamCreated", (event: any) => {
       // 1. 서버에 추가 요청 => x
       // 완료
-      if (stream.typeOfVideo == "CAMERA") {
-        if (sessionCamera) {
-          const subscriber = sessionCamera.subscribe(
-            stream,
+      if (event.stream.typeOfVideo == "CAMERA") {
+        if (store.state.session) {
+          const subscriber = store.state.session.subscribe(
+            event.stream,
             undefined as unknown as HTMLElement
           );
 
@@ -162,30 +155,30 @@ export default defineComponent({
       }
     });
 
-    sessionScreen.on("streamCreated", (event) => {
-      if (event.stream.typeOfVideo == "SCREEN") {
-        // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
-        var subscriberScreen = sessionScreen?.subscribe(
-          event.stream,
-          "shareImg"
-        );
-        // When the HTML video has been appended to DOM...
-        subscriberScreen?.on("videoElementCreated", (event) => {
-          // Add a new <p> element for the user's nickname just below its video
-          // appendUserData(event.element, subscriberScreen?.stream.connection);
-        });
-      }
-    });
+    // sessionScreen.on("streamCreated", (event) => {
+    //   if (event.stream.typeOfVideo == "SCREEN") {
+    //     // Subscribe to the Stream to receive it. HTML video will be appended to element with 'container-screens' id
+    //     var subscriberScreen = sessionScreen?.subscribe(
+    //       event.stream,
+    //       "shareImg"
+    //     );
+    //     // When the HTML video has been appended to DOM...
+    //     subscriberScreen?.on("videoElementCreated", (event) => {
+    //       // Add a new <p> element for the user's nickname just below its video
+    //       // appendUserData(event.element, subscriberScreen?.stream.connection);
+    //     });
+    //   }
+    // });
 
-    sessionCamera.on("streamDestroyed", ({ stream }) => {
+    store.state.session.on("streamDestroyed", (event: any) => {
       // Remove the stream from 'subscribers' array
 
       // 1. 서버에 삭제 요청 *****
-      member2.get(`${store.state.roomId}/disconnect`);
+      // member2.get(`${store.state.roomId}/disconnect`);
 
       // 2. map user-class name 삭제
       const index = (subscribers.value as openVidu.Subscriber[]).indexOf(
-        stream.streamManager as openVidu.Subscriber,
+        event.stream.streamManager as openVidu.Subscriber,
         0
       );
 
@@ -215,7 +208,7 @@ export default defineComponent({
       }
     });
 
-    sessionCamera.on("exception", (exception) => {
+    store.state.session.on("exception", (exception: any) => {
       console.warn(exception);
     });
 
@@ -266,14 +259,14 @@ export default defineComponent({
     if (testReturnData === undefined) return;
     console.log("no return");
     const tokenCamera = testReturnData["tokenCamera"];
-    const tokenScreen = testReturnData["tokenScreen"];
+    // const tokenScreen = testReturnData["tokenScreen"];
 
-    await sessionCamera
+    await store.state.session
       .connect(tokenCamera, testReturnData)
       .then(() => {
         // --- Get your own camera stream with the desired properties ---
         if (OVCamera) {
-          publisher = OVCamera.initPublisher(
+          store.state.publisher = OVCamera.initPublisher(
             undefined as unknown as HTMLElement,
             {
               audioSource: undefined, // The source of audio. If undefined default microphone
@@ -286,17 +279,19 @@ export default defineComponent({
               mirror: false, // Whether to mirror your local video or not
             }
           );
-          console.log("pub create : ", publisher);
+          console.log("pub create : ", store.state.publisher);
 
-          if (sessionCamera) {
-            sessionCamera.publish(publisher as openVidu.Publisher);
+          if (store.state.session) {
+            store.state.session.publish(
+              store.state.publisher as openVidu.Publisher
+            );
           }
 
-          mainStreamManager = publisher;
+          mainStreamManager = store.state.publisher;
           // --- Publish your stream ---
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(
           "There was an error connecting to the session:",
           error.code,
@@ -306,12 +301,14 @@ export default defineComponent({
 
     function leaveSession() {
       // 퇴실 서버에 request
-      member2.get("/${useRoute().params.roomId}/disconnect");
+      console.log(store.state.roomId, "disconnect");
+      alert("LEAVE SESSION");
+      member2.get(`/${store.state.roomId}/disconnect`);
 
-      if (sessionCamera) sessionCamera.disconnect();
-      sessionCamera = undefined;
+      if (store.state.session) store.state.session.disconnect();
+      store.state.session = undefined;
       mainStreamManager = undefined;
-      publisher = undefined;
+      store.state.publisher = undefined;
       subscribers.value = [];
       OVCamera = undefined;
       mapUserClassName.value = new Map();
@@ -328,7 +325,7 @@ export default defineComponent({
     window.addEventListener("beforeunload", leaveSession);
     // window.addEventListener("beforeunload", removeUser);
     console.log("...?");
-    console.log("pub : ", publisher);
+    console.log("pub : ", store.state.publisher);
     console.log("sub : ", subscribers);
 
     console.log("empty Video Arr : ", emptyVideoArr);
@@ -341,23 +338,22 @@ export default defineComponent({
     //   )["userSideOrder"];
     //   const index = emptyVideoArr.value.indexOf((sideOrder as string));
     // }
-    console.log("pre OV : ", OVScreen);
-    console.log("pre SESSION : ", sessionScreen);
-    console.log("pre token : ", tokenScreen);
+    // console.log("pre OV : ", OVScreen);
+    // console.log("pre SESSION : ", sessionScreen);
+    // console.log("pre token : ", tokenScreen);
     return {
       store,
-      publisher,
       testReturnData,
       subscribers,
       mapUserClassName,
       mapClassNameUser,
       emptyVideoArr,
-      sessionCamera,
-      sessionScreen,
+      // sessionCamera,
+      // sessionScreen,
       OVCamera,
-      OVScreen,
+      // OVScreen,
       tokenCamera,
-      tokenScreen,
+      // tokenScreen,
     };
   },
 });
@@ -374,7 +370,9 @@ body {
   flex-direction: column;
   align-items: center;
   /* align-content: center; */
+  width: 100%;
   height: 100%;
+  background: radial-gradient(circle, #141834 0%, #13162f 100%);
 }
 .room__inside__class1 {
   box-sizing: border-box;

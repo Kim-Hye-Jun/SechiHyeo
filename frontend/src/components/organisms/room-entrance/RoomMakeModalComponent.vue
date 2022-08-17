@@ -148,6 +148,7 @@ export default defineComponent({
         });
     },
     goRoomInsidePage(roomId: string): void {
+      console.log("GO ROOM INSIDE");
       this.$router.push({
         name: "RoomInsidePage",
         params: {

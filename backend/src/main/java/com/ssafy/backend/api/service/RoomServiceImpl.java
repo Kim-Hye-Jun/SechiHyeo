@@ -182,10 +182,10 @@ public class RoomServiceImpl implements RoomService {
 //            SessionProperties properties = new SessionProperties.Builder().build();
             //카메라용, 화면공유용 세션 2개 생성
             Session sessionCamera = openVidu.createSession(new SessionProperties.Builder().build());
-            Session sessionScreen = openVidu.createSession(new SessionProperties.Builder().build());
+//            Session sessionScreen = openVidu.createSession(new SessionProperties.Builder().build());
 
             //아직 방에 입장하지 않았으므로 Host는 빈 칸
-            SessionRoom sessionRoom = new SessionRoom(sessionCamera, sessionScreen, room, "");
+            SessionRoom sessionRoom = new SessionRoom(sessionCamera, room, "");
             roomWithSession.put(room.getRoomId(), sessionRoom);
             roomList.add(room);
 
@@ -240,7 +240,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String uploadProof(String roomId, MultipartFile proof) {
+    public String uploadProof(MultipartFile proof) {
         //자료 파일 업로드 폴더명
         String proofDir = "proof";
 
@@ -283,7 +283,7 @@ public class RoomServiceImpl implements RoomService {
             if (sessionRoom == null) throw new Error(roomJoinReq.getRoomId() + "not exists");
 
             Session sessionCamera = sessionRoom.getSessionCamera();
-            Session sessionScreen = sessionRoom.getSessionScreen();
+//            Session sessionScreen = sessionRoom.getSessionScreen();
 
             //방 정보 가져오기
             Room room = sessionRoom.getRoom();
@@ -317,7 +317,7 @@ public class RoomServiceImpl implements RoomService {
 
             //토큰 2개 생성
             String tokenCamera = sessionCamera.createConnection(connectionProperties).getToken();
-            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
+//            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
 
             System.out.println("TOKEN OOOOO");
 
@@ -368,9 +368,10 @@ public class RoomServiceImpl implements RoomService {
             return RoomJoinRes.builder()
                     .roomId(roomJoinReq.getRoomId())
                     .tokenCamera(tokenCamera)
-                    .tokenScreen(tokenScreen)
+//                    .tokenScreen(tokenScreen)
                     .sideA(room.getSideA())
                     .sideB(room.getSideB())
+                    .nickname(member.getNickname())
                     .userSideOrder(sideOrder)
                     .isRoomHost(checkHost)
                     .currentNumOfPeople((room.getCurNumOfPeople()))
@@ -407,7 +408,7 @@ public class RoomServiceImpl implements RoomService {
             if (sessionRoom == null) throw new Error(roomJoinReq.getRoomId() + "not exists");
 
             Session sessionCamera = sessionRoom.getSessionCamera();
-            Session sessionScreen = sessionRoom.getSessionScreen();
+//            Session sessionScreen = sessionRoom.getSessionScreen();
 
             //방 정보 가져오기
             Room room = sessionRoom.getRoom();
@@ -443,7 +444,7 @@ public class RoomServiceImpl implements RoomService {
 
             //토큰 2개 생성
             String tokenCamera = sessionCamera.createConnection(connectionProperties).getToken();
-            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
+//            String tokenScreen = sessionScreen.createConnection(connectionProperties).getToken();
 
             System.out.println("TOKEN OOOOO");
 
@@ -466,20 +467,22 @@ public class RoomServiceImpl implements RoomService {
 
             String sideOrder = "";
             //participants에서 사용자가 요청한 진영순서 칸에 loginId가 있으면 에러, 없으면 사용자를 저장
-            //여기서 에러나면 아예 요청을 취소해야하나..? 접속자 수 +1 한 거 빼줘야하는디
             if(roomJoinReq.getSide().equals("a")){
                 if(participants[0][roomJoinReq.getOrder()-1].equals("")) {
                     participants[0][roomJoinReq.getOrder()-1] = member.getLoginId();
-                    sideOrder+="a"+(roomJoinReq.getOrder()-1);
+                    sideOrder+="a"+(roomJoinReq.getOrder());
                 } else {
-                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+//                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+                    return RoomJoinRes.builder().userSideOrder("error").build();
                 }
+
             } else if(roomJoinReq.getSide().equals("b")){
                 if(participants[1][roomJoinReq.getOrder()-1].equals("")) {
                     participants[1][roomJoinReq.getOrder()-1] = member.getLoginId();
-                    sideOrder+="b"+(roomJoinReq.getOrder()-1);
+                    sideOrder+="b"+(roomJoinReq.getOrder());
                 } else {
-                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+//                    System.out.println("이미 다른 사용자가 배정되었습니다.");
+                    return RoomJoinRes.builder().userSideOrder("error").build();
                 }
             }
 
@@ -492,9 +495,10 @@ public class RoomServiceImpl implements RoomService {
             return RoomJoinRes.builder()
                     .roomId(roomJoinReq.getRoomId())
                     .tokenCamera(tokenCamera)
-                    .tokenScreen(tokenScreen)
+//                    .tokenScreen(tokenScreen)
                     .sideA(room.getSideA())
                     .sideB(room.getSideB())
+                    .nickname(member.getNickname())
                     .userSideOrder(sideOrder)
                     .isRoomHost(checkHost)
                     .currentNumOfPeople((room.getCurNumOfPeople()))
@@ -777,6 +781,16 @@ public class RoomServiceImpl implements RoomService {
                     memberService.changeDebateInfo(participants[i][j]);
             }
         }
+    }
+
+    @Override
+    public int getPageNumber() {
+        return roomList.size();
+    }
+
+    @Override
+    public List<Room> getAllRoomInfo() {
+        return roomList;
     }
 
     private String swap(String a, String b) {

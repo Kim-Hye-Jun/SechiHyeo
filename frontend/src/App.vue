@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <app-header></app-header>
+    <app-header v-if="$route.name != 'RoomInsidePage'"></app-header>
     <div class="app-contents">
       <router-view></router-view>
     </div>

@@ -296,10 +296,13 @@ export default defineComponent({
     },
     goRoomInsidePage(roomId: string): void {
       // this.modalOut();
+      console.log("GO ROOM INSIDE....");
       this.$router.push({
         name: "RoomInsidePage",
         params: {
           roomId: roomId,
+          side: "a",
+          order: 1,
         },
       });
     },

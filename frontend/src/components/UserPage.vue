@@ -8,17 +8,17 @@
         @click="recordClick"
         :class="[record === true ? 'click' : 'non-click']"
       >
-        <span class="span-user">토론전적</span>
+        <span class="span-user">자기소개</span>
         <div class="transition"></div>
       </div>
-      <div
+      <!-- <div
         class="userpage-content-button"
         @click="introClick"
         :class="[intro === true ? 'click' : 'non-click']"
       >
         <span class="span-user">한줄소개</span>
         <div class="transition"></div>
-      </div>
+      </div> -->
       <div
         class="userpage-content-button"
         @click="recruitClick"
@@ -141,7 +141,7 @@ export default defineComponent({
   },
 });
 </script>
-<style>
+<style scoped>
 .hidden {
   display: none;
 }
@@ -169,20 +169,20 @@ export default defineComponent({
   display: inline-block;
   font-family: "Raleway", sans-serif;
   font-weight: bold;
-  left: 50.4%;
+  left: 53.4%;
   transform: translate(-300%);
   margin: 0px 10px 5px 10px;
-  width: 130px;
-  top: 450px;
-  font-size: 24px;
-  line-height: 44px;
+  width: 100px;
+  top: 305px;
+  font-size: 16px;
+  line-height: 32px;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.5s;
   letter-spacing: 4px;
   outline: 0;
-  padding: 10px 5px;
+  padding: 6px 3px;
   color: #fff;
   overflow: hidden;
 }
@@ -216,5 +216,77 @@ export default defineComponent({
   -o-transition: all 0.7s cubic-bezier(0.77, 0, 0.175, 1);
   -webkit-transition: all 0.7s cubic-bezier(0.77, 0, 0.175, 1);
   transition: all 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.userpage-content-record {
+  position: relative;
+  width: 600px;
+  height: 370px;
+  top: 310px;
+  left: 50%;
+  transform: translate(-50%);
+  backdrop-filter: blur(4px);
+  background: #757f9a;
+  box-shadow: 0 0 0.5px 1px rgba(200, 230, 255, 0.5),
+    0 -0.5px 0.5px 1.5px rgba(200, 230, 255, 0.5) inset,
+    0 0 0.5px 2.5px rgba(135, 131, 171, 0.9),
+    0 0 0.5px 1.75px rgba(135, 131, 171, 0.9) inset,
+    0 0 3px 3.25px rgba(123, 108, 196, 0.9),
+    0 0 3px 2.75px rgba(123, 108, 196, 0.9) inset,
+    0 2px 7.5px 4.5px rgba(0, 0, 0, 0.8),
+    0 2px 6.25px 3px rgba(0, 0, 0, 0.7) inset;
+  border: 0px;
+}
+.userpage-content-intro {
+  position: relative;
+  top: 460px;
+  left: 50%;
+  transform: translate(-50%);
+  width: 800px;
+  height: 200px;
+  background: #757f9a;
+  box-shadow: 0 0 0.5px 1px rgba(200, 230, 255, 0.5),
+    0 -0.5px 0.5px 1.5px rgba(200, 230, 255, 0.5) inset,
+    0 0 0.5px 2.5px rgba(135, 131, 171, 0.9),
+    0 0 0.5px 1.75px rgba(135, 131, 171, 0.9) inset,
+    0 0 3px 3.25px rgba(123, 108, 196, 0.9),
+    0 0 3px 2.75px rgba(123, 108, 196, 0.9) inset,
+    0 2px 7.5px 4.5px rgba(0, 0, 0, 0.8),
+    0 2px 6.25px 3px rgba(0, 0, 0, 0.7) inset;
+  border: 0px;
+}
+.userpage-content-recruit {
+  position: relative;
+  width: 800px;
+  height: 370px;
+  top: 310px;
+  left: 50%;
+  transform: translate(-50%);
+}
+.userpage-content-apply {
+  position: relative;
+  width: 800px;
+  height: 370px;
+  top: 310px;
+  left: 50%;
+  transform: translate(-50%);
+}
+.userpage-content-set {
+  position: relative;
+  width: 600px;
+  height: 370px;
+  top: 310px;
+  left: 50%;
+  transform: translate(-50%);
+  backdrop-filter: blur(4px);
+  background: #757f9a;
+  box-shadow: 0 0 0.5px 1px rgba(200, 230, 255, 0.5),
+    0 -0.5px 0.5px 1.5px rgba(200, 230, 255, 0.5) inset,
+    0 0 0.5px 2.5px rgba(135, 131, 171, 0.9),
+    0 0 0.5px 1.75px rgba(135, 131, 171, 0.9) inset,
+    0 0 3px 3.25px rgba(123, 108, 196, 0.9),
+    0 0 3px 2.75px rgba(123, 108, 196, 0.9) inset,
+    0 2px 7.5px 4.5px rgba(0, 0, 0, 0.8),
+    0 2px 6.25px 3px rgba(0, 0, 0, 0.7) inset;
+  border: 0px;
 }
 </style>
