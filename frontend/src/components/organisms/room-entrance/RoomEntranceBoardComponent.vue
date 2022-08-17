@@ -38,7 +38,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import RoomEntranceComponent from "@components/molecules/room-entrance/RoomEntranceComponent.vue";
 import { RoomThumbnailInfo, SideOrderInfo } from "@type/types";
 import ModalRadioButtonComponent from "@/components/atoms/common/ModalRadioButtonComponent.vue";
