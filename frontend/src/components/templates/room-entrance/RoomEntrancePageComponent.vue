@@ -197,7 +197,7 @@ export default defineComponent({
   },
 
   created() {
-    http.get("sessions").then((res) => {
+    http.get("sessions/pageNum").then((res) => {
       this.roomCount = res.data;
       this.pageCount = Math.floor(this.roomCount / 6) + 1;
     });

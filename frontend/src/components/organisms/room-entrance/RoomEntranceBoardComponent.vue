@@ -55,17 +55,26 @@ export default defineComponent({
     ModalRadioButtonComponent,
     ButtonComponent,
   },
-  async setup(props) {
+  // created() {
+  //   // (#구현 해야할것)create시에 axios 요청으로 방 가져와서 방 썸네일에 넣어줌 (roomInfoData)
+  //   let roomInfoDataList = ref([]);
+  //   const response = await http.get("sessions/1").then((response) => {
+  //     roomInfoDataList = response.data;
+  //     console.log(roomInfoDataList);
+  //   });
+  //   return {
+  //     roomInfoDataList,
+  //   };
+  // },
+  created() {
     // (#구현 해야할것)create시에 axios 요청으로 방 가져와서 방 썸네일에 넣어줌 (roomInfoData)
-    let roomInfoDataList = ref([]);
-    const response = await http.get("sessions/1");
-    roomInfoDataList = response.data;
-    console.log(roomInfoDataList);
-    return {
-      roomInfoDataList,
-    };
+    // let roomInfoDataList = ref([]);
+    http.get("sessions/1").then((response) => {
+      this.roomInfoDataList = response.data;
+      // console.log(roomInfoDataList);
+    });
   },
-  updated() {
+  beforeUpdate() {
     console.log("update " + "sessions/" + String((this.pageNum as number) + 1));
     http.get("sessions/" + String((this.pageNum as number) + 1)).then((res) => {
       this.roomInfoDataList = res.data;
@@ -79,6 +88,7 @@ export default defineComponent({
       sideOrderList: [] as Array<SideOrderInfo>,
       sideOrderSelector: "sideOrderSelector",
       roomId: "",
+      roomInfoDataList: [] as any,
     };
   },
   // watch: {
