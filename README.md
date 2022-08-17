@@ -93,11 +93,22 @@
 | 8080 | Spring boot Docker Container                          |
 | 8443 | Openvidu                                              |
 
-### 2. ERD
+### 2. 와이어프레임
+![마이페이지](/uploads/c749cc20c328fb4626b5da212a8e7727/마이페이지.PNG)
+
+![메인화면_및_화상회의](/uploads/a04733e0fcafa1273e6ef92d54b0ead7/메인화면_및_화상회의.PNG)
+
+![메인화면](/uploads/0f44f9702f5bcc3df81e2c27beb59532/메인화면.PNG)
+
+![소개화면](/uploads/ed2a7183c0fc0bb83314af74533ca7a2/소개화면.PNG)
+
+![회원가입](/uploads/f7fd9adbc89038869172ad868e5557d3/회원가입.PNG)
+
+### 3. ERD
 <!-- 링크 삽입 예정 -->
 ![Image_Pasted_at_2022-8-17_23-07](/uploads/2f743881d275ddb736d5449f6edde084/Image_Pasted_at_2022-8-17_23-07.png)
 
-### 3. API 명세서
+### 4. API 명세서
 ## 📃API 설계
 **토론 신청 정보**
 |기능|Method|URL|Response|
