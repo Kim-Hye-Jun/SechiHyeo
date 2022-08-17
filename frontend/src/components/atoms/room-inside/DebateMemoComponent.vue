@@ -30,11 +30,11 @@ export default defineComponent({
 .paper {
   position: relative;
   width: 90%;
-  max-width: 800px;
-  min-width: 400px;
-  height: 390px;
+  max-width: 20%;
+  min-width: 10%;
+  height: 200px;
   margin: 0 auto;
-  background: #fafafa;
+  background: rgb(255, 255, 255);
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -46,9 +46,9 @@ export default defineComponent({
   bottom: 0;
   left: 0;
   width: 60px;
-  background: radial-gradient(#575450 6px, transparent 7px) repeat-y;
+  background: radial-gradient(#3888f1 6px, transparent 7px) repeat-y;
   background-size: 30px 30px;
-  border-right: 3px solid #d44147;
+  border-right: 3px solid #41b2d4;
   box-sizing: border-box;
 }
 
@@ -58,7 +58,7 @@ export default defineComponent({
   right: 0;
   bottom: 30px;
   left: 60px;
-  background: linear-gradient(transparent, transparent 28px, #91d1d3 28px);
+  background: linear-gradient(transparent, transparent 28px, #375c5d 28px);
   background-size: 30px 30px;
 }
 

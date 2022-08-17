@@ -1,12 +1,16 @@
 <template>
-  <debate-memo-component
-    v-show="isModalView"
-    @close-modal="isModalView = false"
-  ></debate-memo-component>
-  <button-component3
-    v-show="!isModalView"
-    @click="isModalView = true"
-  ></button-component3>
+  <div class="video__extra__container">
+    <button-component3
+      v-show="!isModalView"
+      @click="isModalView = true"
+    ></button-component3>
+    <p v-if="!isModalView">{{ nickname }}</p>
+    <debate-memo-component
+      class="memo__modal"
+      v-show="isModalView"
+      @close-modal="isModalView = false"
+    ></debate-memo-component>
+  </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -15,6 +19,9 @@ import ButtonComponent3 from "@/components/atoms/common/ButtonComponent3.vue";
 
 export default defineComponent({
   components: { DebateMemoComponent, ButtonComponent3 },
+  props: {
+    nickname: String,
+  },
   data() {
     return {
       isModalView: false as boolean,
@@ -23,3 +30,19 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.video__extra__container {
+  display: flex;
+  flex-direction: row;
+}
+.memo__modal {
+  position: absolute;
+}
+p {
+  font-size: 20px;
+  color: white;
+  padding-left: 25%;
+  overflow: hidden;
+}
+</style>
