@@ -12,6 +12,7 @@ import java.util.Date;
 @Builder
 @ApiModel("board in boardResponse")
 public class BoardResBoard {
+    int board_no;
     String board_title;
     String debate_topic;
     String board_content;

@@ -85,6 +85,7 @@ public class DebateBoardController {
         //있다면 댓글 목록 가져온후 리턴
         DebateBoard debateBoard=debateBoardService.getBoard(board_no);
         boardRes.setBoard(BoardResBoard.builder()
+                .board_no(debateBoard.getBoardNo())
                 .board_title(debateBoard.getBoardTitle())
                 .debate_topic(debateBoard.getDebateTopic())
                         .board_content(debateBoard.getBoardContent())
