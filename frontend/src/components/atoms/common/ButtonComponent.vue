@@ -36,6 +36,8 @@ a {
   transition: 0.5s;
   /* margin-top: 10px; */
   letter-spacing: 4px;
+
+  margin: 5px;
 }
 
 a:hover {
