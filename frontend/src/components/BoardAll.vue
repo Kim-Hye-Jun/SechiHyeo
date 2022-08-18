@@ -31,7 +31,7 @@
         <div
           class="boards-content-write-box1"
           @click="moveToDetail(debate_board.board_no)"
-          v-for="(debate_board, board_no) in boards"
+          v-for="(debate_board, board_no) in boards.slice(0, 8)"
           :key="board_no"
         >
           <div class="boards-content-write-no">

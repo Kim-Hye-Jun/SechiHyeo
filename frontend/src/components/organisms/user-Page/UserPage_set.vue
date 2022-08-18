@@ -62,7 +62,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "vuex";
-import ImageUpload from "../molecules/ImageUpload.vue";
+import ImageUpload from "../../molecules/ImageUpload.vue";
 export default defineComponent({
   components: { ImageUpload },
   data() {

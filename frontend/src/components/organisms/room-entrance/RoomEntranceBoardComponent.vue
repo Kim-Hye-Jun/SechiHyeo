@@ -120,7 +120,7 @@ export default defineComponent({
       this.sideOrderList = roomInfo.sideOrderList;
       this.roomId = roomInfo.roomId;
       console.log(this.sideOrderList);
-      this.roomTitle = roomInfo.roomTile;
+      this.roomTitle = roomInfo.roomTitle;
       this.roomSideA = roomInfo.sideA;
       this.roomSideB = roomInfo.sideB;
       this.debateTopic = roomInfo.debateTopic;
@@ -268,7 +268,7 @@ a {
 .modal-window > div {
   border-radius: 1rem;
   /* 모달 창 색깔 */
-  background: #7f53ac;
+  background: rgb(46, 37, 37);
 }
 
 .modal-window div:not(:last-of-type) {
@@ -277,7 +277,7 @@ a {
 
 .modal-body {
   /* 모달창 글씨 색깔 */
-  color: #657ced;
+  color: white;
 }
 
 .logo {
