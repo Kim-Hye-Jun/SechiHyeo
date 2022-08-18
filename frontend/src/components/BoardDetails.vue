@@ -504,9 +504,9 @@ a {
   top: -20px;
   left: 0px;
   width: 240px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 20px;
   text-align: left;
   line-height: 34px;
@@ -518,9 +518,9 @@ a {
   display: inline-block;
   top: -20px;
   width: 320px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 20px;
   text-align: left;
   line-height: 34px;
@@ -533,9 +533,9 @@ a {
   top: -20px;
   /* right: -50px; */
   width: 100px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 20px;
   text-align: left;
   line-height: 34px;
@@ -549,9 +549,9 @@ a {
   height: 240px;
   top: 0px;
   left: 0px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 800;
+  /* font-weight: 800; */
   font-size: 20px;
   color: #000000;
   border-right: 3px solid #ddd;
@@ -656,10 +656,10 @@ a {
   height: 30px;
   left: 10px;
   top: 18px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
+  /* font-weight: 400; */
+  font-size: 15px;
   line-height: 30px;
   color: #111845;
   transition: 0.3s;
@@ -699,9 +699,9 @@ a {
   height: 30px;
   left: 200px;
   top: -20px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -713,9 +713,9 @@ a {
   height: 30px;
   left: 0px;
   top: -20px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -727,9 +727,9 @@ a {
   height: 30px;
   left: 200px;
   top: -20px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -740,9 +740,9 @@ a {
   width: 56px;
   height: 30px;
   top: 60px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -769,9 +769,9 @@ a {
   position: relative;
   display: inline-block;
   display: inline-block;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -779,9 +779,9 @@ a {
 .board-reply2-create-cancle {
   position: relative;
   display: inline-block;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -789,9 +789,9 @@ a {
 .board-reply2-create-sign {
   position: relative;
   display: inline-block;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -813,9 +813,9 @@ a {
   width: 50px;
   height: 30px;
   top: 21px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -826,9 +826,9 @@ a {
   width: 50px;
   height: 30px;
   top: 21px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
@@ -851,9 +851,9 @@ a {
   height: 30px;
   left: 71px;
   top: 0px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 12px;
   line-height: 30px;
   color: #000000;
