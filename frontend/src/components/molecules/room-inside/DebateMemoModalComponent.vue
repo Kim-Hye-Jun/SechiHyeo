@@ -32,6 +32,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "";
+}
 .video__extra__container {
   display: flex;
   flex-direction: row;
