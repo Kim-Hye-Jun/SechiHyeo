@@ -45,31 +45,22 @@ public class ApplicantStateController {
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
     public ResponseEntity<ArrayList<ApplicantRes>> getApplicantState(@RequestParam int board_no){
-        try {
-
-
-            List<ApplicantState> list=applicantService.getApplicantState(board_no);
-            ArrayList<ApplicantRes> arrayList=new ArrayList<>();
-            if(list==null){
-                return ResponseEntity.status(200).body(arrayList);
-            }
-
-            for (ApplicantState as: list
-            ) {
-                arrayList.add(ApplicantRes
-                        .builder()
-                                .applicant_no(as.getApplicantNo())
-                                .nickname(as.getMember().getNickname())
-                        .build());
-            }
-
+        List<ApplicantState> list=applicantService.getApplicantState(board_no);
+        ArrayList<ApplicantRes> arrayList=new ArrayList<>();
+        if(list==null){
             return ResponseEntity.status(200).body(arrayList);
-        } catch(Exception e) {
-            //토큰이 유효하지 않은 경우
-            String message = "권한이 없습니다.";
-
-            return ResponseEntity.status(400).body(null);
         }
+
+        for (ApplicantState as: list
+        ) {
+            arrayList.add(ApplicantRes
+                    .builder()
+                    .applicant_no(as.getApplicantNo())
+                    .nickname(as.getMember().getNickname())
+                    .build());
+        }
+
+        return ResponseEntity.status(200).body(arrayList);
     }
     
     @PostMapping()
@@ -153,6 +144,7 @@ public class ApplicantStateController {
                             .board_finished(as.getDebateBoard().isBoardFinished())
                             .nickname(as.getMember().getNickname())
                             .accept(as.getAccept())
+                                .board_no(as.getDebateBoard().getBoardNo())
                         .build());
             }
 
@@ -191,6 +183,7 @@ public class ApplicantStateController {
                             .current_applicant((int) applicantService.countCurrentApplicantByBoardNo(as.getDebateBoard().getBoardNo()))
                             .max_applicant(as.getDebateBoard().getMaxApplicant()).accept(as.getAccept())
                             .board_finished(as.getDebateBoard().isBoardFinished())
+                                .board_no(as.getDebateBoard().getBoardNo())
                         .build());
             }
 
