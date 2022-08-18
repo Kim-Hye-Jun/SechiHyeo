@@ -15,13 +15,15 @@
     </div>
     <div id="section3">
       <div class="container">
-        <h2>토론을 처음 시작하는 사람부터 대회를 준비하는 사람까지</h2>
+        <h2>토론을 처음 시작하는 사람부터</h2>
+        <h2>대회를 준비하는 사람까지</h2>
         <a href="#section4" class="scroll">scroll<span></span></a>
       </div>
     </div>
     <div id="section4">
       <div class="container">
-        <h2>원하는 주제로 공식 토론 규칙에 맞춰서 토론을 진행해보세요</h2>
+        <h2>원하는 주제로 공식 토론 규칙에 맞춰</h2>
+        <h2>토론을 진행해보세요</h2>
         <a href="#section5" class="scroll">scroll<span></span></a>
       </div>
     </div>
@@ -146,12 +148,13 @@ export default defineComponent({
   methods: {},
 });
 </script>
+
 <style scoped>
 /* reset */
 * {
   margin: 0;
   padding: 0;
-  font-family: "Lato";
+  font-family: "locus_sangsang";
 }
 li {
   list-style: none;
@@ -217,40 +220,40 @@ a {
 }
 #section2 {
   background: radial-gradient(
-    ellipse farthest-corner at center bottom,
-    #3aa17e,
-    #00537e
+    ellipse farthest-corner at center top,
+    #ff9fcd,
+    #3a3897
   );
 }
 #section3 {
   background: radial-gradient(
     ellipse farthest-corner at center top,
-    #fbb03b,
-    #d4145a
+    #e64efa,
+    #3a3897
   );
 }
 #section4 {
   background: radial-gradient(
     ellipse farthest-corner at center top,
-    #29abe2,
-    #4f00bc
+    #00ae8e,
+    #3a3897
   );
 }
 #section5 {
   background: radial-gradient(
     ellipse farthest-corner at center top,
-    #ff5300,
-    #45145a
+    #29abe2,
+    #3a3897
   );
 }
 #section6 {
   background: radial-gradient(
-    ellipse farthest-corner at center bottom,
-    #852d91,
-    #312a6c
+    ellipse farthest-corner at center top,
+    #a3a1ff,
+    #3a3897
   );
 }
-#section7 {
+/* #section7 {
   background: radial-gradient(
     ellipse farthest-corner at center top,
     #a3a1ff,
@@ -276,7 +279,7 @@ a {
 }
 #section11 {
   background-image: linear-gradient(to top, #88d3ce 0%, #6e45e2 100%);
-}
+} */
 
 /* #section1 {
   background: url(https://picsum.photos/1200/800?image=575) center center /
