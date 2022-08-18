@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.Column;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +22,10 @@ public class Room {
     private String roomType;
     private String debateType;
     private String thumbnail;
+    //썸네일 파일 이름
+    private String thumbnailName;
+
+    private ArrayList<String> proofName;
 
     //private일 경우 비밀번호
     private String password;

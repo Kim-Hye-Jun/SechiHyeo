@@ -2,6 +2,7 @@ package com.ssafy.backend.api.controller;
 
 import com.ssafy.backend.api.request.applicantState.ApplicantStateRegiPostReq;
 import com.ssafy.backend.api.request.debateBoard.DebateBoardRegiPostReq;
+import com.ssafy.backend.api.response.applicantState.ApplicantRes;
 import com.ssafy.backend.api.response.applicantState.ApplicantStateRes;
 import com.ssafy.backend.api.service.ApplicantService;
 import com.ssafy.backend.api.service.MemberService;
@@ -37,6 +38,40 @@ public class ApplicantStateController {
     ApplicantService applicantService;
 
 
+    @GetMapping("/{board_no}")
+    @ApiOperation(value = "해당 토론 참여 신청자들 출력", notes = "<strong>해당 토론 참여자</strong>를 반환한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 접근"),
+    })
+    public ResponseEntity<ArrayList<ApplicantRes>> getApplicantState(@RequestParam int board_no){
+        try {
+
+
+            List<ApplicantState> list=applicantService.getApplicantState(board_no);
+            if(list==null){
+                return ResponseEntity.status(400).body(null);
+            }
+            ArrayList<ApplicantRes> arrayList=new ArrayList<>();
+
+            for (ApplicantState as: list
+            ) {
+                arrayList.add(ApplicantRes
+                        .builder()
+                                .applicant_no(as.getApplicantNo())
+                                .nickname(as.getMember().getNickname())
+                        .build());
+            }
+
+            return ResponseEntity.status(200).body(arrayList);
+        } catch(Exception e) {
+            //토큰이 유효하지 않은 경우
+            String message = "권한이 없습니다.";
+
+            return ResponseEntity.status(400).body(null);
+        }
+    }
+    
     @PostMapping()
     @ApiOperation(value = "토론 참여 신청", notes = "<strong>토론 참여</strong>를 신청한다.")
     @ApiResponses({

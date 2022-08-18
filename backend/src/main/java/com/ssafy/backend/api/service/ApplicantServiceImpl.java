@@ -85,6 +85,12 @@ public class ApplicantServiceImpl implements  ApplicantService{
         return list;
     }
 
+    @Override
+    public List<ApplicantState> getApplicantState(int boardNo) {
+        List<ApplicantState> list = applicantStateRepository.findByDebateBoardBoardNo(boardNo);
+        return list;
+    }
+
     //boardNo로 찾은 보드에 현재 승인된 인원수 count
     @Override
     public long countCurrentApplicantByBoardNo(int boardNo) {

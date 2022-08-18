@@ -21,4 +21,7 @@ public interface ApplicantStateRepository extends JpaRepository<ApplicantState,I
 
     @Query(value = "SELECT DISTINCT COUNT(*) FROM ApplicantState a join a.debateBoard d where d.boardNo = :boardNo AND a.accept = 1")
     Long getCountOfCurrentApplicant(int boardNo);
+
+
+    List<ApplicantState> findByDebateBoardBoardNo(int boardNo);
 }
