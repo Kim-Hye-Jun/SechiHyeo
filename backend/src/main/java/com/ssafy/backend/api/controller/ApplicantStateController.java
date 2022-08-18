@@ -44,7 +44,7 @@ public class ApplicantStateController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<ArrayList<ApplicantRes>> getApplicantState(@RequestParam int board_no){
+    public ResponseEntity<ArrayList<ApplicantRes>> getApplicantState(@PathVariable int board_no){
         List<ApplicantState> list=applicantService.getApplicantState(board_no);
         ArrayList<ApplicantRes> arrayList=new ArrayList<>();
         if(list==null){
@@ -111,7 +111,7 @@ public class ApplicantStateController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 접근"),
     })
-    public ResponseEntity<? extends BaseResponseBody> deleteApplicantState(@RequestParam int apply_no){
+    public ResponseEntity<? extends BaseResponseBody> deleteApplicantState(@PathVariable int apply_no){
         if(applicantService.deleteApplicant(apply_no)) {return ResponseEntity.status(200).body(BaseResponseBody.of(200,"성공"));}
         else {return ResponseEntity.status(400).body(BaseResponseBody.of(400,"잘못된 접근입니다"));}
     }
