@@ -1,5 +1,6 @@
 <template>
   <img
+    style="height: 80%"
     class="thumbnail"
     :src="thumbnailSrc"
     alt="서버에서 이미지를 불러오지 못했습니다."
@@ -26,5 +27,6 @@ export default defineComponent({
 .thumbnail {
   /* border: 3px solid black; */
   /* border-radius: 1em; */
+  /* height: 175px; */
 }
 </style>
