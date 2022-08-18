@@ -225,14 +225,14 @@ a {
   align-items: center;
   gap: 8px;
   line-height: 1;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 700;
+  /* font-family: "Times New Roman", Times, serif; */
+  /* font-weight: 700; */
   font-size: 1.125;
   color: #000000;
 }
 .modal-container-body {
   padding: 24px 32px 51px;
-  font-family: serif;
+  /* font-family: serif; */
   overflow-y: auto;
   color: #000000;
 }
@@ -253,7 +253,7 @@ a {
   border: 0;
   font-weight: 600;
   font-size: 20px;
-  font-family: "Times New Roman", Times, serif;
+  /* font-family: "Times New Roman", Times, serif; */
   cursor: pointer;
   transition: 0.15s ease;
 }
@@ -366,9 +366,9 @@ a {
   top: -20px;
   left: -50px;
   width: 120px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 600;
+  /* font-weight: 600; */
   font-size: 16px;
   text-align: left;
   line-height: 34px;
@@ -380,9 +380,9 @@ a {
   display: inline-block;
   top: -20px;
   width: 270px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 600;
+  /* font-weight: 600; */
   font-size: 16px;
   text-align: left;
   line-height: 34px;
@@ -395,9 +395,9 @@ a {
   top: -20px;
   right: -50px;
   width: 100px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 600;
+  /* font-weight: 600; */
   font-size: 16px;
   text-align: left;
   line-height: 34px;
@@ -411,9 +411,9 @@ a {
   height: 240px;
   top: -60px;
   left: -34px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 800;
+  /* font-weight: 800; */
   font-size: 20px;
   color: #000000;
   border-right: 3px solid #ddd;
