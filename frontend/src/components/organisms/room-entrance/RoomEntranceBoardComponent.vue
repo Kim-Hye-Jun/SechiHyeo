@@ -173,7 +173,7 @@ export default defineComponent({
 <style scoped>
 .grid {
   top: 10%;
-  position: relative;
+  position: absolute;
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -181,6 +181,7 @@ export default defineComponent({
   opacity: 1;
   row-gap: 5em;
   column-gap: 3em;
+  margin: 50px;
 }
 
 /* ?#### */
