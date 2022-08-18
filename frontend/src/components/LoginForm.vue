@@ -75,7 +75,7 @@
               />
               <br />
               <button
-                class="btn btn-primary btn-sm border-0"
+                class="btn btn-outline-primary btn-lg"
                 type="button"
                 @click="login"
               >
@@ -84,16 +84,16 @@
             </form>
           </div>
           <div class="nomember">
-            <p class="text-center">
-              회원이 아니신가요?
+            <p class="text-center">회원이 아니신가요?</p>
+            <div class="text-center">
               <button
-                class="btn btn-primary signup-btn"
+                class="btn btn-outline-primary btn-lg signup-btn"
                 type="button"
                 @click="moveToSignin"
               >
                 회원가입
               </button>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -133,7 +133,6 @@ export default defineComponent({
           await this.loginMember(this.member);
           this.$router.push("/main");
         } catch (error) {
-          console.log(error);
           alert("로그인 정보를 확인해주세요!");
         } finally {
           this.initForm();
@@ -214,7 +213,7 @@ body {
   background-color: rgb(232, 240, 254);
 }
 
-.btn {
+/* .btn {
   font-size: 22px;
   background-color: #0278ae;
   border: none;
@@ -225,7 +224,7 @@ body {
 
 .btn:hover {
   background-color: blue;
-}
+} */
 
 .nomember {
   background-color: #e4dede;

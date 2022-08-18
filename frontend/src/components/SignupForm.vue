@@ -428,6 +428,11 @@ body {
   font-family: "Lato", sans-serif;
 }
 
+.container {
+  margin-top: 70px;
+  margin-bottom: 25%;
+}
+
 .signUp-content {
   max-width: 600px;
   width: 100%;
@@ -439,6 +444,7 @@ body {
   margin-left: -200px;
   margin-top: -286px;
   border-radius: 8px;
+  /* padding-bottom: 70px; */
 }
 
 .logo {
