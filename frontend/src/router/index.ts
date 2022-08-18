@@ -72,7 +72,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/main",
     name: "Main",
-    component: () => import("@/views/MainPage.vue"),
+    component: () => import("@/views/MainPage_2.vue"),
     // meta: { auth: true }, //라우터 네비게이터 가드 확인용 변수
   },
   {
