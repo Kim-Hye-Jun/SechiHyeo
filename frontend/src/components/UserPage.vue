@@ -76,12 +76,12 @@
 
 <script lang="ts">
 import Background from "@/components/common/Background.vue";
-import UserPage_user from "@/components/organisms/UserPage_user.vue";
-import UserPage_record from "@/components/organisms/UserPage_record.vue";
-import UserPage_intro from "@/components/organisms/UserPage_intro.vue";
-import UserPage_recruit from "@/components/organisms/UserPage_recruit.vue";
-import UserPage_apply from "@/components/organisms/UserPage_apply.vue";
-import UserPage_set from "@/components/organisms/UserPage_set.vue";
+import UserPage_user from "@/components/organisms/user-Page/UserPage_user.vue";
+import UserPage_record from "@/components/organisms/user-Page/UserPage_record.vue";
+import UserPage_intro from "@/components/organisms/user-Page/UserPage_intro.vue";
+import UserPage_recruit from "@/components/organisms/user-Page/UserPage_recruit.vue";
+import UserPage_apply from "@/components/organisms/user-Page/UserPage_apply.vue";
+import UserPage_set from "@/components/organisms/user-Page/UserPage_set.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   components: {

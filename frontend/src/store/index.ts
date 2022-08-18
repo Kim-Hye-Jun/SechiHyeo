@@ -89,13 +89,11 @@ export default createStore({
     },
     applicant_recruit_array: [],
     applicant_recruit: {
-      board_no: 0,
       order: 0,
       side: 0,
     },
     applicant_apply_array: [],
     applicant_apply: {
-      board_no: 0,
       order: 0,
       side: 0,
     },
@@ -103,6 +101,11 @@ export default createStore({
       board_no: 0,
       order: 0,
       side: 0,
+    },
+    applies: [],
+    apply: {
+      nickname: "",
+      applicant_no: 0,
     },
   },
   getters: {
@@ -165,6 +168,11 @@ export default createStore({
       console.log(state.applicant_apply);
       state.applicant_apply_array = payload.applicant;
       console.log(state.applicant_apply);
+    },
+    GETAPPLY: (state, payload) => {
+      console.log("33");
+      state.applies = payload.applicant;
+      console.log(state.apply);
     },
   },
   actions: {
@@ -269,12 +277,29 @@ export default createStore({
           });
       }
     },
+    GETAPPLY: (store, board_no) => {
+      axios
+        .get(`${API_BASE_URL}debate-apply/${board_no}`, {
+          headers: {
+            "access-token": store.state.token,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          store.commit("GETAPPLY", {
+            applicant: res.data,
+          });
+        })
+        .then(() => {
+          router.push(`/userPage`);
+        });
+    },
     POSTAPPLY: (store, applicant) => {
       // postApply().then((res: any) => {
       //   console.log(res.data);
       // });
       axios
-        .post(`${API_BASE_URL}debate-apply`, applicant, {
+        .post(`${API_BASE_URL}debate-apply/`, applicant, {
           headers: {
             "access-token": store.state.token,
           },
@@ -285,6 +310,21 @@ export default createStore({
         .then(() => {
           alert("토론 신청이 완료되었습니다!!");
           router.push(`/debate-board/`);
+        });
+    },
+    PUTAPPLY: (store, applicant) => {
+      axios
+        .put(`${API_BASE_URL}debate-apply/`, applicant, {
+          headers: {
+            "access-token": store.state.token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .then(() => {
+          alert("게시글 수정이 완료되었습니다!!");
+          router.push(`/userPage/`);
         });
     },
     //MyPage Action

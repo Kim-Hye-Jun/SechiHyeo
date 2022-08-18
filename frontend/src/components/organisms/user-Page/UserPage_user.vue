@@ -54,12 +54,12 @@ export default defineComponent({
     //   };
     // },
     level() {
-      return this.memberinfo.exp / 100;
+      return this.memberinfo.exp / 100 + 1;
       // return Math.floor(lv);
     },
-    // exp() {
-    //   return this.memberinfo.exp % 87;
-    // },
+    exp() {
+      return this.memberinfo.exp % 98;
+    },
     // expBar() {
     //   return 100 - (this.memberinfo.exp % 87);
     // },
