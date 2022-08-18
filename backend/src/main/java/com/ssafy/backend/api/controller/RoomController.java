@@ -132,25 +132,27 @@ public class RoomController {
     }
 
 
-    // 11.
+    // 11. 진영, 순서 설정 변경
     @PutMapping("/sideOrder")
     public ResponseEntity updateUserSideOrder(@RequestBody RoomUpdateUserSideOrderReq roomUpdateUserSideOrderReq) {
         roomService.sendSignal(roomUpdateUserSideOrderReq);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    // 12.
+    // 12. 토론 종료 후 사용자 정보 갱신
     @PutMapping("/{room_id}/end")
     public ResponseEntity updateDebateInfo(@PathVariable String room_id) {
         roomService.updateDebateInfo(room_id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 13. 현재 방 개수 반환
     @GetMapping("/pageNum")
     public ResponseEntity<Integer> getPages() {
         return ResponseEntity.ok(roomService.getPageNumber());
     }
 
+    // 14. 현재 방 전체 정보 반환
     @GetMapping("/roomInfo")
     public ResponseEntity<List<Room>> getAllRoomInfo() {
         return ResponseEntity.ok(roomService.getAllRoomInfo());
