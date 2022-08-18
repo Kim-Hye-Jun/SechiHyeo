@@ -72,9 +72,9 @@ public class RoomController {
     }
 
     // 5. 자료 공유 관련 이미지 파일 주소 반환
-    @PostMapping("/uploadProof")
-    public ResponseEntity<String> uploadProof (@RequestPart MultipartFile proof) {
-        String proofUrl = roomService.uploadProof(proof);
+    @PostMapping("/{room_id}/uploadProof")
+    public ResponseEntity<String> uploadProof (@PathVariable String room_id, @RequestPart MultipartFile proof) {
+        String proofUrl = roomService.uploadProof(room_id, proof);
         return ResponseEntity.ok(proofUrl);
     }
 

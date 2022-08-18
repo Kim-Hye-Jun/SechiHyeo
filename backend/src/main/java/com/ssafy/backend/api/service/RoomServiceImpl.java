@@ -167,6 +167,8 @@ public class RoomServiceImpl implements RoomService {
                 .curNumOfPeople(0)
 //                .thumbnail(thumbnailPath + saveName)
                 .thumbnail(null)
+                .thumbnailName("")
+                .proofName(new ArrayList<String>())
                 .debateTopic(roomCreateReq.getDebateTopic())
                 .debateType(roomCreateReq.getDebateType())
                 .password((roomCreateReq.getPassword()))
@@ -220,6 +222,7 @@ public class RoomServiceImpl implements RoomService {
         String fileName = thumbnail.getOriginalFilename(); // 원본 파일 이름
         String saveName = UUID.randomUUID() + "_" + fileName; // UUID로 저장(파일명 중복 방지)
 
+
 //        썸네일 업로드 테스트용
 //        String thumbnailPath = System.getProperty("user.dir") + "/src/main/resources/static/thumbnail";
         try {
@@ -231,6 +234,8 @@ public class RoomServiceImpl implements RoomService {
 
             //만들어진 방 객체를 찾아 thumbnail을 수정 (roomWithSession, roomList에서 같은 Room 객체 사용하므로, 하나만 수정)
             roomWithSession.get(roomId).getRoom().setThumbnail(fileUrl + thumbnail1Dir + "/" + saveName);
+            //이미지 이름 저장
+            roomWithSession.get(roomId).getRoom().setThumbnailName(saveName);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -238,7 +243,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String uploadProof(MultipartFile proof) {
+    public String uploadProof(String roomId, MultipartFile proof) {
         //자료 파일 업로드 폴더명
         String proofDir = "proof";
 
@@ -256,6 +261,9 @@ public class RoomServiceImpl implements RoomService {
             proof.transferTo(file);
 
             proofUrl = fileUrl + proofDir + "/" + saveName;
+
+            //방 객체를 찾아 업로드한 자료 파일 이름 저장
+            roomWithSession.get(roomId).getRoom().getProofName().add(saveName);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -520,6 +528,20 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoom(String roomId) {
+        //방 객체 찾아오기
+        Room room = roomWithSession.get(roomId).getRoom();
+
+        //썸네일 이미지 파일 및 자료 공유용 파일 삭제
+        if(room.getThumbnailName() != "") {
+            File deleteThumbFile = new File(fileUploadPath + "thumbnail", room.getThumbnailName());
+            if (deleteThumbFile.exists()) deleteThumbFile.delete();
+        }
+
+        for (int i = 0; i < room.getProofName().size(); i++) {
+            File deleteProofFile = new File(fileUploadPath + "proof", room.getProofName().get(i));
+            if (deleteProofFile.exists()) deleteProofFile.delete();
+        }
+
         //session 삭제
         List<Session> sessionList = openVidu.getActiveSessions();
         for (int i = 0; i < sessionList.size(); i++) {
