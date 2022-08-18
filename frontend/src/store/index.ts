@@ -143,7 +143,8 @@ export default createStore({
     },
     //BOARD Mutation
     BOARDALL: (state, payload) => {
-      state.boards = payload.boards;
+      console.log(payload);
+      state.boards = payload.boards.reverse();
       console.log(state.boards);
     },
     BOARDONE: (state, payload) => {
@@ -191,13 +192,14 @@ export default createStore({
     },
     // BOARD Action
     BOARDALL: (store) => {
-      axios
+      return axios
         .get(`${API_BASE_URL}debate-board`, {
           headers: {
             "access-token": store.state.token,
           },
         })
         .then((res) => {
+          console.log(res.data);
           store.commit("BOARDALL", {
             boards: res.data,
           });
@@ -228,7 +230,7 @@ export default createStore({
       // });
     },
     BOARDWRITE: (store, board) => {
-      axios
+      return axios
         .post(`${API_BASE_URL}debate-board/`, board, {
           headers: {
             "access-token": store.state.token,
@@ -239,7 +241,8 @@ export default createStore({
         })
         .then(() => {
           alert("게시글 등록이 완료되었습니다!!");
-          router.push(`/`);
+          // router.push(`/debate-board`);
+          store.dispatch("BOARDALL");
         });
     },
     BOARDUPDATE: (store, board) => {
