@@ -41,7 +41,7 @@ export default defineComponent({
 }
 p {
   font-size: 20px;
-  color: white;
+  color: #3a3897;
   padding-left: 25%;
   overflow: hidden;
 }

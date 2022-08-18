@@ -1,6 +1,7 @@
 <template>
   <div class="debateSide__flex__container">
     <div class="red side">{{ sideA }}</div>
+    &nbsp;&nbsp;
     <div class="blue side">{{ sideB }}</div>
   </div>
 </template>
@@ -37,12 +38,14 @@ export default defineComponent({
 
   text-align: center;
   font-size: 30px;
-  color: white;
+  color: #3a3897;
+
+  padding-top: 7px;
 }
 .red {
-  background: rgb(252 68 68);
+  background: #ffe2e2;
 }
 .blue {
-  background: #5ba5ff;
+  background: #e1eeff;
 }
 </style>

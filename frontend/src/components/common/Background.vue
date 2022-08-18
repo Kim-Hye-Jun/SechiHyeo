@@ -15,9 +15,11 @@ export default {};
   background: -webkit-linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
   background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
   background-size: cover;
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
+  /* height: 100vh;
+  width: 100vw; */
+  height: 100%;
+  width: 100%;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: -3;

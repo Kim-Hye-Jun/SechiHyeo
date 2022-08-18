@@ -433,7 +433,7 @@ body {
   width: 100%;
   height: 1100px;
   z-index: 1;
-  position: absolute;
+  position: relative;
   top: 38%;
   left: 47%;
   margin-left: -200px;
