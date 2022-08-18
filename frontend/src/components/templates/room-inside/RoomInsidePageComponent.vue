@@ -372,6 +372,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
+
 body {
   margin: 0;
   background: #0e0e23;
