@@ -265,10 +265,11 @@ export default defineComponent({
   border-radius: 6px;
 
   width: 80%;
+  margin-bottom: 20px;
 }
 .debateOrder {
   font-size: 30px;
-  color: rgb(72, 253, 141);
+  color: white;
   padding-top: 5px;
   padding-left: 15%;
   padding-right: 5%;
@@ -276,8 +277,9 @@ export default defineComponent({
 .timer {
   width: 30%;
   font-size: 60px;
-  color: yellow;
+  color: white;
 }
 #timerBtn {
+  margin: 3px;
 }
 </style>

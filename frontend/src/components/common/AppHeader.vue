@@ -9,9 +9,9 @@
     <div class="navigations">
       <!-- 1 -->
       <template v-if="isLogin">
-        <router-link to="/entrance">방 조회</router-link>
-        <router-link to="/debate-board">토론 모집 게시판</router-link>
-        <router-link to="/userPage">Mypage</router-link>
+        <router-link to="/entrance">Room &nbsp;&nbsp;</router-link>|
+        <router-link to="/debate-board">Board &nbsp;&nbsp;</router-link>|
+        <router-link to="/userPage">Mypage &nbsp;&nbsp;</router-link>|
         <a href="javascript:;" @click="logoutUser" class="logout-button">
           Logout
         </a>
@@ -50,15 +50,21 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.username {
+* {
+  font-family: "locus_sangsang";
+  text-decoration: none;
   color: white;
 }
+/* .username {
+  color: white;
+} */
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: radial-gradient(circle, #141834 0%, #13162f 100%);
+  background-color: rgba(0, 38, 255, 0.121);
   z-index: 3;
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.05);
   position: fixed;
