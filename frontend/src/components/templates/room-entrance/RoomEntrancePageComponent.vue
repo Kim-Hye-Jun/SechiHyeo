@@ -4,12 +4,14 @@
     <!-- <room-entrance-search-input-component
       @getSearchValue="updateRooms"
     ></room-entrance-search-input-component> -->
-    <suspense>
-      <room-entrance-board-component
-        :pageNum="nowPage"
-      ></room-entrance-board-component>
-    </suspense>
-    <nav id="pagenation-bar" aria-label="Page navigation example">
+    <div class="sus">
+      <suspense>
+        <room-entrance-board-component
+          :pageNum="nowPage"
+        ></room-entrance-board-component>
+      </suspense>
+    </div>
+    <nav id="pagenation-bar" aria-label="Page navigation example" class="navPg">
       <!-- <ul class="pagination">
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Previous">
@@ -412,6 +414,15 @@ export default defineComponent({
 <style scoped>
 body {
   background: rgb(7, 8, 78);
+}
+
+.sus {
+  position: relative;
+}
+
+.navPg {
+  position: relative;
+  margin-top: 20px;
 }
 
 .modal-content {

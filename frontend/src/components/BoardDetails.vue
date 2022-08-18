@@ -3,26 +3,33 @@
   <div class="modal-container">
     <header class="modal-container-header">
       <h1 class="modal-container-title">
-        토론 주제 : {{ debate_board.board.debate_topic }}
+        {{ debate_board.board.debate_topic }}
       </h1>
     </header>
     <div class="modal-container-body">
       <h3 class="board-master">작성자 : {{ debate_board.board.nickname }}</h3>
+      <br />
       <h3 class="board-day">
         토론 일시 : {{ Unix_timestamp(debate_board.board.debate_time) }}
       </h3>
+      <br />
       <h3 class="board-count">
         인원 :
         <!-- {{ debate_board.board.current_applicant }}/ -->
-        {{ debate_board.board.max_applicant + "명" }}
+        {{ debate_board.board.max_applicant }} 명
       </h3>
+      <hr />
+      <br />
       <!-- <h2 class="board-summary">개요</h2> -->
       <div class="board-summary-content">
         <li class="board-a">A 진영 : {{ debate_board.board.a_opinion }}</li>
         <li class="board-b">B 진영 : {{ debate_board.board.b_opinion }}</li>
+        <hr />
+        <br />
         <div class="board-summary-in">
           {{ debate_board.board.board_content }}
         </div>
+        <hr />
       </div>
       <!-- <div class="wrapper">
         <h4 style="display: inline-block">A</h4>
@@ -42,6 +49,7 @@
           진영</label
         >
       </div>
+      <br />
       <div>
         <label style="margin-right: 23px"
           ><input type="radio" v-model="applicant.order" value="1" /> 순서
@@ -60,6 +68,7 @@
           <input type="reset" value="Reset" />
         </p> -->
       </div>
+      <hr />
       <div class="board-reply-box">
         <h3 class="board-reply">댓글</h3>
         <!-- <h5 class="board-reply-count">{{ 0 }} 개</h5> -->
@@ -349,37 +358,40 @@ a {
   }
 }
 .modal-container-header {
-  padding-top: 12px;
+  /* padding-top: 12px; */
   padding: 16px 32px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 2px solid rgb(0, 32, 68);
   background: #d7dde8;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 .modal-container-title {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   gap: 8px;
   line-height: 1;
   /* font-family: "Times New Roman", Times, serif; */
   /* font-weight: bold; */
   font-size: 1;
   color: #000000;
+  margin-top: 5px;
 }
 .modal-container-body {
-  margin-left: 30px;
+  background: #d7dde8;
+  /* margin-left: 30px; */
   padding: 24px 32px 48px;
   /* font-family: serif; */
   overflow-y: auto;
   color: #000000;
 }
 .modal-container-footer {
+  background: #d7dde8;
   padding: 20px 32px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  border-top: 1px solid #ddd;
+  border-top: 2px solid rgb(0, 32, 68);
   gap: 12px;
   position: relative;
 }
@@ -511,7 +523,8 @@ a {
   text-align: left;
   line-height: 34px;
   color: #000000;
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #ddd; */
+  margin-top: 10px;
 }
 .board-day {
   position: relative;
@@ -525,7 +538,7 @@ a {
   text-align: left;
   line-height: 34px;
   color: #000000;
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #ddd; */
 }
 .board-count {
   position: relative;
@@ -540,7 +553,7 @@ a {
   text-align: left;
   line-height: 34px;
   color: #000000;
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #ddd; */
 }
 .board-summary {
   position: relative;
@@ -554,13 +567,14 @@ a {
   /* font-weight: 800; */
   font-size: 20px;
   color: #000000;
-  border-right: 3px solid #ddd;
+  /* border-right: 3px solid #ddd; */
 }
 .board-summary-content {
   position: relative;
   display: inline-block;
   width: 450px;
   height: 200px;
+  list-style: none;
 }
 .board-a {
   position: relative;
@@ -570,8 +584,8 @@ a {
   top: -30px;
   left: 0px;
   font-style: initial;
-  font-weight: bold;
-  font-size: 16px;
+  /* font-weight: bold; */
+  font-size: 20px;
   text-align: left;
   line-height: 34px;
   color: #000000;
@@ -584,29 +598,29 @@ a {
   top: -30px;
   left: 0px;
   font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
+  /* font-weight: bold; */
+  font-size: 20px;
   text-align: left;
   line-height: 34px;
   color: #000000;
-  border-bottom: 3px solid #ddd;
+  /* border-bottom: 3px solid #ddd; */
 }
 .board-summary-in {
   position: relative;
   /* display: inline-block; */
   width: 400px;
-  height: 160px;
+  /* height: 100px; */
   top: -20px;
   left: 10px;
   text-align: left;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: larger;
 }
 .board-reply-box {
   position: relative;
   display: inline-block;
   width: 580px;
-  border-bottom: 3px solid #ddd;
+  /* border-bottom: 3px solid #ddd; */
 }
 .board-reply {
   position: relative;
