@@ -142,6 +142,9 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
 .hidden {
   display: none;
 }

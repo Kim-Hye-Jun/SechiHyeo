@@ -1,7 +1,7 @@
 <template>
   <div class="userpage-content-set-form-topic">회원정보 수정</div>
   <div style="position: absolute">
-    <div style="margin-left: 80px; height: 150px">empty</div>
+    <div style="margin-left: 80px; height: 150px"></div>
     <image-upload></image-upload>
   </div>
   <!-- <div class="userpage-content-set-form-image"></div> -->
@@ -98,6 +98,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
 .userpage-content-set-form-intro {
   position: absolute;
   width: 400px;
@@ -125,9 +128,9 @@ export default defineComponent({
   height: 40px;
   bottom: 30px;
   right: 80px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   font-size: 20px;
   line-height: 24px;
   color: #ffffff;
@@ -142,9 +145,9 @@ export default defineComponent({
   background: #070707;
   border: #ffffff solid 1px;
   border-radius: 5px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 16px;
   line-height: 36px;
   color: #ffffff;
@@ -164,9 +167,9 @@ export default defineComponent({
   background: #070707;
   border: #ffffff solid 1px;
   border-radius: 5px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 16px;
   line-height: 36px;
   color: #ffffff;
@@ -184,9 +187,9 @@ export default defineComponent({
   position: relative;
   left: 34%;
   top: 10px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 30px;
   color: #ffffff;
 }
@@ -337,9 +340,9 @@ export default defineComponent({
   height: 24px;
   left: -50px;
   top: 160px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-size: 22px;
+  font-size: 20px;
   color: #000000;
 }
 .userpage-content-set-form-email {
@@ -348,9 +351,9 @@ export default defineComponent({
   height: 24px;
   left: -50px;
   top: 130px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-size: 22px;
+  font-size: 20px;
   color: #000000;
 }
 .userpage-content-set-form-pw {
@@ -359,9 +362,9 @@ export default defineComponent({
   height: 24px;
   left: -50px;
   top: 40px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-size: 22px;
+  font-size: 20px;
   color: #000000;
 }
 .userpage-content-set-form-pw2 {
@@ -370,9 +373,9 @@ export default defineComponent({
   height: 24px;
   left: -50px;
   top: 70px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-size: 22px;
+  font-size: 20px;
   color: #000000;
 }
 .userpage-content-set-form-pw3 {
@@ -381,9 +384,9 @@ export default defineComponent({
   height: 24px;
   left: -50px;
   top: 100px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-size: 22px;
+  font-size: 20px;
   color: #000000;
 }
 .userpage-content-set-form-id {
@@ -392,9 +395,9 @@ export default defineComponent({
   height: 24px;
   left: -50px;
   top: 10px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-size: 22px;
+  font-size: 20px;
   color: #000000;
 }
 </style>

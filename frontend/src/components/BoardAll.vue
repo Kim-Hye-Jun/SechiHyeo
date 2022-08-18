@@ -238,14 +238,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap"); */
 * {
   margin: 0;
+  font-family: "locus_sangsang";
 }
 .boards {
   text-align: center;
-  font-family: "Black Han Sans";
+  /* font-family: "Black Han Sans"; */
 }
 .hidden {
   display: none;
@@ -283,8 +284,8 @@ export default defineComponent({
   font-size: 80px;
   text-align: center;
   color: #ffffff;
-  font-style: italic;
-  font-family: "Raleway", sans-serif;
+  /* font-style: italic; */
+  /* font-family: "Raleway", sans-serif; */
 }
 .boards-title::after {
   content: "토론 모집 게시판";
@@ -311,8 +312,8 @@ export default defineComponent({
   color: #03e9f4;
   text-decoration: none;
   text-transform: uppercase;
-  font-family: "Raleway", sans-serif;
-  font-weight: bold;
+  /* font-family: "Raleway", sans-serif; */
+  /* font-weight: bold; */
   font-size: 24px;
   transition: 0.5s;
   letter-spacing: 4px;
@@ -429,9 +430,9 @@ div .span-board:nth-child(4) {
   position: absolute;
   left: 0%;
   right: 85%;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 500;
+  /* font-weight: 500; */
   font-size: 18px;
   line-height: 44px;
   color: #ffffff;
@@ -439,9 +440,9 @@ div .span-board:nth-child(4) {
 .boards-content-write-title {
   position: absolute;
   left: 15%;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 500;
+  /* font-weight: 500; */
   font-size: 18px;
   line-height: 44px;
   color: #ffffff;
@@ -450,9 +451,9 @@ div .span-board:nth-child(4) {
   position: absolute;
   left: 90%;
   right: 0%;
-  font-family: "Inter";
-  font-style: italic;
-  font-weight: 500;
+  /* font-family: "Inter"; */
+  /* font-style: italic; */
+  /* font-weight: 500; */
   font-size: 18px;
   line-height: 44px;
   color: #ffffff;
@@ -568,14 +569,14 @@ a {
   align-items: center;
   gap: 8px;
   line-height: 1;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 700;
+  /* font-family: "Times New Roman", Times, serif; */
+  /* font-weight: 700; */
   font-size: 1.125;
   color: #000000;
 }
 .modal-container-body {
   /* padding: 24px 32px 51px; */
-  font-family: serif;
+  /* font-family: serif; */
   overflow-y: auto;
   color: #000000;
 }
@@ -675,9 +676,9 @@ a {
   margin-top: 5px;
   margin-left: 10px;
   width: 100px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 600;
+  /* font-weight: 600; */
   font-size: 16px;
   text-align: left;
   line-height: 34px;
@@ -691,9 +692,9 @@ a {
   margin-top: 5px;
   margin-left: 50px;
   margin-bottom: 5px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 600;
+  /* font-weight: 600; */
   font-size: 16px;
   text-align: left;
   line-height: 34px;

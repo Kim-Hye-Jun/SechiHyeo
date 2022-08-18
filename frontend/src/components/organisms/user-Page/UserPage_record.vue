@@ -46,6 +46,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
 .userpage-content-record-time-box {
   position: relative;
   width: 580px;
@@ -53,9 +56,9 @@ export default defineComponent({
   transform: translate(-50%);
   top: 20px;
   font-weight: bold;
-  font-family: "Montserrat", sans-serif;
+  /* font-family: "Montserrat", sans-serif; */
   font-style: normal;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 30px;
   text-align: center;
   color: #070707;
@@ -116,7 +119,7 @@ export default defineComponent({
   width: 700px;
   height: 90px;
   top: 5%;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
   font-size: 36px;
   text-align: center;
@@ -164,9 +167,9 @@ export default defineComponent({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: bolder;
+  /* font-weight: bolder; */
   font-size: 32px;
   line-height: 44px;
   text-align: center;

@@ -19,6 +19,9 @@ export default defineComponent({
 </script>
 
 <style>
+* {
+  font-family: "locus_sangsang";
+}
 body {
   -ms-overflow-style: none;
 }

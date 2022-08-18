@@ -27,14 +27,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
 .userpage-content-intro-text {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: bolder;
+  /* font-weight: bolder; */
   font-size: 40px;
   line-height: 44px;
   text-align: center;
