@@ -2,6 +2,7 @@
   <div class="userpage">
     <Background></Background>
     <UserPage_user></UserPage_user>
+    <!-- 유저 버튼 창 -->
     <div>
       <div
         class="userpage-content-button"
@@ -44,6 +45,7 @@
         <div class="transition"></div>
       </div>
     </div>
+    <!-- 유저 컨텐츠 -->
     <div
       class="userpage-content-record"
       :class="[record === true ? '' : 'hidden']"

@@ -87,11 +87,21 @@ export default createStore({
       board_title: "",
       max_applicant: 0,
     },
+
+    // accept: 2
+    // board_finished: false
+    // board_no: 17
+    // current_applicant: 0
+    // debate_topic: "토론은?"
+    // max_applicant: 4
+    // nickname: "파워레인지"
+
     applicant_recruit_array: [],
     applicant_recruit: {
       order: 0,
       side: 0,
     },
+
     applicant_apply_array: [],
     applicant_apply: {
       order: 0,
@@ -160,7 +170,8 @@ export default createStore({
     },
     DEBATERECRUIT: (state, payload) => {
       console.log("11");
-      console.log(state.applicant_recruit);
+      // console.log(state.applicant_recruit);
+      console.log(payload.applicant);
       state.applicant_recruit_array = payload.applicant;
       console.log(state.applicant_recruit);
     },
@@ -173,7 +184,7 @@ export default createStore({
     GETAPPLY: (state, payload) => {
       console.log("33");
       state.applies = payload.applicant;
-      console.log(state.apply);
+      console.log(payload.applicant);
     },
   },
   actions: {
@@ -294,7 +305,7 @@ export default createStore({
           });
         })
         .then(() => {
-          router.push(`/userPage`);
+          router.push(`/userPage`); //이건 뭐지 갱신용인가?
         });
     },
     POSTAPPLY: (store, applicant) => {
