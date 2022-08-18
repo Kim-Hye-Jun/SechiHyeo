@@ -3,6 +3,7 @@
     <Background @click="modalOut"></Background>
     <div class="boards-title">토론 모집 게시판</div>
     <div class="boards-content">
+      <!-- 게시판 버튼 -->
       <div
         class="boards-content-text"
         @click="academyClick"
@@ -14,6 +15,7 @@
         <span class="span-board"></span>
         게시판
       </div>
+      <!-- 글쓰기 버튼 -->
       <div
         class="boards-content-text"
         style="filter: hue-rotate(270deg)"
@@ -26,27 +28,78 @@
         <span class="span-board"></span>
         <span class="span-board"></span>
       </div>
+      <!-- 글 목록 -->
       <div class="boards-content-write">
         <!-- :class="[academy === true ? '' : 'hidden']" -->
         <div
           class="boards-content-write-box1"
           @click="moveToDetail(debate_board.board_no)"
-          v-for="(debate_board, board_no) in boards.slice(0, 8)"
+          v-for="(debate_board, board_no) in boards.slice(
+            nowPage * 10,
+            boards.length > nowPage * 10 + 10
+              ? nowPage * 10 + 10
+              : boards.length
+          )"
           :key="board_no"
         >
           <div class="boards-content-write-no">
-            {{ debate_board.board_no }}
+            <!-- 그냥 인덱스로 표현하기로 결정 -->
+            {{ boards.length - nowPage * 10 - board_no }}
           </div>
           <div class="boards-content-write-title">
             {{ debate_board.board_title }}
           </div>
           <div class="boards-content-write-count">
-            {{ debate_board["current_applicant"] }}/{{
-              debate_board.max_applicant
-            }}
+            <!-- {{ debate_board["current_applicant"] }}/ -->
+            {{ debate_board.max_applicant + "인" }}
           </div>
         </div>
       </div>
+      <!-- 페이지네이션 -->
+      <div class="btn-cover">
+        <button
+          :disabled="nowPage === 0"
+          @click="prevPage"
+          class="btn btn-outline-secondary border-radius"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-left"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+            />
+          </svg>
+        </button>
+        <span class="page-count"
+          >&nbsp; {{ nowPage + 1 }} / {{ pageCount }} &nbsp;
+        </span>
+        <button
+          :disabled="nowPage >= pageCount - 1"
+          @click="nextPage"
+          class="btn btn-outline-secondary border-radius"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-right"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+        </button>
+      </div>
+      <!-- 레이아웃용 -->
       <div class="boards-content-write">
         <!-- :class="[free === true ? '' : 'hidden']" -->
         <!-- <div
@@ -70,6 +123,7 @@
         </div> -->
       </div>
     </div>
+    <!-- 모달창 -->
     <div class="modalZero" :class="[modal === false ? 'hidden' : '']">
       <!-- <div @modalOut="modalOut"> -->
       <div>
@@ -133,8 +187,8 @@
             />
             <!-- </div> -->
             <div>
-              <button class="button modalOut" @click="modalOut">취소</button>
               <button class="button append" @click="boardWrite()">등록</button>
+              <button class="button modalOut" @click="modalOut">취소</button>
             </div>
           </div>
         </div>
@@ -175,18 +229,22 @@ export default defineComponent({
         b_opinion: "",
         max_applicant: 0,
       },
+      nowPage: 0,
+      pageCount: 1,
     };
   },
   computed: {
     ...mapState(["boards", "debate_board"]),
   },
   created() {
-    this.boardAll();
+    this.boardAll().then(() => {
+      this.pageCount = Math.floor(this.boards.length / 10) + 1;
+    });
   },
   methods: {
     ...mapActions(["BOARDALL", "BOARDWRITE", "BOARDONE"]),
     boardAll() {
-      this.BOARDALL();
+      return this.BOARDALL();
     },
     academyClick() {
       (this.academy = true), (this.free = false);
@@ -210,6 +268,15 @@ export default defineComponent({
       (this.academy = true), (this.free = false);
       console.log(this.modal);
     },
+    modalInit() {
+      this.board.board_title = "";
+      this.board.board_content = "";
+      this.board.debate_topic = "";
+      this.board.debate_time = "";
+      this.board.a_opinion = "";
+      this.board.b_opinion = "";
+      this.board.max_applicant = 0;
+    },
     typeAcademy(room: { debate_type: string }, filter: string) {
       if (room.debate_type === filter) {
         return true;
@@ -231,7 +298,17 @@ export default defineComponent({
         a_opinion: this.debate_board.a_opinion,
         b_opinion: this.debate_board.b_opinion,
         max_applicant: this.debate_board.max_applicant,
+      }).then(() => {
+        this.pageCount = Math.floor(this.boards.length / 10) + 1;
+        this.modalInit();
+        this.modalOut();
       });
+    },
+    nextPage() {
+      this.nowPage += 1;
+    },
+    prevPage() {
+      this.nowPage -= 1;
     },
   },
 });
@@ -242,6 +319,9 @@ export default defineComponent({
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
 * {
   margin: 0;
+}
+.page-count {
+  color: white;
 }
 .boards {
   text-align: center;
