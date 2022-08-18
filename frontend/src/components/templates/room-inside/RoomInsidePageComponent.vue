@@ -306,7 +306,7 @@ export default defineComponent({
       // 퇴실 서버에 request
       console.log(store.state.roomId, "disconnect");
       alert("LEAVE SESSION");
-      member2.get(`/${store.state.roomId}/disconnect`);
+      member2.get(`/sessions/${store.state.roomId}/disconnect`);
 
       if (store.state.session) store.state.session.disconnect();
       store.state.session = undefined;
