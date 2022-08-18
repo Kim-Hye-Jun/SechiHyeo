@@ -603,7 +603,7 @@ public class RoomServiceImpl implements RoomService {
         //if문으로 만약 배열의 모든 값들이 다 ""이면 roomWithParticipant, roomWithSession에서 해당 세션 정보 삭제
         if (!check) {
             roomWithParticipant.remove(roomId);
-            roomWithSession.remove(roomId);
+//            roomWithSession.remove(roomId);
             //세션 닫기
             this.deleteRoom(roomId);
         }
