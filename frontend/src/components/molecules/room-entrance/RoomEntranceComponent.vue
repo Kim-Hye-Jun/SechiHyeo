@@ -61,7 +61,7 @@ export default defineComponent({
 .flex-item {
   text-align: center;
   border-radius: 5px;
-  width: 12em;
+  /* width: 12em; */
   height: auto;
   overflow: hidden;
   color: #5ddcff;

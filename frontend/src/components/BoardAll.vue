@@ -6,6 +6,7 @@
       <!-- 게시판 버튼 -->
       <div
         class="boards-content-text"
+        style="cursor: pointer"
         @click="academyClick"
         :class="[academy === true ? 'academy' : 'no']"
       >
@@ -18,7 +19,7 @@
       <!-- 글쓰기 버튼 -->
       <div
         class="boards-content-text"
-        style="filter: hue-rotate(270deg)"
+        style="cursor: pointer"
         @click="freeClick(), modalIn()"
         :class="[free === true ? 'free' : 'no']"
       >
@@ -35,18 +36,16 @@
           class="boards-content-write-box1"
           @click="moveToDetail(debate_board.board_no)"
           v-for="(debate_board, board_no) in boards.slice(
-            nowPage * 10,
-            boards.length > nowPage * 10 + 10
-              ? nowPage * 10 + 10
-              : boards.length
+            nowPage * 8,
+            boards.length > nowPage * 8 + 8 ? nowPage * 8 + 8 : boards.length
           )"
           :key="board_no"
         >
           <div class="boards-content-write-no">
             <!-- 그냥 인덱스로 표현하기로 결정 -->
-            {{ boards.length - nowPage * 10 - board_no }}
+            {{ boards.length - nowPage * 8 - board_no }}
           </div>
-          <div class="boards-content-write-title">
+          <div class="boards-content-write-title" style="cursor: pointer">
             {{ debate_board.board_title }}
           </div>
           <div class="boards-content-write-count">
@@ -238,7 +237,7 @@ export default defineComponent({
   },
   created() {
     this.boardAll().then(() => {
-      this.pageCount = Math.floor(this.boards.length / 10) + 1;
+      this.pageCount = Math.floor(this.boards.length / 8) + 1;
     });
   },
   methods: {
@@ -299,7 +298,7 @@ export default defineComponent({
         b_opinion: this.debate_board.b_opinion,
         max_applicant: this.debate_board.max_applicant,
       }).then(() => {
-        this.pageCount = Math.floor(this.boards.length / 10) + 1;
+        this.pageCount = Math.floor(this.boards.length / 8) + 1;
         this.modalInit();
         this.modalOut();
       });
