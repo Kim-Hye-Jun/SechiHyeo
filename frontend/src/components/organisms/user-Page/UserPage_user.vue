@@ -68,6 +68,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
 .userpage-user {
   position: absolute;
   width: 800px;
@@ -89,7 +92,7 @@ export default defineComponent({
   border-radius: 50%;
   font-size: 2rem;
   color: white;
-  font-family: roboto;
+  /* font-family: roboto; */
   font-weight: bold;
   position: relative;
 }
@@ -164,10 +167,10 @@ export default defineComponent({
   left: 18.5%;
   transform: translate(-50%);
   bottom: 50%;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 900;
-  font-size: 28px;
+  /* font-weight: 900; */
+  font-size: 30px;
   line-height: 77px;
   text-align: center;
   color: #ffffff;
@@ -176,10 +179,10 @@ export default defineComponent({
   position: absolute;
   left: 34%;
   bottom: 58%;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 900;
-  font-size: 20px;
+  /* font-weight: 900; */
+  font-size: 25px;
   line-height: 44px;
   text-align: center;
   color: #ffffff;
@@ -197,10 +200,10 @@ export default defineComponent({
   position: absolute;
   right: 20px;
   top: 24%;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
+  /* font-weight: 600; */
+  font-size: 20px;
   line-height: 29px;
   text-align: center;
   color: #ffffff;
