@@ -13,11 +13,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-body {
-  -ms-overflow-style: none;
-}
-::-webkit-scrollbar {
-  display: none;
-}
-</style>
+<style scoped></style>
