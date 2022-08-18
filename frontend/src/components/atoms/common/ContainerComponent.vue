@@ -16,7 +16,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
   background: #1a1d3a;
   background: linear-gradient(45deg, #1a1d3a 0%, #212752 100%);

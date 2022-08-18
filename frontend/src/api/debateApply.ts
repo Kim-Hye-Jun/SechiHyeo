@@ -1,7 +1,10 @@
 import { debateApply } from "./index";
 
+function getApply(board_no: number) {
+  return debateApply.get("/" + board_no);
+}
 function postApply() {
-  return debateApply.get("/");
+  return debateApply.post("/");
 }
 function putApply(num: number) {
   return debateApply.put("/" + num);
@@ -15,4 +18,11 @@ function getDebateApply() {
 function getDebateRecruit() {
   return debateApply.get("/recruiting");
 }
-export { postApply, putApply, deleteApply, getDebateApply, getDebateRecruit };
+export {
+  getApply,
+  postApply,
+  putApply,
+  deleteApply,
+  getDebateApply,
+  getDebateRecruit,
+};

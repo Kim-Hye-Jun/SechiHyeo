@@ -9,7 +9,7 @@
     <div class="modal-container-body">
       <h3 class="board-master">작성자 : {{ debate_board.board.nickname }}</h3>
       <h3 class="board-day">
-        토론 일시 : {{ debate_board.board.debate_time }}
+        토론 일시 : {{ Unix_timestamp(debate_board.board.debate_time) }}
       </h3>
       <h3 class="board-count">
         인원 : {{ debate_board.board.current_applicant }}/{{
@@ -281,6 +281,31 @@ export default defineComponent({
     backPage() {
       this.$router.go(-1);
     },
+    Unix_timestamp(t: any) {
+      var date = new Date(t);
+      var year = date.getFullYear();
+      var month = "0" + (date.getMonth() + 1);
+      var day = "0" + date.getDate();
+      var hour = "0" + date.getHours();
+      var minute = "0" + date.getMinutes();
+      var second = "0" + date.getSeconds();
+      return (
+        year +
+        "-" +
+        month.substr(-2) +
+        "-" +
+        day.substr(-2) +
+        " " +
+        hour.substr(-2) +
+        ":" +
+        minute.substr(-2) +
+        ":" +
+        second.substr(-2)
+      );
+    },
+    con() {
+      console.log(this.Unix_timestamp(1660706175750));
+    },
   },
 });
 </script>
@@ -477,7 +502,7 @@ a {
   display: inline-block;
   top: -20px;
   left: 0px;
-  width: 300px;
+  width: 240px;
   font-family: "Inter";
   font-style: normal;
   font-weight: bold;
@@ -491,7 +516,7 @@ a {
   position: relative;
   display: inline-block;
   top: -20px;
-  width: 270px;
+  width: 320px;
   font-family: "Inter";
   font-style: normal;
   font-weight: 400;
