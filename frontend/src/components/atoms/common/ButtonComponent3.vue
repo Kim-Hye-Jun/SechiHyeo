@@ -31,7 +31,7 @@ export default defineComponent({
 .button-circle {
   background: black;
   border-radius: 50%;
-  color: red;
+  color: rgb(255, 255, 255);
   /* border: 2px solid rgb(11, 255, 251); */
   width: 30px;
   height: 30px;
@@ -43,7 +43,7 @@ export default defineComponent({
   color: blue;
 }
 .icon__note {
-  padding-top: 10%;
+  padding-top: 3%;
   padding-left: 19%;
 }
 </style>

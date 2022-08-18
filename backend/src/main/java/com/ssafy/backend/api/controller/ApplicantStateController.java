@@ -49,10 +49,10 @@ public class ApplicantStateController {
 
 
             List<ApplicantState> list=applicantService.getApplicantState(board_no);
-            if(list==null){
-                return ResponseEntity.status(400).body(null);
-            }
             ArrayList<ApplicantRes> arrayList=new ArrayList<>();
+            if(list==null){
+                return ResponseEntity.status(200).body(arrayList);
+            }
 
             for (ApplicantState as: list
             ) {

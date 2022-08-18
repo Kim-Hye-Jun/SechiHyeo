@@ -18,4 +18,11 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+body {
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+</style>

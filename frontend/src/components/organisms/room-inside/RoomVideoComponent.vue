@@ -35,6 +35,7 @@
     <button
       v-for="(item, index) in store.state.uploadImageArr"
       v-bind:key="item"
+      class="room__inside__fileUploadButton"
       @click="updateImg(item, index)"
     >
       {{ index + 1 }}
@@ -129,5 +130,14 @@ export default defineComponent({
   padding: 20px;
   box-sizing: border-box;
   background-clip: content-box;
+}
+.room__inside__fileUploadButton {
+  width: 40px;
+  height: 40px;
+  background: rgb(9, 9, 83);
+  border: 1px solid white;
+  border-radius: 3px;
+  color: white;
+  margin-bottom: 20px;
 }
 </style>

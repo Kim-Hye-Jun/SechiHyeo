@@ -77,7 +77,6 @@ export default defineComponent({
   /* font-weight: bold; */
   font-size: 18px;
   box-sizing: border-box;
-  z-index: 1;
 }
 
 textarea::-webkit-scrollbar {
