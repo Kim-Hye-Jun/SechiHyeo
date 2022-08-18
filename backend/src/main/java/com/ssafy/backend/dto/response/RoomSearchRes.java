@@ -19,4 +19,8 @@ public class RoomSearchRes {
     private String roomType;
     private String thumbnail;
     private ArrayList<SideOrderInfo> sideOrderList;
+    //진영
+    private String sideA;
+    private String sideB;
+    private String debateTopic;
 }

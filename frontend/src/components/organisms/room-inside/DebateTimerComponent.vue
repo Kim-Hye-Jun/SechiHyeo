@@ -58,7 +58,7 @@ export default defineComponent({
     this.store.state.session?.on("signal:countdown-stop", (event: any) => {
       this.stopTimer();
     });
-    // this.settings();
+    this.settings();
   },
   data() {
     return {

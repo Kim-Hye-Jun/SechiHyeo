@@ -42,7 +42,7 @@ export default defineComponent({
       if (this.roomInfo.thumbnail) {
         return this.roomInfo.thumbnail;
       }
-      return "@/assets/basic.jpg";
+      return require("@/assets/basic.jpg");
     },
   },
 });

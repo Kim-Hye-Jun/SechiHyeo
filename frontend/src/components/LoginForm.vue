@@ -210,7 +210,7 @@ body {
   left: 65px;
   position: relative;
   border-radius: 5px;
-  background-color: #ccffee;
+  background-color: rgb(232, 240, 254);
 }
 
 .btn {

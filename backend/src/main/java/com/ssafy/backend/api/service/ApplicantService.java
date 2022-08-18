@@ -18,4 +18,6 @@ public interface ApplicantService {
     long countCurrentApplicantByBoardNo(int boardNo);
 
     List<ApplicantState> getApplyingApplicant(int memberNo);
+
+    List<ApplicantState> getApplicantState(int boardNo);
 }

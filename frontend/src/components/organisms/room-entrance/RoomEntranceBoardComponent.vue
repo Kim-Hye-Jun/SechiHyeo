@@ -13,6 +13,7 @@
       <a href="#" title="Close" class="modal-close">X</a>
       <div class="modal__content__container">
         <p class="modal__content__roomTitle__paragraph">{{ roomTitle }}</p>
+        <p class="modal__content__roomTitle__paragraph">{{ debateTopic }}</p>
         <div class="modal_content__debateSide__container">
           <p class="modal__debateSide__paragraph">A진영 : {{ roomSideA }}</p>
           <p class="modal__debateSide__paragraph">B진영 : {{ roomSideB }}</p>
@@ -99,6 +100,7 @@ export default defineComponent({
       roomTitle: "roomTitle",
       roomSideA: "Aside",
       roomSideB: "Bside",
+      debateTopic: "배고파요",
       sideOrderList: [] as Array<SideOrderInfo>,
       sideOrderSelector: "sideOrderSelector",
       roomId: "",
@@ -118,6 +120,10 @@ export default defineComponent({
       this.sideOrderList = roomInfo.sideOrderList;
       this.roomId = roomInfo.roomId;
       console.log(this.sideOrderList);
+      this.roomTitle = roomInfo.roomTile;
+      this.roomSideA = roomInfo.sideA;
+      this.roomSideB = roomInfo.sideB;
+      this.debateTopic = roomInfo.debateTopic;
       document.location.href = "#open-modal";
     },
     joinRoom(): void {
