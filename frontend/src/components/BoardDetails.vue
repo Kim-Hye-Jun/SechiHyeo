@@ -12,9 +12,9 @@
         토론 일시 : {{ Unix_timestamp(debate_board.board.debate_time) }}
       </h3>
       <h3 class="board-count">
-        인원 : {{ debate_board.board.current_applicant }}/{{
-          debate_board.board.max_applicant
-        }}
+        인원 :
+        <!-- {{ debate_board.board.current_applicant }}/ -->
+        {{ debate_board.board.max_applicant + "명" }}
       </h3>
       <!-- <h2 class="board-summary">개요</h2> -->
       <div class="board-summary-content">

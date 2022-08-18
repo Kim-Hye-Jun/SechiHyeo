@@ -46,7 +46,9 @@
             />
           </svg>
         </button>
-        <span class="page-count">{{ nowPage + 1 }} / {{ pageCount }} </span>
+        <span class="page-count"
+          >&nbsp;{{ nowPage + 1 }} / {{ pageCount }} &nbsp;</span
+        >
         <button
           :disabled="nowPage >= pageCount - 1"
           @click="nextPage"
