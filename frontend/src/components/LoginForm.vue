@@ -134,6 +134,7 @@ export default defineComponent({
           this.$router.push("/main");
         } catch (error) {
           console.log(error);
+          alert("로그인 정보를 확인해주세요!");
         } finally {
           this.initForm();
         }
