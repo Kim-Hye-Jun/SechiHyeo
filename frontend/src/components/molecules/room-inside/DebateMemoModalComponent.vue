@@ -38,6 +38,7 @@ export default defineComponent({
 }
 .memo__modal {
   position: absolute;
+  z-index: 1;
 }
 p {
   font-size: 20px;

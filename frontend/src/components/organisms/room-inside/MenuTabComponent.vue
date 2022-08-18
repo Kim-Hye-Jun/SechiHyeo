@@ -21,9 +21,11 @@
       @click="camOn"
     ></menu-tab-cam-off-icon-component>
     <menu-tab-doc-icon-component
-      class="svg"
+      class="svg screen__share__btn"
       @click="screenShare"
-    ></menu-tab-doc-icon-component>
+    >
+    </menu-tab-doc-icon-component>
+    <span class="tooltiptext">자료 공유</span>
     <!-- <menu-tab-chat-icon-component class="svg"></menu-tab-chat-icon-component> -->
     <input
       type="file"
@@ -32,10 +34,8 @@
       @change="previewFile"
       style="display: none"
     />
-    <menu-tab-share-icon-component
-      class="svg"
-      @click="clickButton"
-    ></menu-tab-share-icon-component>
+    <menu-tab-share-icon-component class="svg" @click="clickButton">
+    </menu-tab-share-icon-component>
     <menu-tab-exit-icon-component
       class="svg"
       @click="exitRoom"
@@ -152,42 +152,6 @@ export default defineComponent({
             });
           });
       }
-
-      // console.log("next session : ", this.sessionScreen);
-      // console.log("next oV : ", this.OVScreen);
-      // console.log("next token : ", this.tokenScreen);
-      // this.sessionScreen
-      //   ?.connect(this.tokenScreen)
-      //   .then(() => {
-      //     let publisher = this.OVScreen?.initPublisher(
-      //       document.getElementById("shareImg"),
-      //       {
-      //         videoSource: "screen",
-      //       }
-      //     );
-      //     console.log("PUBLISHER INITPUBLISHER", publisher);
-      //     publisher.once("accessAllowed", (error: any) => {
-      //       publisher.stream
-      //         .getMediaStream()
-      //         .getVideoTracks()[0]
-      //         .addEventListener("ended", () => {
-      //           console.log('User pressed the "Stop sharing" button');
-      //         });
-      //       this.sessionScreen?.publish(publisher);
-      //     });
-
-      //     publisher.once("accessDenied", (error: any) => {
-      //       console.warn("ScreenShare: Access Denied");
-      //     });
-      //   })
-      //   .catch((error: any) => {
-      //     console.log(error);
-      //     console.warn(
-      //       "There was an error connecting to the session:",
-      //       error.code,
-      //       error.message
-      //     );
-      //   });
     },
     clickButton() {
       console.log("click", document.getElementById("file"));
@@ -246,9 +210,21 @@ export default defineComponent({
   color: #4255d4;
 }
 
-/* .border {
-  padding-top: 1em;
-  padding-left: 3em;
-  /* padding-bottom: ; */
-/* } */
+.screen__share__btn + .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: rgb(0, 0, 0);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  opacity: 0.7;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.screen__share__btn:hover + .tooltiptext {
+  visibility: visible;
+}
 </style>

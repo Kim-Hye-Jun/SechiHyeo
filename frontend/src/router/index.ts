@@ -48,11 +48,13 @@ const routes: Array<RouteRecordRaw> = [
     path: "/entrance",
     name: "RoomEntrancePage",
     component: RoomEntrancePageComponentVue,
+    meta: { auth: true },
   },
   {
     path: "/room",
     name: "RoomInsidePage",
     component: RoomInsideView,
+    meta: { auth: true },
   },
   {
     path: "/",

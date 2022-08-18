@@ -1,57 +1,14 @@
 <template>
   <div id="contents">
     <div id="section1">
-      <div class="container">
-        <div class="content__box">
-          <img class="content__box__img" src="@/assets/logo.png" />
-          <div class="content__box__discription">^^</div>
-        </div>
-        <a href="#section2" class="scroll">scroll<span></span></a>
-      </div>
+      <a href="#section11" class="scroll">DOWN<span></span></a>
     </div>
-    <div id="section2">
+    <div id="section11">
       <div class="container">
-        <div class="content__box">
-          <img class="content__box__img" src="@/assets/logo.png" />
-          <div class="content__box__discription">^^</div>
-        </div>
-        <a href="#section3" class="scroll">scroll<span></span></a>
-      </div>
-    </div>
-    <div id="section3">
-      <div class="container">
-        <div class="content__box">
-          <img class="content__box__img" src="@/assets/logo.png" />
-          <div class="content__box__discription">^^</div>
-        </div>
-        <a href="#section4" class="scroll">scroll<span></span></a>
-      </div>
-    </div>
-    <div id="section4">
-      <div class="container">
-        <div class="content__box">
-          <img class="content__box__img" src="@/assets/logo.png" />
-          <div class="content__box__discription">^^</div>
-        </div>
-        <a href="#section5" class="scroll">scroll<span></span></a>
-      </div>
-    </div>
-    <div id="section5">
-      <div class="container">
-        <div class="content__box">
-          <img class="content__box__img" src="@/assets/logo.png" />
-          <div class="content__box__discription">^^</div>
-        </div>
-        <a href="#section6" class="scroll">scroll<span></span></a>
-      </div>
-    </div>
-    <div id="section6">
-      <div class="container">
-        <div class="content__box">
-          <img class="content__box__img" src="@/assets/logo.png" />
-          <div class="content__box__discription">^^</div>
-        </div>
-        <a href="#section7" class="scroll">scroll<span></span></a>
+        <p>이 화면은 메인 화면 입니다</p>
+        <br />
+        <p>토론을 즐겨보세요</p>
+        <a href="#section1" class="scroll">UP<span></span></a>
       </div>
     </div>
   </div>
@@ -60,10 +17,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
-import axios from "axios";
-import { OpenVidu } from "openvidu-browser";
-// import { mapState } from "vuex";
-import { OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET } from "@/config/index";
 
 export default defineComponent({
   setup() {
@@ -109,56 +62,28 @@ a {
   display: block;
 }
 
+p {
+  font-size: 40px;
+  font-weight: 500;
+  text-transform: uppercase;
+  /* font-style: italic; */
+}
+
 #section1 {
+  height: 100vh;
+  width: 100vw;
+
   background: #000000;
+  background-image: url("@/assets/logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60% 60%;
+  /* background-color: transparent; */
 }
-
-#section2 {
-  background: black;
-}
-
-/* section */
-#section3 {
-  background: radial-gradient(
-    circle,
-    rgba(247, 150, 192, 1) 0%,
-    rgba(118, 174, 241, 1) 100%
-  );
-}
-
-#section4 {
-  background: linear-gradient(315deg, #4dccc6 0%, #96e4df 74%);
-}
-
-#section5 {
-  background: linear-gradient(315deg, #f0ecfc 0%, #c797eb 74%);
-}
-
-.container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 1200px;
-  margin: 0 auto;
-}
-
-.content__box__img {
-  width: 40%;
-}
-
-.content__box__discription {
-  width: 60%;
-  padding: 3%;
-  margin: 3%;
-  border: 2px solid;
-  border-radius: 9px;
-}
-
 /* scroll */
 .scroll {
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
   left: 50%;
   transform: translatex(-50%);
   z-index: 2;
@@ -170,10 +95,10 @@ a {
   opacity: 0.5;
 }
 
-a {
+#section1 a {
   padding-top: 60px;
 }
-a span {
+#section1 a span {
   position: absolute;
   top: 0;
   left: 50%;
@@ -184,7 +109,7 @@ a span {
   border-radius: 100%;
   box-sizing: border-box;
 }
-a span::after {
+#section1 a span::after {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -198,7 +123,7 @@ a span::after {
   transform: rotate(-45deg);
   box-sizing: border-box;
 }
-a span::before {
+#section1 a span::before {
   position: absolute;
   top: 0;
   left: 0;
@@ -228,15 +153,51 @@ a span::before {
   }
 }
 
-.content__box {
-  width: 80%;
-  height: 500px;
-  background: #519dff;
-  border-radius: 12px;
-  /* opacity: 0.5; */
-  /* box-shadow: 0 0 5px 2px rgba(231, 218, 218, 0.738); */
+#section11 {
+  background: black;
+}
 
-  display: flex;
-  flex-direction: row;
+#section11 a {
+  padding-top: 55px;
+  /* padding-right: 30px; */
+}
+#section11 a span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin-left: -23px;
+  border: 1px solid #fff;
+  border-radius: 100%;
+  box-sizing: border-box;
+}
+#section11 a span::after {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  content: "";
+  width: 16px;
+  height: 16px;
+  margin: -12px 0 0 -8px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+  box-sizing: border-box;
+}
+#section11 a span::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  content: "";
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1);
+  border-radius: 100%;
+  opacity: 0;
+  animation: sdb03 3s infinite;
+  box-sizing: border-box;
 }
 </style>
