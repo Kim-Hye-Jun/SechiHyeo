@@ -109,6 +109,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
 .userpage-content-room {
   position: relative;
   width: 150px;
@@ -155,9 +158,9 @@ export default defineComponent({
   position: absolute;
   margin-left: 10px;
   margin-right: 10px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: normal;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 14px;
   line-height: 44px;
   color: rgba(255, 255, 255);
@@ -170,9 +173,9 @@ export default defineComponent({
   position: absolute;
   right: 12px;
   bottom: -6px;
-  font-family: "Inter";
+  /* font-family: "Inter"; */
   font-style: italic;
-  font-weight: 500;
+  /* font-weight: 500; */
   font-size: 12px;
   line-height: 44px;
   text-align: center;

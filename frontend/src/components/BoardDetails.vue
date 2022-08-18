@@ -322,6 +322,7 @@ a {
 }
 * {
   scrollbar-width: 0;
+  font-family: "locus_sangsang";
 }
 *::-webkit-scrollbar {
   background-color: transparent;
@@ -361,15 +362,15 @@ a {
   align-items: center;
   gap: 8px;
   line-height: 1;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: bold;
+  /* font-family: "Times New Roman", Times, serif; */
+  /* font-weight: bold; */
   font-size: 1;
   color: #000000;
 }
 .modal-container-body {
   margin-left: 30px;
   padding: 24px 32px 48px;
-  font-family: serif;
+  /* font-family: serif; */
   overflow-y: auto;
   color: #000000;
 }
@@ -388,9 +389,9 @@ a {
   background-color: transparent;
   color: #000000;
   border: 0;
-  font-weight: 600;
+  /* font-weight: 600; */
   font-size: 20px;
-  font-family: "Times New Roman", Times, serif;
+  /* font-family: "Times New Roman", Times, serif; */
   cursor: pointer;
   transition: 0.15s ease;
 }
