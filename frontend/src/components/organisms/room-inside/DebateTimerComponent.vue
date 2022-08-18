@@ -37,6 +37,7 @@
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import ButtonComponent from "@components/atoms/common/ButtonComponent.vue";
+import { member2 } from "@/api/index";
 
 export default defineComponent({
   components: {
@@ -151,6 +152,7 @@ export default defineComponent({
               this.resetTimer();
               this.time = 0;
               // *** 토론 종료 서버에 요청
+              member2.put(`/sessions/${this.store.state.roomId}/end`);
               console.log("종료");
               return;
             }
@@ -257,22 +259,25 @@ export default defineComponent({
 #debateRuleContainer {
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
 
-  background: radial-gradient(circle, #1a2049 0%, #13162f 100%);
+  background: radial-gradient(circle, #0f101a 0%, #222858 100%);
   border-radius: 6px;
 
-  width: 20%;
+  width: 80%;
 }
 .debateOrder {
-  padding: 3px;
-  color: rgb(42, 204, 42);
+  font-size: 30px;
+  color: rgb(72, 253, 141);
+  padding-top: 5px;
+  padding-left: 15%;
+  padding-right: 5%;
 }
 .timer {
-  padding: 3px;
+  width: 30%;
+  font-size: 60px;
   color: yellow;
 }
 #timerBtn {
-  margin-top: 10px;
 }
 </style>

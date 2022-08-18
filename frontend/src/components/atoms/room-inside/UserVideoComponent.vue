@@ -1,7 +1,9 @@
 <template>
   <div>
     <video autoplay :class="returnVideoClassName(xx)"></video>
-    <debate-memo-modal-component></debate-memo-modal-component>
+    <debate-memo-modal-component
+      :nickname="returnNickname()"
+    ></debate-memo-modal-component>
   </div>
 </template>
 
@@ -34,6 +36,8 @@ export default defineComponent({
 
     if (this.xx === undefined) return;
 
+    console.log(this.streamManager);
+
     this.streamManager?.addVideoElement(
       document.getElementsByClassName(
         this.returnVideoClassName(this.$props.xx as string)
@@ -44,6 +48,12 @@ export default defineComponent({
     return {};
   },
   methods: {
+    returnNickname(): string {
+      if (this.streamManager === undefined) return "";
+      return JSON.parse(
+        this.streamManager?.stream.connection.data.split("%/%")[1]
+      )["nickname"];
+    },
     returnVideoClassName(xx: string | undefined): string {
       return xx + "__video";
     },

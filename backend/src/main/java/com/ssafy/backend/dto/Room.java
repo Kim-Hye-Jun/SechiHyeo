@@ -45,6 +45,9 @@ public class Room {
                 .maxNumOfPeople(room.getMaxNumOfPeople())
                 .thumbnail(room.getThumbnail())
 //                .sideOrderList(new ArrayList<SideOrderInfo>())
+                .sideA(room.getSideA())
+                .sideB(room.getSideB())
+                .debateTopic(room.getDebateTopic())
                 .build();
     }
 }

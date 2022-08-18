@@ -87,6 +87,23 @@ export default createStore({
       board_title: "",
       max_applicant: 0,
     },
+    applicant_recruit_array: [],
+    applicant_recruit: {
+      board_no: 0,
+      order: 0,
+      side: 0,
+    },
+    applicant_apply_array: [],
+    applicant_apply: {
+      board_no: 0,
+      order: 0,
+      side: 0,
+    },
+    applicant: {
+      board_no: 0,
+      order: 0,
+      side: 0,
+    },
   },
   getters: {
     isLogin(state) {
@@ -124,9 +141,11 @@ export default createStore({
     //BOARD Mutation
     BOARDALL: (state, payload) => {
       state.boards = payload.boards;
+      console.log(state.boards);
     },
     BOARDONE: (state, payload) => {
       state.debate_board = payload.board;
+      // console.log(state.debate_board);
     },
     //USERPAGE Mutation
     MEMBERPROFILE: (state, payload) => {
@@ -136,10 +155,16 @@ export default createStore({
       state.memberinfo = payload.memberinfo;
     },
     DEBATERECRUIT: (state, payload) => {
-      state.memberinfo = payload.memberinfo;
+      console.log("11");
+      console.log(state.applicant_recruit);
+      state.applicant_recruit_array = payload.applicant;
+      console.log(state.applicant_recruit);
     },
     DEBATEAPPLY: (state, payload) => {
-      state.memberinfo = payload.memberinfo;
+      console.log("22");
+      console.log(state.applicant_apply);
+      state.applicant_apply_array = payload.applicant;
+      console.log(state.applicant_apply);
     },
   },
   actions: {
@@ -206,7 +231,7 @@ export default createStore({
         })
         .then(() => {
           alert("게시글 등록이 완료되었습니다!!");
-          router.push(`/debate-board/`);
+          router.push(`/`);
         });
     },
     BOARDUPDATE: (store, board) => {
@@ -244,6 +269,24 @@ export default createStore({
           });
       }
     },
+    POSTAPPLY: (store, applicant) => {
+      // postApply().then((res: any) => {
+      //   console.log(res.data);
+      // });
+      axios
+        .post(`${API_BASE_URL}debate-apply`, applicant, {
+          headers: {
+            "access-token": store.state.token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .then(() => {
+          alert("토론 신청이 완료되었습니다!!");
+          router.push(`/debate-board/`);
+        });
+    },
     //MyPage Action
     MEMBERPROFILE: (store) => {
       getMemberInfo().then((res: any) => {
@@ -267,16 +310,16 @@ export default createStore({
       });
     },
     DEBATERECRUIT: (store) => {
-      getDebateRecruit().then((res: any) => {
+      return getDebateRecruit().then((res: any) => {
         store.commit("DEBATERECRUIT", {
-          debate_board: res.data,
+          applicant: res.data,
         });
       });
     },
     DEBATEAPPLY: (store) => {
       getDebateApply().then((res: any) => {
         store.commit("DEBATEAPPLY", {
-          debate_board: res.data,
+          applicant: res.data,
         });
       });
     },

@@ -50,7 +50,7 @@ public class ApplicantServiceImpl implements  ApplicantService{
         as.setMember(member);
         as.setSide(regiReq.getSide());
         as.setTurn(regiReq.getOrder());
-        as.setAccept(2);
+        as.setAccept(regiReq.getAccept());
 
         DebateBoard debateBoard=debateBoardRepository.findByBoardNo(regiReq.getBoard_no());
         if(debateBoard==null) return false;

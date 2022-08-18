@@ -30,7 +30,7 @@
         <!-- :class="[academy === true ? '' : 'hidden']" -->
         <div
           class="boards-content-write-box1"
-          @click="moveToDetail(board_no)"
+          @click="moveToDetail(debate_board.board_no)"
           v-for="(debate_board, board_no) in boards"
           :key="board_no"
         >
@@ -170,7 +170,7 @@ export default defineComponent({
         board_title: "",
         board_content: "",
         debate_topic: "",
-        debate_time: Date,
+        debate_time: "",
         a_opinion: "",
         b_opinion: "",
         max_applicant: 0,
@@ -195,9 +195,10 @@ export default defineComponent({
       (this.academy = false), (this.free = true);
     },
     moveToDetail(board_no: number) {
-      let no = board_no + 1;
-      this.BOARDONE(no).then(() => {
-        this.$router.push("/debate-board/" + no);
+      // let no = board_no + 1;
+      console.log(board_no);
+      this.BOARDONE(board_no).then(() => {
+        this.$router.push("/debate-board/" + board_no);
       });
     },
     modalIn() {

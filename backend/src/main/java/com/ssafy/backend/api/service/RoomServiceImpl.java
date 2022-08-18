@@ -131,8 +131,6 @@ public class RoomServiceImpl implements RoomService {
                     }
                 }
 
-                //테스트용 출력
-                System.out.println("sideOrderList : " + sideOrderList);
                 roomSearchRes.setSideOrderList(sideOrderList);
                 tmp.add(roomSearchRes);
             }

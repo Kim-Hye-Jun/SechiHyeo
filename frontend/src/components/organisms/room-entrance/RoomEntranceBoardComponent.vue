@@ -9,7 +9,7 @@
     ></room-entrance-component>
   </div>
   <div id="open-modal" class="modal-window">
-    <div>
+    <div class="modal-body">
       <a href="#" title="Close" class="modal-close">X</a>
       <div class="modal__content__container">
         <p class="modal__content__roomTitle__paragraph">{{ roomTitle }}</p>
@@ -28,11 +28,11 @@
             :selector="sideOrderSelector"
           ></modal-radio-button-component>
         </div>
-        <button-component
+        <button-component-vue
           class="modal__content__joinbutton"
           buttonName="JOIN!"
           @click="joinRoom"
-        ></button-component>
+        ></button-component-vue>
       </div>
     </div>
   </div>
@@ -43,6 +43,7 @@ import RoomEntranceComponent from "@components/molecules/room-entrance/RoomEntra
 import { RoomThumbnailInfo, SideOrderInfo } from "@type/types";
 import ModalRadioButtonComponent from "@/components/atoms/common/ModalRadioButtonComponent.vue";
 import ButtonComponent from "@/components/atoms/common/ButtonComponent.vue";
+import ButtonComponentVue from "@/components/atoms/common/ButtonComponent.vue";
 
 import http from "@/http";
 // import ContainerComponent from "@components/atoms/common/ContainerComponent.vue";
@@ -53,7 +54,8 @@ export default defineComponent({
   components: {
     RoomEntranceComponent,
     ModalRadioButtonComponent,
-    ButtonComponent,
+    // ButtonComponent,
+    ButtonComponentVue,
   },
   // created() {
   //   // (#구현 해야할것)create시에 axios 요청으로 방 가져와서 방 썸네일에 넣어줌 (roomInfoData)
@@ -178,7 +180,7 @@ export default defineComponent({
 /* ?#### */
 .modal-window {
   position: fixed;
-  background-color: rgba(255, 0, 0, 0.25);
+  /* background-color: rgba(255, 0, 0, 0.25); */
   top: 0;
   right: 0;
   bottom: 0;
@@ -259,10 +261,17 @@ a {
 
 .modal-window > div {
   border-radius: 1rem;
+  /* 모달 창 색깔 */
+  background: #7f53ac;
 }
 
 .modal-window div:not(:last-of-type) {
   margin-bottom: 15px;
+}
+
+.modal-body {
+  /* 모달창 글씨 색깔 */
+  color: #657ced;
 }
 
 .logo {
@@ -315,6 +324,6 @@ small {
 }
 
 .modal__content__joinbutton {
-  width: 30%;
+  margin-top: 2%;
 }
 </style>

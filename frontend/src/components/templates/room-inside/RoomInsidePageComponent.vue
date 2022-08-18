@@ -1,8 +1,10 @@
 <template>
   <div class="flexA">
-    <debate-topic-component></debate-topic-component>
+    <debate-topic-component :debateTopic="debateTopic"></debate-topic-component>
     <debate-title-tab-component
       class="room__inside__class1"
+      :sideA="sideA"
+      :sideB="sideB"
     ></debate-title-tab-component>
     <debate-timer-component
       :roomAndUserData="testReturnData"
@@ -89,7 +91,8 @@ export default defineComponent({
         store.state.isRoomHost = testReturnData?.roomHost;
         store.state.mySideOrder = testReturnData?.userSideOrder;
       } catch (err) {
-        console.log(err);
+        alert("이미 신청된 진영,순서 입니다.");
+        return;
       }
     };
     await apiCall();
@@ -341,7 +344,16 @@ export default defineComponent({
     // console.log("pre OV : ", OVScreen);
     // console.log("pre SESSION : ", sessionScreen);
     // console.log("pre token : ", tokenScreen);
+
+    const sideA: string = testReturnData["sideA"];
+    const sideB: string = testReturnData["sideB"];
+    const debateTopic: string = testReturnData["debateTopic"];
+    const nickname: string = testReturnData["nickname"];
     return {
+      nickname,
+      sideA,
+      sideB,
+      debateTopic,
       store,
       testReturnData,
       subscribers,

@@ -4,10 +4,10 @@ function postApply() {
   return debateApply.get("/");
 }
 function putApply(num: number) {
-  return debateApply.get("/" + num);
+  return debateApply.put("/" + num);
 }
 function deleteApply(num: number) {
-  return debateApply.get("/" + num);
+  return debateApply.delete("/" + num);
 }
 function getDebateApply() {
   return debateApply.get("/applying");

@@ -1,68 +1,75 @@
 <template>
   <div
     class="userpage-content-room"
-    v-for="board in boards"
-    :key="board"
-    :filter="board['member_no']"
-    :filter-function="myRecruit"
+    v-for="applicant_recruit in store.state.applicant_recruit_array"
+    :key="applicant_recruit"
   >
     <div class="userpage-content-count">
-      {{ board["current_applicant"] }}/{{ board["max_applicant"] }}
+      {{ applicant_recruit["current_applicant"] }}/{{
+        applicant_recruit["max_applicant"]
+      }}
     </div>
     <div class="userpage-content-topic">
-      {{ board["debate_topic"] }}미래와 토론의 연관
+      {{ applicant_recruit["debate_topic"] }}
     </div>
     <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
     <div class="userpage-content-room-button">
       <a
         href="#"
         class="userpage-content-room-button-start"
-        @click="moveToRoom(board)"
+        @click="moveToRoom(applicant_recruit.board_no)"
         >시작</a
       >
     </div>
   </div>
-  <div class="userpage-content-room">
+  <!-- <div class="userpage-content-room">
     <div class="userpage-content-count">6/6</div>
     <div class="userpage-content-topic">우주문명에서 토론</div>
     <div class="userpage-content-room-button">
       <a href="#" class="userpage-content-room-button-start">시작</a>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, useStore } from "vuex";
+import { member2 } from "@/api/index";
 export default defineComponent({
   data() {
-    return {
-      boards: [],
-      apllicant_state: {
-        accept: 0,
-      },
-    };
+    return {};
+  },
+  setup() {
+    const store = useStore();
+    return { store };
   },
   computed: {
-    ...mapState(["board", "memberinfo"]),
+    ...mapState([
+      "board",
+      "debate_board",
+      "memberinfo",
+      "applicant_recruit",
+      "applicant_recruit_array",
+    ]),
   },
   created() {
     this.debateRecruit();
+    console.log(this.store.state.applicant_recruit_array);
   },
   methods: {
     ...mapActions(["DEBATERECRUIT"]),
-    debateRecruit() {
-      this.DEBATERECRUIT();
+    async debateRecruit() {
+      await this.DEBATERECRUIT();
     },
-    moveToRoom(board: { num: string }) {
-      this.$router.push("/room/" + board.num);
+    moveToRoom(no: number) {
+      this.$router.push("/room/" + no);
     },
-    myRecruit(memberinfo: { memberNo: any }, filter: any) {
-      if (memberinfo.memberNo === filter) {
-        return true;
-      }
-      return false;
-    },
+    // myRecruit(memberinfo: { memberNo: any }, filter: any) {
+    //   if (memberinfo.memberNo === filter) {
+    //     return true;
+    //   }
+    //   return false;
+    // },
   },
 });
 </script>

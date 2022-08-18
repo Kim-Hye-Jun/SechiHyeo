@@ -94,10 +94,10 @@ export default defineComponent({
   position: absolute;
   content: "";
   border-radius: 100%;
-  height: 15px;
-  width: 15px;
-  top: 5px;
-  left: 5px;
+  height: 17px;
+  width: 16px;
+  /* top: 1px;
+  left: 1px; */
   margin: auto;
   transition: background 0.25s linear;
   -webkit-transition: background 0.25s linear;

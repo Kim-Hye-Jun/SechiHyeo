@@ -1,9 +1,12 @@
 <template>
-  <div class="topic">주제</div>
+  <div class="topic">{{ debateTopic }}</div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
+  props: {
+    debateTopic: String,
+  },
   components: {},
   data() {
     return {
@@ -16,7 +19,10 @@ export default defineComponent({
 <style scoped>
 .topic {
   width: 100%;
-  background: linear-gradient(325deg, #1a1d3a 0%, #212752 100%);
-  color: #9b9ca7;
+  height: 50px;
+  background: radial-gradient(circle, #141834 0%, #13162f 100%);
+  color: #ffffff;
+  text-align: center;
+  font-size: 40px;
 }
 </style>

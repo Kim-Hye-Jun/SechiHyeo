@@ -9,4 +9,5 @@ public class ApplicantStateRegiPostReq {
     int side;
     int order;
     int board_no;
+    int accept;
 }

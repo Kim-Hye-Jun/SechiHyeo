@@ -93,7 +93,7 @@
   </button>
 
   <!-- 모달창 -->
-  <div id="create" class="modal">
+  <div id="create" class="modal fade">
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -171,10 +171,12 @@
           <button-component-vue
             data-bs-dismiss="modal"
             @click="myFunc()"
+            :buttonName="createButton"
           ></button-component-vue>
-          <button-component-back
+          <button-component-vue
             data-bs-dismiss="modal"
-          ></button-component-back>
+            :buttonName="backButton"
+          ></button-component-vue>
         </div>
       </div>
     </div>
@@ -204,7 +206,7 @@ export default defineComponent({
     // ButtonComponent,
     // RoomMakeModalComponent,
     ButtonComponentVue,
-    ButtonComponentBack,
+    // ButtonComponentBack,
     ModalInputBoxComponent,
     ModalRadioButtonComponent,
     Background,
@@ -243,6 +245,8 @@ export default defineComponent({
       roomCount: 1 as number,
       pageCount: 1 as number,
       nowPage: 0 as number,
+      createButton: "CREATE",
+      backButton: "BACK",
     };
   },
 
@@ -409,7 +413,12 @@ body {
 }
 
 .modal-content {
-  background: black;
+  background: rgb(46, 37, 37);
+  margin-top: 10%;
+}
+
+.modal-footer {
+  justify-content: center;
 }
 
 .flex {
