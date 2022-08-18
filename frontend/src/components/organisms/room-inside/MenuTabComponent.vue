@@ -134,7 +134,7 @@ export default defineComponent({
           ]
         );
         http
-          .post("https://i7a508.p.ssafy.io/api/sessions/uploadProof", proof, {
+          .post(`sessions/${this.store.state.roomId}/uploadProof`, proof, {
             headers: {
               "Content-Type": "multipart/form-data",
               "access-token": this.store.state.token,
