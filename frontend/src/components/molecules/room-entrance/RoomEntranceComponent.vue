@@ -49,6 +49,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  font-family: "locus_sangsang";
+}
 .flex-container {
   width: 80%;
   display: flex;
@@ -73,7 +76,7 @@ export default defineComponent({
   background: #191c29;
   width: 15em;
   height: 10em;
-  margin: 3em;
+  /* margin: 3em; */
   position: relative;
   border-radius: 6px;
   justify-content: center;
@@ -83,7 +86,7 @@ export default defineComponent({
   font-size: 1.5em;
   color: rgb(88 199 250 / 0%);
   cursor: pointer;
-  font-family: cursive;
+  /* font-family: cursive; */
   flex-direction: column;
   align-items: center;
 
