@@ -1,69 +1,65 @@
 <template>
   <div
     class="userpage-content-room"
-    v-for="applicant_recruit in store.state.applicant_recruit_array"
-    :key="applicant_recruit"
+    v-for="board_number in myRecruitBoardList"
+    :key="board_number"
   >
-    <div class="userpage-content-count">
-      4 /{{ applicant_recruit["max_applicant"] }}
-    </div>
+    <div class="userpage-content-count"></div>
     <div class="userpage-content-topic">
-      {{ applicant_recruit["debate_topic"] }}
+      {{ boardtopic(board_number) }}
     </div>
-    <button
-      class="apply-check"
-      :class="[apply_modal === true ? 'hidden' : '']"
-      @click="modalShow(), getApply(applicant_recruit['debate_topic'])"
-    >
-      신청 목록
+    <button class="apply-check">
+      <!-- getApply(applicant_recruit['debate_topic']  이건 뭐여..-->
+      승인대기
     </button>
-    <button
+    <!-- <button
       class="apply-check"
       :class="[apply_modal === true ? '' : 'hidden']"
       @click="modalHidden()"
     >
       숨기기
-    </button>
-    <div class="apply-modal" :class="[apply_modal === true ? '' : 'hidden']">
-      <div v-for="apply in applies" :key="apply">
+    </button> -->
+    <!-- 박스 안에 해당 게시판 신청자 리스트 모달 -->
+    <div class="apply-modal">
+      <div v-for="apply in myBoardMemberList[board_number]" :key="apply">
         <div style="display: inline-block; position: relative">
           {{ apply.nickname }}
         </div>
-        <div
-          style="display: inline-block; position: absolute; margin-left: 35px"
-        >
+        <!-- <div style="position: absolute; margin-left: 35px">
           <button class="apply-button" @click="putApply_no(apply.applicant_no)">
             거절
           </button>
           <button class="apply-button" @click="putApply_go(apply.applicant_no)">
             수락
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- 토론방 이동 메서드 추후에 토론방 완성 후 작성 예정... -->
-    <div
-      class="userpage-content-room-button"
+    <button
+      class="userpage-content-room-button userpage-content-room-button-start"
       type="button"
       data-bs-toggle="modal"
-      data-bs-target="#create"
+      data-bs-target="#create2"
       @click="modalIn"
     >
-      <a href="#" class="userpage-content-room-button-start" @click="modalIn"
+      시작
+      <!-- <a href="#" class="userpage-content-room-button-start" @click="modalIn"
         >시작</a
-      >
-      <path
+      > -->
+      <!-- <path
         d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
-      />
-    </div>
+      /> -->
+    </button>
   </div>
   <!-- 모달창 -->
   <div
-    id="create"
-    class="modal"
+    id="create2"
+    class="modal fade"
+    data-backdrop="false"
     style="
       top: -300px;
-      width: 600px;
+      width: 800px;
       height: 700px;
       margin-left: 50%;
       transform: translate(-50%);
@@ -71,7 +67,7 @@
   >
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
       <div class="modal-content">
-        <div class="modal-header" style="color: black">
+        <div class="modal-header">
           <h1 class="text">방 만들기</h1>
           <button
             type="button"
@@ -145,10 +141,12 @@
           <button-component-vue
             data-bs-dismiss="modal"
             @click="myFunc()"
+            :buttonName="createButton"
           ></button-component-vue>
-          <button-component-back
+          <button-component-vue
             data-bs-dismiss="modal"
-          ></button-component-back>
+            :buttonName="backButton"
+          ></button-component-vue>
         </div>
       </div>
     </div>
@@ -164,17 +162,19 @@ import ButtonComponentVue from "@/components/atoms/common/ButtonComponent.vue";
 import ButtonComponentBack from "@/components/atoms/common/ButtonComponentBack.vue";
 import http from "@/http";
 import { RoomCreateRequestInfo } from "@type/types";
+import axios from "axios";
+import { API_BASE_URL } from "@/config";
 export default defineComponent({
   components: {
     ModalInputBoxComponent,
     ModalRadioButtonComponent,
     ButtonComponentVue,
-    ButtonComponentBack,
+    // ButtonComponentBack,
   },
   data() {
     return {
       apply_modal: false,
-      modal: true,
+      modal: false,
       previewImgUrl: null as any,
       selectFile: null,
       roomTitleLabelName: "RoomTitle" as string,
@@ -186,6 +186,10 @@ export default defineComponent({
       roomCount: 1 as number,
       pageCount: 1 as number,
       nowPage: 0 as number,
+      createButton: "CREATE",
+      backButton: "BACK",
+      myRecruitBoardList: [] as number[],
+      myBoardMemberList: [] as any[],
     };
   },
   setup() {
@@ -211,9 +215,34 @@ export default defineComponent({
     ]),
   },
   created() {
-    this.debateRecruit();
-    this.getApply(9);
-    this.getApply(13);
+    //내가 모집한 토론의 모든 지원자 호출(토론게시판 중복 되어도 전부)
+    //applicant_recruit_array에 저장
+    this.debateRecruit()
+      .then(() => {
+        const list = this.store.state.applicant_recruit_array;
+        for (let i = 0; i < list.length; i++) {
+          if (!this.myRecruitBoardList.includes(list[i].board_no)) {
+            this.myRecruitBoardList.push(list[i].board_no);
+          }
+        }
+        this.myRecruitBoardList.sort();
+      })
+      .then(() => {
+        for (let i = 0; i < this.myRecruitBoardList.length; i++) {
+          axios
+            .get(`${API_BASE_URL}debate-apply/${this.myRecruitBoardList[i]}`, {
+              headers: {
+                "access-token": this.store.state.token,
+              },
+            })
+            .then((res) => {
+              this.myBoardMemberList[this.myRecruitBoardList[i]] = res.data;
+            });
+        }
+      });
+    // 토론 게시판 번호와 관련된 지원자 호출
+    //applies에 저장
+
     console.log(this.store.state.applicant_recruit_array);
   },
   methods: {
@@ -237,6 +266,13 @@ export default defineComponent({
         accept: 1,
       });
     },
+    boardtopic(board_no: number) {
+      for (let i = 0; i < this.applicant_recruit_array.length; i++) {
+        if (this.applicant_recruit_array[i].board_no == board_no) {
+          return this.applicant_recruit_array[i].debate_topic;
+        }
+      }
+    },
     // moveToRoom(no: number) {
     //   this.$router.push("/room/" + no);
     // },
@@ -248,8 +284,9 @@ export default defineComponent({
     // },
     modalShow() {
       this.apply_modal = true;
-      console.log(this.applicant_recruit["board_no"]);
-      console.log(this.applicant_recruit["max_applicant"]);
+      // 영범아 변수 틀렸어
+      // console.log(this.applicant_recruit["board_no"]);
+      // console.log(this.applicant_recruit["max_applicant"]);
     },
     modalHidden() {
       this.apply_modal = false;
@@ -588,7 +625,7 @@ export default defineComponent({
   margin-bottom: 500px;
 }
 .modal-content {
-  background: #111845a6;
+  background: rgb(46, 37, 37);
 }
 .flex {
   margin-top: 4%;
@@ -611,11 +648,11 @@ export default defineComponent({
   margin-left: 50%;
   transform: translate(-50%);
 }
-.btn-close {
-  background: red;
-}
+/* .btn-close {
+  background: white;
+} */
 /* .modal-backdrop {
-  position: relative !important;
+  visibility: hidden;
 } */
 /* .modal-backdrop {
   z-index: -10 !important;
