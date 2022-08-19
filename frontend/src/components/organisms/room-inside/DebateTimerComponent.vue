@@ -123,7 +123,7 @@ export default defineComponent({
       timer: null as any,
       // inputMin: "",
       // inputSec: "",
-      time: 5, // props로 받아야할듯? store나
+      time: 10, // props로 받아야할듯? store나
       breakTime: 5, //쉬는 시간 길이
       resetButton: false,
       edit: false,
