@@ -58,7 +58,7 @@ export default defineComponent({
     this.store.state.session?.on("signal:countdown-stop", (event: any) => {
       this.stopTimer();
     });
-    // this.settings();
+    this.settings();
   },
   data() {
     return {
@@ -123,8 +123,8 @@ export default defineComponent({
       timer: null as any,
       // inputMin: "",
       // inputSec: "",
-      time: 10, // props로 받아야할듯? store나
-      breakTime: 5, //쉬는 시간 길이
+      time: 360, // props로 받아야할듯? store나
+      breakTime: 20, //쉬는 시간 길이
       resetButton: false,
       edit: false,
     };
