@@ -153,7 +153,7 @@
 
 ### 1. 아키텍쳐 구조도
 <!-- 링크 삽입 예정 & 포트번호 수정 예정 -->
-![ServiceArchitectureDraw.drawio](/uploads/954a6942b43b867957ddca8c73c9f71e/ServiceArchitectureDraw.drawio.png)
+![ServiceArchitectureDraw.drawio](./service.png)
 
 | PORT | 이름                                                  |
 | ---- | ----------------------------------------------------- |
@@ -164,11 +164,11 @@
 | 8443 | Openvidu                                              |
 
 ### 2. 와이어프레임
-![Image_Pasted_at_2022-8-17_23-12](/uploads/384559dcf91927696573e73e38663d6d/Image_Pasted_at_2022-8-17_23-12.png)
+![Image_Pasted_at_2022-8-17_23-12](./figma.png)
 
 ### 3. ERD
 <!-- 링크 삽입 예정 -->
-![Image_Pasted_at_2022-8-17_23-07](/uploads/2f743881d275ddb736d5449f6edde084/Image_Pasted_at_2022-8-17_23-07.png)
+![Image_Pasted_at_2022-8-17_23-07](./erd.png)
 
 ### 4. API 명세서
 ## 📃API 설계
